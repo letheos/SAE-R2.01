@@ -1,9 +1,12 @@
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Cellule {
+public class Cellule implements Serializable {
     private int identifiant;
     private int x;
     private int y;
+
+    private Element élément;
 
 
     HashMap<String,Boolean> murs = new HashMap<>();
@@ -16,6 +19,7 @@ public class Cellule {
         this.murs.put("S",true);
         this.murs.put("E",true);
         this.murs.put("O",true);
+        this.élément = new Herbe();
     }
 
 }

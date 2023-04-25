@@ -1,7 +1,8 @@
+import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class Labyrinthe {
+public class Labyrinthe implements Serializable {
     private int nx;
     private int ny;
     private ArrayList<ArrayList<Cellule>> cellules;
@@ -20,6 +21,7 @@ public class Labyrinthe {
                 identifiant ++;
             }
         }
+        this.vider();
 
     }
 
@@ -81,25 +83,55 @@ public void CasserMur(int x ,int y,String orientation){
             return;
         }
         c.murs.put(orientation,false);
-        System.out.println("j'ai pété le mur");
-        
+
+
         if (orientation.equals("N") && x > 0){
             this.cellules.get(x-1).get(y).murs.put("S",false);
-            System.out.println("j'ai cassé le mur de la cellule ");
+
         }
         else if (orientation.equals("S") && x< this.nx-1) {
             this.cellules.get(x+1).get(y).murs.put("N",false);
-            System.out.println("j'ai cassé le mur de la cellule ");
+
         }
         else if (orientation.equals("E") && x< this.ny-1) {
             this.cellules.get(x).get(y+1).murs.put("O",false);
-            System.out.println("j'ai cassé le mur de la cellule ");
+
         }
         else if (orientation.equals("O") && y>0 ){
             this.cellules.get(x).get(y-1).murs.put("E",false);
-            System.out.println("j'ai cassé le mur de la cellule ");
+
         }
 
-}
+
+    }
+    //ajout 11:25 le 25/04/2023
+    public void vider(){
+        ArrayList<String> list = new ArrayList();
+        list.add(String.valueOf('N'));
+        list.add(String.valueOf('S'));
+        list.add(String.valueOf('E'));
+        list.add(String.valueOf('O'));
+        for(int x = 0;x<this.nx;x++){
+            for(int y= 0;y<this.ny;y++){
+                for(String direction :list){
+                    this.CasserMur(x,y,direction);
+                }
+            }
+        }
+    }
+    //ajout des deux fonctions le 25/04/2023 à 13:13
+public void sauvegarderLabyrinthe(String nomFichier) throws IOException {
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(nomFichier));
+        oos.writeObject(this);
+        oos.close();
+    }
+
+    public static Labyrinthe chargerLabyrinthe(String nomFichier) throws IOException, ClassNotFoundException {
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(nomFichier));
+        Labyrinthe labyrinthe = (Labyrinthe) ois.readObject();
+        ois.close();
+        return labyrinthe;
+    }
+
 
 }
