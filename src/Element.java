@@ -1,9 +1,6 @@
+
 import java.io.Serializable;
 
-public class Element implements Serializable {
-    protected int bonus;
+public  abstract class Element implements Serializable {
 
-    public Element(int bonus){
-        this.bonus = bonus;
-    }
 }
