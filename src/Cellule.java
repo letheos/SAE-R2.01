@@ -9,17 +9,20 @@ public class Cellule implements Serializable {
     private Element élément;
 
 
-    HashMap<String,Boolean> murs = new HashMap<>();
 
-    public Cellule(int identifiant,int x, int y){
+
+    public Cellule(int identifiant,int x, int y,Element element){
         this.x  = x;
         this.y = y;
         this.identifiant = identifiant;
-        this.murs.put("N",true);
-        this.murs.put("S",true);
-        this.murs.put("E",true);
-        this.murs.put("O",true);
-        this.élément = new Herbe();
+        this.élément = element;
     }
 
+    public Element getÉlément() {
+        return élément;
+    }
+
+    public void setÉlément(Element élément) {
+        this.élément = élément;
+    }
 }

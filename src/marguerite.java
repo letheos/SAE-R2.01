@@ -1,4 +1,4 @@
-public class marguerite extends Element {
+public class marguerite extends Végétal {
     public marguerite() {
         super(4);
     }
