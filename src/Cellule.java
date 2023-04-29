@@ -1,5 +1,8 @@
 import java.io.Serializable;
+import java.rmi.MarshalException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Cellule implements Serializable {
     private int identifiant;
@@ -24,5 +27,27 @@ public class Cellule implements Serializable {
 
     public void setÉlément(Element élément) {
         this.élément = élément;
+    }
+    public void manger(){
+        this.élément = null;
+    }
+    public void repousser(){
+        ArrayList<String> elements = new ArrayList<String>();
+        elements.add("herbe");
+        elements.add("herbe");
+        elements.add("cactus");
+        elements.add("margeurite");
+        Random rand = new Random();
+        int indexAleatoire = rand.nextInt(elements.size());
+        String element = elements.get(indexAleatoire);
+        if (element.equals("herbe")){
+            this.élément = new Herbe();
+        }
+        else if (element.equals("cactus")){
+            this.élément = new Cactus();
+        }
+        else if (element.equals("margeurite")) {
+            this.élément = new marguerite();
+        }
     }
 }
