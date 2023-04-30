@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public class Labyrinthe implements Serializable {
     private int nx;
     private int ny;
+    private Mouton mouton;
+    private Loup loup;
     private ArrayList<ArrayList<Cellule>> cellules;
 
     private boolean sortie;
@@ -51,7 +53,13 @@ public class Labyrinthe implements Serializable {
             sb.append("|");
             for (int x = 0; x < nx; x++) {
                 Cellule cell = cellules.get(x).get(y);
-                if (cell.getÉlément() instanceof Mur) {
+                if ((y == mouton.getX() && (x == mouton.getY()))){
+                    sb.append(" M ");
+                }
+                else if ((y == loup.getX())&& (x==loup.getY())){
+                    sb.append(" L ");
+                }
+                else if (cell.getÉlément() instanceof Mur) {
                     sb.append("###|");
                 } else if (cell.getÉlément() instanceof Cactus) {
                     sb.append("/*/|");
@@ -146,7 +154,6 @@ public class Labyrinthe implements Serializable {
         return true;
     }
 
-
     //ajout des fonctions Définir Sortie et PoserMur le 29/04/2023 par letheos à 19:56
     public boolean PoserMur(int x, int y) {
         if (this.cellules.get(x).get(y).getÉlément() instanceof Mur) {
@@ -167,14 +174,50 @@ public class Labyrinthe implements Serializable {
             System.out.println("un coin n'est pas valable");
             return false;
         }
-            if (cellules.get(x).get(y).getÉlément() instanceof Végétal) {
-                System.out.println("cette case n'est pas valide");
-                return false;
-            } else {
-                System.out.println("la sortie a été crée ");
-                this.cellules.get(x).get(y).setÉlément(new Herbe());
-                this.sortie=true;
-                return true;
-            }
+        if (cellules.get(x).get(y).getÉlément() instanceof Végétal) {
+            System.out.println("cette case n'est pas valide");
+            return false;
+        } else {
+            System.out.println("la sortie a été crée ");
+            this.cellules.get(x).get(y).setÉlément(new Herbe());
+            this.sortie = true;
+            return true;
         }
     }
+
+    //x = droite
+    //y = hauteur
+    //liste de boolean en format [N,S,E,O] pour indiquer si l'animal peut se déplacer dans une direction ou non
+    public ArrayList<Boolean> getVoisins(int x, int y) {
+        ArrayList<Boolean> liste = new ArrayList<>();
+        liste.add(false);
+        liste.add(false);
+        liste.add(false);
+        liste.add(false);
+        if (this.cellules.get(x - 1).get(y).getÉlément() instanceof Végétal) {
+
+            System.out.println("la case ouest est disponible");
+
+            liste.set(3, true);
+        }
+        if (this.cellules.get(x + 1).get(y).getÉlément() instanceof Végétal) {
+            liste.set(2, true);
+            System.out.println("la case du est est disponible");
+        }
+        if (this.cellules.get(x).get(y + 1).getÉlément() instanceof Végétal) {
+            liste.set(1, true);
+            System.out.println("la case du bas  est disponible");
+        }
+        if (this.cellules.get(x).get(y - 1).getÉlément() instanceof Végétal) {
+            liste.set(0, true);
+            System.out.println("la case du haut est disponible");
+        }
+        return liste;
+    }
+    public void setLoup(Loup loup){
+        this.loup = loup;
+    }
+    public void setMouton(Mouton mouton){
+        this.mouton = mouton;
+    }
+}

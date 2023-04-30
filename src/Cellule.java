@@ -50,4 +50,12 @@ public class Cellule implements Serializable {
             this.élément = new marguerite();
         }
     }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getX() {
+        return x;
+    }
 }
