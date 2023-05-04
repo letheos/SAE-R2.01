@@ -1,0 +1,17 @@
+
+Interface )
+  -gérer graphiquement le déplacement 
+  -implémenter boutons pour la customisation (PoserMouton , PoserMargeurite,PoserMur...)
+  -Créer Scène Menu principal
+  -menu paramètres(optionnel)
+  
+Code)
+  -Faire main
+  -fonction manger de la classe Loup
+  -Gérer Vision animaux
+  -Gérer Fuite
+  -Gérer Classe
+  -faire un menu quand le jeu est fini 
+  -faire une fonction to String sur mouton 
+  
+  
