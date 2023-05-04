@@ -1,3 +1,5 @@
+package com.example.fx_sae;
+
 import java.io.Serializable;
 import java.util.Random;
 

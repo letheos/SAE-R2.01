@@ -1,3 +1,5 @@
+package com.example.fx_sae;
+
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -54,10 +56,13 @@ public class Labyrinthe implements Serializable {
             for (int x = 0; x < nx; x++) {
                 Cellule cell = cellules.get(x).get(y);
                 if ((y == mouton.getX() && (x == mouton.getY()))){
-                    sb.append(" M ");
+                    sb.append(" M |");
                 }
                 else if ((y == loup.getX())&& (x==loup.getY())){
-                    sb.append(" L ");
+                    sb.append(" L |");
+                }
+                else if (cell.getÉlément() == null){
+                    sb.append("Ter|");
                 }
                 else if (cell.getÉlément() instanceof Mur) {
                     sb.append("###|");

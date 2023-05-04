@@ -1,3 +1,5 @@
+package com.example.fx_sae;
+
 import java.util.HashMap;
 
 public class Mouton extends Animaux {

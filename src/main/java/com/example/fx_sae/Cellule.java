@@ -1,3 +1,5 @@
+package com.example.fx_sae;
+
 import java.io.Serializable;
 import java.rmi.MarshalException;
 import java.util.ArrayList;

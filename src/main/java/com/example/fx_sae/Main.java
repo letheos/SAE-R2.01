@@ -1,3 +1,5 @@
+package com.example.fx_sae;
+
 import java.io.IOException;
 
 public class Main {
@@ -36,7 +38,7 @@ public class Main {
         System.out.println(babouin_compteur);
         récup.DéfinirSortie(9,1);
         System.out.println(récup.toString());
-        System.out.println("les voisins sont "+récup.getVoisins(récup.GetCellule(78,1)));
+        System.out.println("les voisins sont "+récup.getVoisins(récup.GetCellule(8,1)));
         //System.out.println("les voisins sont"+récup.getVoisins(8,8));
         //System.out.println("les voisins sont"+récup.getVoisins(4,4));
 
