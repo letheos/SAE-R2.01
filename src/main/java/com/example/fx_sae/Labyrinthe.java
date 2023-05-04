@@ -218,4 +218,11 @@ public class Labyrinthe implements Serializable {
     public void setMouton(Mouton mouton){
         this.mouton = mouton;
     }
+
+    public int getNx(){
+        return this.nx;
+    }
+    public int getNy(){
+        return this.ny;
+    }
 }

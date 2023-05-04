@@ -28,10 +28,10 @@ public class HelloApplication extends Application {
         System.out.println(test.GetCellule(2,2));
         Loup loup = new Loup(test.GetCellule(1,1));
         test.setLoup(loup);
-        Mouton mouton = new Mouton(test.GetCellule(8,8));
+        Mouton mouton = new Mouton(test.GetCellule(test.getNx()-2, test.getNy()-2));
         test.setMouton(mouton);
         System.out.println(test.toString());
-        test.CasserMur(4,0);
+        test.CasserMur(3,0);
         test.PoserCactus(3,3);
         test.PoserMargueurite(2,3);
         test.CasserMur(0,3);
@@ -40,35 +40,60 @@ public class HelloApplication extends Application {
         test.sauvegarderLabyrinthe("labyrintheprefait.dat");
         Labyrinthe récup = Labyrinthe.chargerLabyrinthe("labyrintheprefait.dat");
         System.out.println(récup.toString());
-        int babouin_compteur = 0;
-        for(int x = 0;x<10;x++){
-            for (int y=0;y<10;y++){
+        /*int babouin_compteur = 0;
+        for(int x = 0;x<récup.getNx();x++){
+            for (int y=0;y< test.getNy();y++){
                 if (récup.DéfinirSortie(x,y) == true){
                     babouin_compteur +=1;
                 }
             }
         }
-        System.out.println(babouin_compteur);
-        récup.DéfinirSortie(9,1);
+        System.out.println(babouin_compteur);*/
+        récup.DéfinirSortie(4,1);
         System.out.println(récup.toString());
-        System.out.println("les voisins sont "+récup.getVoisins(récup.GetCellule(8,1)));
+        System.out.println("les voisins sont "+récup.getVoisins(récup.GetCellule(2,1)));
         //System.out.println("les voisins sont"+récup.getVoisins(8,8));
         //System.out.println("les voisins sont"+récup.getVoisins(4,4));
         Image image = new Image("C:\\Users\\depla\\OneDrive\\Images\\Herbe.Png");
-BackgroundSize backgroundSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
-BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
-Background background = new Background(backgroundImage);
+        Image image2 = new Image("C:\\Users\\depla\\OneDrive\\Images\\Mur.Png");
+        Image image3 = new Image("C:\\Users\\depla\\OneDrive\\Images\\cactus.jpg");
+        Image image4 = new Image("C:\\Users\\depla\\OneDrive\\Images\\Margeurites.jpg");
+
+
+        BackgroundSize backgroundSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+        BackgroundImage backgroundImage2 = new BackgroundImage(image2, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+        BackgroundImage backgroundImage3 = new BackgroundImage(image3, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+        BackgroundImage backgroundImage4 = new BackgroundImage(image4, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+        Background background = new Background(backgroundImage);
+        Background background2 = new Background(backgroundImage2);
+        Background background3 = new Background(backgroundImage3);
+        Background background4 = new Background(backgroundImage4);
 
         Parent gridPane = new GridPane();
-        for (int row = 20; row < 30; row++) {
-    for (int col = 20; col < 30; col++) {
+        for (int row = 0; row < récup.getNx(); row++) {
+    for (int col = 0; col < récup.getNy(); col++) {
         Button button = new Button();
         button.setPrefSize(50, 50);
-        button.setBackground(background);
+        if (récup.GetCellule(row,col).getÉlément() instanceof Mur){
+            button.setBackground(background2);
+        } else if (récup.GetCellule(row,col).getÉlément() instanceof Cactus) {
+            button.setBackground(background3);
+
+        } else if (récup.GetCellule(row,col).getÉlément() instanceof marguerite) {
+            button.setBackground(background4);
+
+        }
+        else {
+            button.setBackground(background);
+        }
         button.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         ((GridPane) gridPane).add(button, col, row);
     }
 }
+
+        gridPane.setLayoutX(250);
+        gridPane.setLayoutY(150);
     Scene scene = new Scene(gridPane, 400, 400);
     stage = new Stage();
     stage.setScene(scene);
