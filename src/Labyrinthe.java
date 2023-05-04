@@ -188,31 +188,24 @@ public class Labyrinthe implements Serializable {
     //x = droite
     //y = hauteur
     //liste de boolean en format [N,S,E,O] pour indiquer si l'animal peut se déplacer dans une direction ou non
-    public ArrayList<Boolean> getVoisins(int x, int y) {
-        ArrayList<Boolean> liste = new ArrayList<>();
-        liste.add(false);
-        liste.add(false);
-        liste.add(false);
-        liste.add(false);
-        if (this.cellules.get(x - 1).get(y).getÉlément() instanceof Végétal) {
+    public ArrayList<Cellule> getVoisins(Cellule cellule ) {
+        ArrayList<Cellule> voisins = new ArrayList<>();
 
-            System.out.println("la case ouest est disponible");
+        if (this.cellules.get(cellule.getX() - 1).get(cellule.getY()).getÉlément() instanceof Végétal) {
+            voisins.add(this.cellules.get(cellule.getX() - 1).get(cellule.getY()));
 
-            liste.set(3, true);
         }
-        if (this.cellules.get(x + 1).get(y).getÉlément() instanceof Végétal) {
-            liste.set(2, true);
-            System.out.println("la case du est est disponible");
+        if (this.cellules.get(cellule.getX() + 1).get(cellule.getY()).getÉlément() instanceof Végétal) {
+            voisins.add(this.cellules.get(cellule.getX() + 1).get(cellule.getY()));
+
         }
-        if (this.cellules.get(x).get(y + 1).getÉlément() instanceof Végétal) {
-            liste.set(1, true);
-            System.out.println("la case du bas  est disponible");
+        if (this.cellules.get(cellule.getX()).get(cellule.getY() + 1).getÉlément() instanceof Végétal) {
+            voisins.add(this.cellules.get(cellule.getX() + 1).get(cellule.getY()+1));
         }
-        if (this.cellules.get(x).get(y - 1).getÉlément() instanceof Végétal) {
-            liste.set(0, true);
-            System.out.println("la case du haut est disponible");
+        if (this.cellules.get(cellule.getX()).get(cellule.getY() - 1).getÉlément() instanceof Végétal) {
+            voisins.add(this.cellules.get(cellule.getX()).get(cellule.getY() - 1));
         }
-        return liste;
+        return voisins;
     }
     public void setLoup(Loup loup){
         this.loup = loup;

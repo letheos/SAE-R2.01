@@ -1,24 +1,38 @@
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 
 public class Animaux implements Serializable {
     private int portée;
-    private int x;
-    private int y;
+    private Cellule position;
 
 
-    public Animaux(int x ,int y){
+
+
+    public Animaux(Cellule cellule){
         this.portée = 4;
-        this.x =x;
-        this.y = y;
+        this.position= cellule;
+
+
+
+
     }
     public int getX(){
-        return this.x;
+        return this.position.getX();
     }
     public int getY(){
-        return this.y;
+        return this.position.getY();
     }
-    public void errer(){
+    public Cellule getPosition(){
+        return this.position;
+    }
+    public void errer(Labyrinthe labyrinthe){
+        ArrayList<Cellule> voisins = labyrinthe.getVoisins(this.position);
+        Random random = new Random();
+        int choix = random.nextInt(voisins.size());
 
+        //todo finir errer en choisissant aléatoirement la direction qui est récupérée et gérer ça dans le labyrinthe
     }
 
 }
