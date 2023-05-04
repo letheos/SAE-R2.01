@@ -4,7 +4,7 @@ Interface )
   -implémenter boutons pour la customisation (PoserMouton , PoserMargeurite,PoserMur...)
   -Créer Scène Menu principal
   -menu paramètres(optionnel)
-  -terminer d'implémenter l'affichage du labyrinthe avec les animaux
+  -finir l'implémentation de la superposition de l'image du mouton et du loup sur les cases
   
 Code)
   -Faire main
