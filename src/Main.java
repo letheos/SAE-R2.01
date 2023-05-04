@@ -11,9 +11,9 @@ public class Main {
 
         System.out.println(test.GetCellules());
         System.out.println(test.GetCellule(2,2));
-        Loup loup = new Loup(8,8);
+        Loup loup = new Loup(test.GetCellule(1,1));
         test.setLoup(loup);
-        Mouton mouton = new Mouton(1,1);
+        Mouton mouton = new Mouton(test.GetCellule(8,8));
         test.setMouton(mouton);
         System.out.println(test.toString());
         test.CasserMur(4,0);
@@ -36,7 +36,7 @@ public class Main {
         System.out.println(babouin_compteur);
         récup.DéfinirSortie(9,1);
         System.out.println(récup.toString());
-        System.out.println("les voisins sont "+récup.getVoisins(8,1));
+        System.out.println("les voisins sont "+récup.getVoisins(récup.GetCellule(78,1)));
         //System.out.println("les voisins sont"+récup.getVoisins(8,8));
         //System.out.println("les voisins sont"+récup.getVoisins(4,4));
 
