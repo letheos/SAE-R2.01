@@ -27,6 +27,11 @@ public class Animaux implements Serializable {
     public Cellule getPosition(){
         return this.position;
     }
+
+    public void setPosition(Cellule position) {
+        this.position = position;
+    }
+
     public void errer(Labyrinthe labyrinthe){
         ArrayList<Cellule> voisins = labyrinthe.getVoisins(this.position);
         Random random = new Random();
