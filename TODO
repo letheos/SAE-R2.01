@@ -4,7 +4,7 @@ Interface )
   -implémenter boutons pour la customisation (PoserMouton , PoserMargeurite,PoserMur...)
   -Créer Scène Menu principal
   -menu paramètres(optionnel)
-  -finir l'implémentation de la superposition de l'image du mouton et du loup sur les cases
+  -Corriger l'affichage du loup pendant son déplacement puis faire celui du mouton une fois corrigé.Optionnel : ajouter une animation lors du déplacement
   
 Code)
   -Faire main
