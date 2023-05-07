@@ -6,14 +6,14 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class Animaux implements Serializable {
-    private int portée;
+    private int portee;
     private Cellule position;
 
 
 
 
     public Animaux(Cellule cellule){
-        this.portée = 4;
+        this.portee = 4;
         this.position= cellule;
 
 
