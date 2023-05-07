@@ -11,7 +11,7 @@ public class Cellule implements Serializable {
     private int x;
     private int y;
 
-    private Element élément;
+    private Element element;
 
 
 
@@ -20,18 +20,18 @@ public class Cellule implements Serializable {
         this.x  = x;
         this.y = y;
         this.identifiant = identifiant;
-        this.élément = element;
+        this.element = element;
     }
 
-    public Element getÉlément() {
-        return élément;
+    public Element getElement() {
+        return element;
     }
 
-    public void setÉlément(Element élément) {
-        this.élément = élément;
+    public void setElement(Element element) {
+        this.element = element;
     }
     public void manger(){
-        this.élément = null;
+        this.element = null;
     }
     public void repousser(){
         ArrayList<String> elements = new ArrayList<String>();
@@ -41,15 +41,16 @@ public class Cellule implements Serializable {
         elements.add("margeurite");
         Random rand = new Random();
         int indexAleatoire = rand.nextInt(elements.size());
+        //prend un élément aléatoire de la liste
         String element = elements.get(indexAleatoire);
         if (element.equals("herbe")){
-            this.élément = new Herbe();
+            this.element = new Herbe();
         }
         else if (element.equals("cactus")){
-            this.élément = new Cactus();
+            this.element = new Cactus();
         }
         else if (element.equals("margeurite")) {
-            this.élément = new marguerite();
+            this.element = new marguerite();
         }
     }
 
