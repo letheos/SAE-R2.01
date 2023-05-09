@@ -115,17 +115,45 @@ public class HelloApplication extends Application {
         ((GridPane) gridPane).add(button, col, row);
     }
 }
-        ScrollBar s1 = new ScrollBar();
-        s1.setOrientation(Orientation.VERTICAL);
+        GridPane boutonCote = new GridPane();
+        //buton pour placé un mur
+        Button placeMur = new Button();
+        placeMur.setText("Placer Mur");
+        //button pour placer une marguerite
+        Button placerMarguerite = new Button();
+        placerMarguerite.setText("placer Marguerite");
+        //button pour placer un cactus
+        Button placerCactus = new Button();
+        placerCactus.setText("placer Cactus");
+        //button pour place de l'herbe
+        Button placerHerbe = new Button();
+        placerHerbe.setText("placer Herbe");
+        //button pour mettre de la terre(enlever tout)
+        Button placerTerre = new Button();
+        placerTerre.setText("placer Terre");
+
+        //ajout dans boutonCote des bouton de haut en bas
+        boutonCote.add(placerTerre,0,1);
+        boutonCote.add(placeMur,0,2);
+        boutonCote.add(placerCactus,0,3);
+        boutonCote.add(placerHerbe,0,4);
+        boutonCote.add(placerMarguerite,0,5);
+
+
         int largeur = nbrLongueur*50;
-        int hauteur = nbrLargeur*50+150;
+        int hauteur = nbrLargeur*55+150;
         int milieuH = hauteur/2;
         int milieuL = largeur/2;
 
         gridPane.setLayoutX(0);
         gridPane.setLayoutY(0);
-
-        Scene scene = new Scene(gridPane, hauteur, largeur);
+        boutonCote.setLayoutX(560);
+        boutonCote.setLayoutY(10);
+        Group groupe = new Group();
+        groupe.getChildren().add(gridPane);
+        groupe.getChildren().add(boutonCote);
+        boutonCote.setVgap(20);
+        Scene scene = new Scene(groupe, hauteur, largeur);
 
     stage = new Stage();
     stage.setTitle("jeu wsh");
