@@ -164,7 +164,7 @@ public class HelloApplication extends Application {
 
         gridPane.setLayoutX(0);
         gridPane.setLayoutY(0);
-        boutonCote.setLayoutX(nbrLongueur+60);
+        boutonCote.setLayoutX(nbrLongueur*55);
         boutonCote.setLayoutY(10);
         Group groupe = new Group();
         groupe.getChildren().add(gridPane);
