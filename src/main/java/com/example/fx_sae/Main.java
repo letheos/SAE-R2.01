@@ -17,12 +17,16 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     public void start(Stage stage) throws IOException {
-        Image image = new Image("C:\\Users\\depla\\OneDrive\\Images\\Herbe.Png");
+        Labyrinthe labyrinthe = new Labyrinthe(3,4);
+        System.out.println(labyrinthe.GetCellules());
+        System.out.println(labyrinthe.GetCellule(0,1));
+
+        /*Image image = new Image("C:\\Users\\depla\\OneDrive\\Images\\Herbe.Png");
 BackgroundSize backgroundSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
 BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
 Background background = new Background(backgroundImage);
 
-        Parent gridPane = new GridPane();
+        GridPane gridPane = new GridPane();
         for (int row = 20; row < 30; row++) {
     for (int col = 20; col < 30; col++) {
         Button button = new Button();
@@ -81,5 +85,5 @@ Background background = new Background(backgroundImage);
 
         }
 
-    }
+    }*/}}
 
