@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Orientation;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,13 +15,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.stage.Stage;
 import javafx.scene.control.ScrollBar;
-
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.InputEvent;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException, ClassNotFoundException {
-
+        Evenement e = new Evenement();
 
 
         Labyrinthe test;
@@ -42,6 +46,7 @@ public class HelloApplication extends Application {
         test.PoserMargueurite(2,3);
         test.CasserMur(0,3);
         test.PoserMargueurite(1,4);
+        test.PoserMargueurite(3,4);
         System.out.println(test.toString());
         test.sauvegarderLabyrinthe("labyrintheprefait.dat");
         Labyrinthe récup = Labyrinthe.chargerLabyrinthe("labyrintheprefait.dat");
@@ -83,7 +88,7 @@ public class HelloApplication extends Application {
         Background background4 = new Background(backgroundImage4);
         Background background5 =  new Background(backgroundImage5);
 
-        Parent gridPane = new GridPane();
+        GridPane gridPane = new GridPane();
         for (int row = 0; row < récup.getNx(); row++) {
     for (int col = 0; col < récup.getNy(); col++) {
         Button button = new Button();
@@ -111,10 +116,20 @@ public class HelloApplication extends Application {
             button.getParent().getChildrenUnmodifiable().add(stackPane);*/
         }
 
+
+
         button.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         ((GridPane) gridPane).add(button, col, row);
     }
 }
+//
+  //      public void handle(MouseEvent v) {
+  //          int colIndex = GridPane.getColumnIndex((Node) v.getTarget());
+  //          int rowIndex = GridPane.getRowIndex((Node) v.getTarget());
+  //          System.out.println("Cellule (" + colIndex + ", " + rowIndex + ") a été cliquée.");
+  //      }
+
+
         GridPane boutonCote = new GridPane();
         //buton pour placé un mur
         Button placeMur = new Button();
@@ -122,6 +137,7 @@ public class HelloApplication extends Application {
         //button pour placer une marguerite
         Button placerMarguerite = new Button();
         placerMarguerite.setText("placer Marguerite");
+
         //button pour placer un cactus
         Button placerCactus = new Button();
         placerCactus.setText("placer Cactus");
@@ -140,14 +156,15 @@ public class HelloApplication extends Application {
         boutonCote.add(placerMarguerite,0,5);
 
 
+        placerMarguerite.setOnAction(e);
+
+
         int largeur = nbrLongueur*50;
         int hauteur = nbrLargeur*55+150;
-        int milieuH = hauteur/2;
-        int milieuL = largeur/2;
 
         gridPane.setLayoutX(0);
         gridPane.setLayoutY(0);
-        boutonCote.setLayoutX(560);
+        boutonCote.setLayoutX(nbrLongueur+60);
         boutonCote.setLayoutY(10);
         Group groupe = new Group();
         groupe.getChildren().add(gridPane);
