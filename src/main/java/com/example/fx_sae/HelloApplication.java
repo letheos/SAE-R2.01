@@ -38,6 +38,8 @@ import javax.swing.text.Position;
 import java.io.IOException;
 import java.util.EventObject;
 
+import static javafx.geometry.HPos.*;
+
 public class HelloApplication extends Application {
 
     private Node getButtonxy (GridPane gridPane,int x ,int y){
@@ -49,14 +51,59 @@ public class HelloApplication extends Application {
         return null;
 }
 
+    private void déplacement(Labyrinthe récup,GridPane gridPane,int newX,int newY,ImageView imageView,ImageView imageView1){
+        Cellule loupPosition = (Cellule) récup.getLoup().getPosition();
 
+    // Vérifier si la nouvelle position est valide
+    if (newX >= 0 && newX < récup.getNx() && newY >= 0 && newY < récup.getNy()) {
+        // Mettre à jour la position du loup
+        récup.getLoup().setPosition(récup.GetCellule(newX,newY));
+
+        // Enlever l'ancienne image de la case actuelle
+       Button button2 = null;
+
+for (Node node : gridPane.getChildren()) {
+    if (GridPane.getColumnIndex(node) == newX && GridPane.getRowIndex(node) == newY) {
+        if (node instanceof Button) {
+            button2 = (Button) node;
+            break;
+        }
+    }
+}
+
+// vérifier si le bouton a été trouvé
+if (button2 != null) {
+    // définir un nouveau graphique pour le bouton
+
+
+    button2.setGraphic(imageView1);
+
+}
+        // Ajouter la nouvelle image à la nouvelle case
+        /*Pane newOverlayPane = new Pane();
+
+        newOverlayPane.setStyle("-fx-background-color: transparent;");
+        imageView1.setMouseTransparent(true);
+        imageView1.setPreserveRatio(true);
+        Rectangle clip1 = new Rectangle(imageView1.getFitWidth(), imageView1.getFitHeight());
+        clip1.setArcHeight(10);
+        clip1.setArcWidth(10);
+        imageView1.setClip(clip1);
+
+        newOverlayPane.getChildren().add(imageView1);
+        ((GridPane) gridPane).add(newOverlayPane, newX, newY);
+
+        GridPane.setValignment(newOverlayPane, VPos.CENTER);
+*/
+    }//TODO optimiser le code , dans les faits il marche mais pas de manière optimale
+    }
 
     @Override
     public void start(Stage stage) throws IOException, ClassNotFoundException {
 
 
         Labyrinthe test;
-        test = new Labyrinthe(10, 10);
+        test = new Labyrinthe(8, 8);
 
 
         System.out.println(test.GetCellules());
@@ -119,8 +166,13 @@ public class HelloApplication extends Application {
         Background background3 = new Background(backgroundImage3);
         Background background4 = new Background(backgroundImage4);
         Background background5 = new Background(backgroundImage5);
-
-        Parent gridPane = new GridPane();
+        imageView1.setMouseTransparent(true);
+        imageView1.setPreserveRatio(true);
+        Rectangle clip1 = new Rectangle(imageView1.getFitWidth(),imageView1.getFitHeight());
+        clip1.setArcWidth(10);
+        clip1.setArcHeight(10);
+        imageView1.setClip(clip1);
+        GridPane gridPane = new GridPane();
         for (int row = 0; row < récup.getNy(); row++) {
             for (int col = 0; col < récup.getNx(); col++) {
                 Button button = new Button();
@@ -153,7 +205,7 @@ public class HelloApplication extends Application {
                     imageView1.setClip(clip);
                     overlayPane.getChildren().add(imageView);
                     button.setGraphic(overlayPane);
-                    //TODO finir l'implémentation du loup et du mouton au déplacement
+
 
                 } else if (récup.GetCellule(col, row).equals(récup.getLoup().getPosition())) {
 
@@ -167,40 +219,9 @@ public class HelloApplication extends Application {
                     imageView1.setClip(clip);
                     overlayPane.getChildren().add(imageView1);
                     button.setGraphic(overlayPane);
-                    button.setOnAction(event -> {
-    // Obtenir la position actuelle du loup
-    Cellule loupPosition = (Cellule) récup.getLoup().getPosition();
-    int x = ((Cellule) loupPosition).getX();
-    int y = ((Cellule) loupPosition).getY();
-
-    // Calculer la position de la case en dessous
-    int newX = x;
-    int newY = y + 1;
-
-    // Vérifier si la nouvelle position est valide
-    if (newX >= 0 && newX < récup.getNx() && newY >= 0 && newY < récup.getNy()) {
-        // Mettre à jour la position du loup
-        récup.getLoup().setPosition(récup.GetCellule(newX,newY));
-
-        // Enlever l'ancienne image de la case actuelle
-        ((Pane)button.getGraphic()).getChildren().clear();
-
-        // Ajouter la nouvelle image à la nouvelle case
-        Pane newOverlayPane = new Pane();
-
-        newOverlayPane.setStyle("-fx-background-color: transparent;");
-        imageView1.setMouseTransparent(true);
-        imageView1.setPreserveRatio(true);
-        Rectangle clip1 = new Rectangle(imageView1.getFitWidth(), imageView1.getFitHeight());
-        clip1.setArcHeight(10);
-        clip1.setArcWidth(10);
-        imageView1.setClip(clip);
-
-        newOverlayPane.getChildren().add(imageView1);
-        ((GridPane) gridPane).add(newOverlayPane, newX, newY);
-        GridPane.setValignment(newOverlayPane, VPos.CENTER);
-
-    }
+                    button.setOnMouseClicked(event -> {
+                        // Obtenir la position actuelle du loup
+                    déplacement(récup,gridPane, loup.getX(), loup.getY()+1,imageView,imageView1);
 });
 
 
@@ -227,7 +248,8 @@ public class HelloApplication extends Application {
 
         stage = new Stage();
         stage.setScene(scene);
-        stage.setTitle("Grass Man");
+        stage.setTitle("Attrappe moi si tu peux ");
+
         stage.show();
     }
 
