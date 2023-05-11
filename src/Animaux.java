@@ -30,6 +30,7 @@ public class Animaux implements Serializable {
 
     public void setPosition(Cellule position) {
         this.position = position;
+
     }
 
     public void errer(Labyrinthe labyrinthe){
