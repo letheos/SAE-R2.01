@@ -41,51 +41,51 @@ public class Labyrinthe implements Serializable {
     }
 
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+    StringBuilder sb = new StringBuilder();
 
-        // Dessiner la première ligne avec des barres horizontales en haut
-        sb.append("+");
-        for (int i = 0; i < nx; i++) {
-            sb.append("---+");
+    // Dessiner la première ligne avec des barres horizontales en haut
+    sb.append("+");
+    for (int i = 0; i < ny; i++) {
+        sb.append("---+");
+    }
+    sb.append("\n");
+
+    // Dessiner les lignes du milieu
+    for (int x = 0; x < nx; x++) {
+        sb.append("|");
+        for (int y = 0; y < ny; y++) {
+            Cellule cell = cellules.get(x).get(y);
+            if ((x == mouton.getX() && y == mouton.getY())){
+                sb.append(" M |");
+            }
+            else if ((x == loup.getX()) && (y == loup.getY())){
+                sb.append(" L |");
+            }
+            else if (cell.getÉlément() == null){
+                sb.append("Ter|");
+            }
+            else if (cell.getÉlément() instanceof Mur) {
+                sb.append("###|");
+            } else if (cell.getÉlément() instanceof Cactus) {
+                sb.append("/*/|");
+            } else if (cell.getÉlément() instanceof marguerite) {
+                sb.append("!!!|");
+            } else {
+                sb.append("   |");
+            }
         }
         sb.append("\n");
 
-        // Dessiner les lignes du milieu
-        for (int y = 0; y < ny; y++) {
-            sb.append("|");
-            for (int x = 0; x < nx; x++) {
-                Cellule cell = cellules.get(x).get(y);
-                if ((y == mouton.getX() && (x == mouton.getY()))){
-                    sb.append(" M |");
-                }
-                else if ((y == loup.getX())&& (x==loup.getY())){
-                    sb.append(" L |");
-                }
-                else if (cell.getÉlément() == null){
-                    sb.append("Ter|");
-                }
-                else if (cell.getÉlément() instanceof Mur) {
-                    sb.append("###|");
-                } else if (cell.getÉlément() instanceof Cactus) {
-                    sb.append("/*/|");
-                } else if (cell.getÉlément() instanceof marguerite) {
-                    sb.append("!!!|");
-                } else {
-                    sb.append("   |");
-                }
-            }
-            sb.append("\n");
-
-            // Dessiner une ligne avec des barres horizontales entre chaque cellule
-            sb.append("+");
-            for (int i = 0; i < nx; i++) {
-                sb.append("---+");
-            }
-            sb.append("\n");
+        // Dessiner une ligne avec des barres horizontales entre chaque cellule
+        sb.append("+");
+        for (int i = 0; i < ny; i++) {
+            sb.append("---+");
         }
-
-        return sb.toString();
+        sb.append("\n");
     }
+
+    return sb.toString();
+}
 
 
     public ArrayList<ArrayList<Cellule>> GetCellules() {
