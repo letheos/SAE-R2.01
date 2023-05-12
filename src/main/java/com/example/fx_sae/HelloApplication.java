@@ -54,7 +54,7 @@ public class HelloApplication extends Application {
 
     // Vérifier si la nouvelle position est valide
     if (newX >= 1 && newX < récup.getNx()-1 && newY >= 1 && newY < récup.getNy()-1) {
-        System.out.println("jai passé le if");
+
         // Mettre à jour la position du loup
         if (animal instanceof Loup){
             récup.getLoup().setPosition(récup.GetCellule(newX,newY));}
@@ -108,7 +108,8 @@ if (button2 != null) {
 
 
         Labyrinthe test;
-        test = new Labyrinthe(10, 8);
+        //nx correspond a la hauteur et ny a la largeur
+        test = new Labyrinthe(15, 27);
 
 
         System.out.println(test.GetCellules());
@@ -189,7 +190,9 @@ if (button2 != null) {
         for (int row = 0; row < récup.getNx(); row++) {
             for (int col = 0; col < récup.getNy(); col++) {
                 Button button = new Button();
-                button.setPrefSize(50, 50);
+
+                button.setMinSize(50, 50);
+                button.setMaxSize(50,50);
                 if (récup.GetCellule(row, col).getÉlément() instanceof Mur) {
                     button.setBackground(background2);
                 } else if (récup.GetCellule(row ,col).getÉlément() instanceof Cactus) {
@@ -262,7 +265,7 @@ if (button2 != null) {
         System.out.println("Cellule (" + colIndex + ", " + rowIndex + ") a été cliquée.");
     }
 });
-        Scene scene = new Scene(gridPane, 400, 400);
+        Scene scene = new Scene(gridPane, récup.getNy()*50, récup.getNx()*50);
 
         stage = new Stage();
         stage.setScene(scene);
