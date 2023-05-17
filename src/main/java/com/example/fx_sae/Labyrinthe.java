@@ -196,18 +196,18 @@ public class Labyrinthe implements Serializable {
     public ArrayList<Cellule> getVoisins(Cellule cellule ) {
         ArrayList<Cellule> voisins = new ArrayList<>();
 
-        if (this.cellules.get(cellule.getX() - 1).get(cellule.getY()).getÉlément() instanceof Végétal) {
+        if (this.cellules.get(cellule.getX() - 1).get(cellule.getY()).getÉlément() instanceof Végétal || this.cellules.get(cellule.getX() - 1).get(cellule.getY()).getÉlément() == null) {
             voisins.add(this.cellules.get(cellule.getX() - 1).get(cellule.getY()));
 
         }
-        if (this.cellules.get(cellule.getX() + 1).get(cellule.getY()).getÉlément() instanceof Végétal) {
+        if (this.cellules.get(cellule.getX() + 1).get(cellule.getY()).getÉlément() instanceof Végétal || this.cellules.get(cellule.getX() + 1).get(cellule.getY()).getÉlément() == null) {
             voisins.add(this.cellules.get(cellule.getX() + 1).get(cellule.getY()));
 
         }
-        if (this.cellules.get(cellule.getX()).get(cellule.getY() + 1).getÉlément() instanceof Végétal) {
+        if (this.cellules.get(cellule.getX()).get(cellule.getY() + 1).getÉlément() instanceof Végétal || this.cellules.get(cellule.getX()).get(cellule.getY() + 1).getÉlément() == null) {
             voisins.add(this.cellules.get(cellule.getX() + 1).get(cellule.getY()+1));
         }
-        if (this.cellules.get(cellule.getX()).get(cellule.getY() - 1).getÉlément() instanceof Végétal) {
+        if (this.cellules.get(cellule.getX()).get(cellule.getY() - 1).getÉlément() instanceof Végétal ||this.cellules.get(cellule.getX()).get(cellule.getY() - 1).getÉlément() == null ) {
             voisins.add(this.cellules.get(cellule.getX()).get(cellule.getY() - 1));
         }
         return voisins;
