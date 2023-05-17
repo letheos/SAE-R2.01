@@ -3,7 +3,10 @@ package com.example.fx_sae;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+
+import java.awt.*;
 import java.awt.event.*;
+import javafx.scene.control.ScrollPane;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -35,56 +38,60 @@ import javafx.scene.layout.StackPane;
 
 import javax.swing.text.Position;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.EventObject;
 
 import static javafx.geometry.HPos.*;
 
 public class HelloApplication extends Application {
 
-    private Node getButtonxy (GridPane gridPane,int x ,int y){
-        for(Node node: gridPane.getChildren()){
-            if (GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y){
+    private Node getButtonxy(GridPane gridPane, int x, int y) {
+        for (Node node : gridPane.getChildren()) {
+            if (GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y) {
                 return node;
             }
         }
         return null;
-}
-
-    private void déplacement(Labyrinthe récup,GridPane gridPane,int newX,int newY,ImageView imageView,ImageView imageView1,Animaux animal){
-
-    // Vérifier si la nouvelle position est valide
-    if (newX >= 1 && newX < récup.getNx()-1 && newY >= 1 && newY < récup.getNy()-1) {
-
-        // Mettre à jour la position du loup
-        if (animal instanceof Loup){
-            récup.getLoup().setPosition(récup.GetCellule(newX,newY));}
-        else {
-            récup.getMouton().setPosition(récup.GetCellule(newX,newY));
-        }
-
-        // Enlever l'ancienne image de la case actuelle
-       Button button2 = null;
-
-for (Node node : gridPane.getChildren()) {
-    if (GridPane.getColumnIndex(node) == newY && GridPane.getRowIndex(node) == newX) {
-        if (node instanceof Button) {
-            button2 = (Button) node;
-            break;
-        }
     }
-}
+
+    private void déplacement(Labyrinthe récup, GridPane gridPane, int newX, int newY, ImageView imageView, ImageView imageView1, Animaux animal) {
+
+        // Vérifier si la nouvelle position est valide
+        if (newX >= 1 && newX < récup.getNx() - 1 && newY >= 1 && newY < récup.getNy() - 1) {
+
+            // Mettre à jour la position du loup
+            if (animal instanceof Loup) {
+                récup.getLoup().setPosition(récup.GetCellule(newX, newY));
+            } else {
+                récup.getMouton().setPosition(récup.GetCellule(newX, newY));
+                récup.getMouton().manger(récup.getMouton().getPosition(), gridPane);
+            }
+
+            // Enlever l'ancienne image de la case actuelle
+            Button button2 = null;
+
+            for (Node node : gridPane.getChildren()) {
+                if (GridPane.getColumnIndex(node) == newY && GridPane.getRowIndex(node) == newX) {
+                    if (node instanceof Button) {
+                        button2 = (Button) node;
+                        break;
+                    }
+                }
+            }
 
 // vérifier si le bouton a été trouvé
-if (button2 != null) {
-    // définir un nouveau graphique pour le bouton
-    if (animal instanceof Mouton){
-    button2.setGraphic(imageView);}
-    else {
+            if (button2 != null) {
+                // définir un nouveau graphique pour le bouton
+                if (animal instanceof Mouton) {
+                    button2.setGraphic(imageView);
+                } else {
 
-        button2.setGraphic(imageView1);
-    }
-}
-        // Ajouter la nouvelle image à la nouvelle case
+                    button2.setGraphic(imageView1);
+                }
+            }
+            //TODO modifier pour corriger le déplacement du mouton , quand il marche sur une case de terre il n'apparait pas
+
+            // Ajouter la nouvelle image à la nouvelle case
         /*Pane newOverlayPane = new Pane();
 
         newOverlayPane.setStyle("-fx-background-color: transparent;");
@@ -100,7 +107,7 @@ if (button2 != null) {
 
         GridPane.setValignment(newOverlayPane, VPos.CENTER);
 */
-    }//TODO optimiser le code , dans les faits il marche mais pas de manière optimale
+        }//TODO optimiser le code , dans les faits il marche mais pas de manière optimale
     }
 
     @Override
@@ -109,16 +116,16 @@ if (button2 != null) {
 
         Labyrinthe test;
         //nx correspond a la hauteur et ny a la largeur
-        test = new Labyrinthe(15, 27);
+        test = new Labyrinthe(10, 10);
 
 
         System.out.println(test.GetCellules());
-        System.out.println("le labyrinthe est un "+test.getNx()+test.getNy());
+        System.out.println("le labyrinthe est un " + test.getNx() + test.getNy());
 
         Loup loup = new Loup(test.GetCellule(1, 1));
         test.setLoup(loup);
         //mouton doit etre a x = ny- et y = nx-2 si tout en bas a droite
-        Mouton mouton = new Mouton(test.GetCellule(test.getNx()-2, test.getNy()-2));
+        Mouton mouton = new Mouton(test.GetCellule(test.getNx() - 2, test.getNy() - 2));
         System.out.println("ceci est la cellule 0,0" + test.GetCellule(0, 0));
         System.out.println("le mouton est en " + mouton.getX() + "en x et " + mouton.getY() + "en Y sur la cellule " + mouton.getPosition());
         test.setMouton(mouton);
@@ -126,17 +133,17 @@ if (button2 != null) {
         test.CasserMur(2, 0);
         test.PoserCactus(1, 1);
         test.PoserMargueurite(2, 1);
-        test.CasserMur(0,2 );
+        test.CasserMur(0, 2);
         test.PoserMargueurite(1, 2);
         System.out.println(test.toString());
         test.sauvegarderLabyrinthe("labyrintheprefait.dat");
         Labyrinthe récup = Labyrinthe.chargerLabyrinthe("labyrintheprefait.dat");
         System.out.println(récup.toString());
         int babouin_compteur = 0;
-        for(int x = 0;x<récup.getNx();x++){
-            for (int y=0;y< test.getNy();y++){
-                if (récup.DéfinirSortie(x,y) == true){
-                    babouin_compteur +=1;
+        for (int x = 0; x < récup.getNx(); x++) {
+            for (int y = 0; y < test.getNy(); y++) {
+                if (récup.DéfinirSortie(x, y) == true) {
+                    babouin_compteur += 1;
                 }
             }
         }
@@ -163,13 +170,13 @@ if (button2 != null) {
         imageView1.setFitWidth(50);
         imageView1.setMouseTransparent(true);
         imageView1.setPreserveRatio(true);
-        Rectangle clip1 = new Rectangle(imageView1.getFitWidth(),imageView1.getFitHeight());
+        Rectangle clip1 = new Rectangle(imageView1.getFitWidth(), imageView1.getFitHeight());
         clip1.setArcWidth(10);
         clip1.setArcHeight(10);
         imageView1.setClip(clip1);
         imageView.setMouseTransparent(true);
         imageView.setPreserveRatio(true);
-        Rectangle clip2 = new Rectangle(imageView.getFitWidth(),imageView.getFitHeight());
+        Rectangle clip2 = new Rectangle(imageView.getFitWidth(), imageView.getFitHeight());
         clip2.setArcWidth(10);
         clip2.setArcHeight(10);
         imageView.setClip(clip2);
@@ -192,10 +199,10 @@ if (button2 != null) {
                 Button button = new Button();
 
                 button.setMinSize(50, 50);
-                button.setMaxSize(50,50);
+                button.setMaxSize(50, 50);
                 if (récup.GetCellule(row, col).getÉlément() instanceof Mur) {
                     button.setBackground(background2);
-                } else if (récup.GetCellule(row ,col).getÉlément() instanceof Cactus) {
+                } else if (récup.GetCellule(row, col).getÉlément() instanceof Cactus) {
                     button.setBackground(background3);
 
                 } else if (récup.GetCellule(row, col).getÉlément() instanceof marguerite) {
@@ -208,7 +215,7 @@ if (button2 != null) {
                     button.setBackground(background);
 
                 }
-                if (récup.GetCellule(row,col).equals(récup.getMouton().getPosition())) {
+                if (récup.GetCellule(row, col).equals(récup.getMouton().getPosition())) {
 
                     //stackPane.getChildren().addAll(button,imageView);
                     Pane overlayPane = new Pane();
@@ -223,11 +230,13 @@ if (button2 != null) {
                     button.setGraphic(overlayPane);
                     button.setOnMouseClicked(event -> {
                         // Obtenir la position actuelle du loup
-                    déplacement(récup,gridPane, récup.getMouton().getX()-1, récup.getMouton().getY(),imageView,imageView1,récup.getMouton());
-                    //TODO inversion entre le graphic et le visuel , a réparer
-                    System.out.println(récup.toString());
-});
-                } else if (récup.GetCellule(row,col).equals(récup.getLoup().getPosition())) {
+                        récup.getMouton().errer(récup.getMouton(),récup);
+                        déplacement(récup, gridPane, récup.getMouton().getX(), récup.getMouton().getY(), imageView, imageView1, récup.getMouton());
+
+                        //TODO inversion entre le graphic et le visuel , a réparer
+                        System.out.println(récup.toString());
+                    });
+                } else if (récup.GetCellule(row, col).equals(récup.getLoup().getPosition())) {
                     Pane overlayPane = new Pane();
                     overlayPane.setStyle("-fx-background-color: transparent;");
                     imageView1.setMouseTransparent(true);
@@ -239,11 +248,13 @@ if (button2 != null) {
                     overlayPane.getChildren().add(imageView1);
                     button.setGraphic(overlayPane);
                     button.setOnMouseClicked(event -> {
+                        récup.getLoup().errer(récup.getLoup(),récup);
+
                         // Obtenir la position actuelle du loup
-                    déplacement(récup,gridPane, récup.getLoup().getX()+1, récup.getLoup().getY(),imageView,imageView1,récup.getLoup());
-                    //TODO inversion entre le graphic et le visuel , a réparer
-                    System.out.println(récup.toString());
-});
+                        déplacement(récup, gridPane, récup.getLoup().getX(), récup.getLoup().getY(), imageView, imageView1, récup.getLoup());
+                        //TODO inversion entre le graphic et le visuel , a réparer
+                        System.out.println(récup.toString());
+                    });
 
 
                 }
@@ -254,33 +265,51 @@ if (button2 != null) {
         }
 
 
-
         gridPane.setLayoutX(0);
         gridPane.setLayoutY(0);
 
         gridPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-    public void handle(MouseEvent event) {
-        int colIndex = GridPane.getColumnIndex((Node) event.getTarget());
-        int rowIndex = GridPane.getRowIndex((Node) event.getTarget());
-        System.out.println("Cellule (" + colIndex + ", " + rowIndex + ") a été cliquée.");
-    }
-});
-        Scene scene = new Scene(gridPane, récup.getNy()*50, récup.getNx()*50);
+            public void handle(MouseEvent event) {
+                int colIndex = GridPane.getColumnIndex((Node) event.getTarget());
+                int rowIndex = GridPane.getRowIndex((Node) event.getTarget());
+                System.out.println("Cellule (" + colIndex + ", " + rowIndex + ") a été cliquée.");
+            }
+        });
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setMaxSize(750,500);
+        scrollPane.setContent(gridPane);
+
+
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().add(scrollPane);
+        Scene scene = new Scene(stackPane, 1000,  750);
 
         stage = new Stage();
         stage.setScene(scene);
         stage.setTitle("Attrappe moi si tu peux ");
+        Image logo = new Image("G:\\Mon Drive\\nonnon on a pas redoublé la\\R2.01 java\\Saé R2.01-2.02 theo 2,thomas,loick\\Textures\\logo.png");
+        stage.getIcons().add(logo);
+        System.out.println("cellule 3,1 : "+récup.GetCellule(3,1));
+        System.out.println("cellule 3,1 X:"+récup.GetCellule(3,1).getX());
+        System.out.println("cellule 3,1 Y:"+récup.GetCellule(3,1).getY());
+        System.out.println("les voisins de la 3,1"+récup.getVoisins(récup.GetCellule(1,3))+'\n');
+        ArrayList voisins2 = new ArrayList();
+        for (int y = 0;y<récup.getVoisins(récup.GetCellule(3,1)).size();y++){
+            ArrayList oui = new ArrayList();
+            oui.add(récup.getVoisins(récup.GetCellule(3,1)).get(y).getX());
+            oui.add(récup.getVoisins(récup.GetCellule(3,1)).get(y).getY());
+            voisins2.add(oui);
+        }
+
+        System.out.println(récup.GetCellules());
 
         stage.show();
+        System.out.println(récup.getMouton().mangé());
     }
 
     public static void main(String[] args) {
         launch();
     }
-
-
-
-
 }
 
 
