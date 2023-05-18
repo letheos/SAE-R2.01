@@ -107,6 +107,7 @@ public class HelloApplication extends Application {
 */
         }//TODO optimiser le code , dans les faits il marche mais pas de manière optimale
     }
+    //TODO faire le code pour que le simu marche dans la console
 
     @Override
     public void start(Stage stage) throws IOException, ClassNotFoundException {
