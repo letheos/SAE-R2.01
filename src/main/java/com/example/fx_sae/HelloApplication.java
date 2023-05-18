@@ -1,57 +1,145 @@
 package com.example.fx_sae;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+
+import java.awt.*;
+import java.awt.event.*;
+import javafx.scene.control.ScrollPane;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Orientation;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.scene.control.ScrollBar;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.InputEvent;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+
+import javax.swing.text.Position;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.EventObject;
+
+import static javafx.geometry.HPos.*;
 
 public class HelloApplication extends Application {
+
+    private Node getButtonxy (GridPane gridPane,int x ,int y){
+        for(Node node: gridPane.getChildren()){
+            if (GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y){
+                return node;
+            }
+        }
+        return null;
+    }
+
+    private void déplacement(Labyrinthe récup,GridPane gridPane,int newX,int newY,ImageView imageView,ImageView imageView1,Animaux animal){
+
+        // Vérifier si la nouvelle position est valide
+        if (newX >= 1 && newX < récup.getNx()-1 && newY >= 1 && newY < récup.getNy()-1) {
+
+            // Mettre à jour la position du loup
+            if (animal instanceof Loup){
+                récup.getLoup().setPosition(récup.GetCellule(newX,newY));}
+            else {
+                récup.getMouton().setPosition(récup.GetCellule(newX,newY));
+            }
+
+            // Enlever l'ancienne image de la case actuelle
+            Button button2 = null;
+
+            for (Node node : gridPane.getChildren()) {
+                if (GridPane.getColumnIndex(node) == newY && GridPane.getRowIndex(node) == newX) {
+                    if (node instanceof Button) {
+                        button2 = (Button) node;
+                        break;
+                    }
+                }
+            }
+
+// vérifier si le bouton a été trouvé
+            if (button2 != null) {
+                // définir un nouveau graphique pour le bouton
+                if (animal instanceof Mouton){
+                    button2.setGraphic(imageView);}
+                else {
+
+                    button2.setGraphic(imageView1);
+                }
+            }
+            // Ajouter la nouvelle image à la nouvelle case
+        /*Pane newOverlayPane = new Pane();
+
+        newOverlayPane.setStyle("-fx-background-color: transparent;");
+        imageView1.setMouseTransparent(true);
+        imageView1.setPreserveRatio(true);
+        Rectangle clip1 = new Rectangle(imageView1.getFitWidth(), imageView1.getFitHeight());
+        clip1.setArcHeight(10);
+        clip1.setArcWidth(10);
+        imageView1.setClip(clip1);
+
+        newOverlayPane.getChildren().add(imageView1);
+        ((GridPane) gridPane).add(newOverlayPane, newX, newY);
+
+        GridPane.setValignment(newOverlayPane, VPos.CENTER);
+*/
+        }//TODO optimiser le code , dans les faits il marche mais pas de manière optimale
+    }
+
     @Override
     public void start(Stage stage) throws IOException, ClassNotFoundException {
-        Evenement e = new Evenement();
 
 
         Labyrinthe test;
+        //nx correspond a la hauteur et ny a la largeur
         int nbrLargeur = 10;
         int nbrLongueur = 10;
-        //problème si les 2 sont pas égaux
-        test = new Labyrinthe(nbrLongueur,nbrLargeur);
+        test = new Labyrinthe(nbrLargeur, nbrLongueur);
 
 
         System.out.println(test.GetCellules());
-        System.out.println(test.GetCellule(2,2));
-        Loup loup = new Loup(test.GetCellule(1,1));
+        System.out.println("le labyrinthe est un "+test.getNx()+test.getNy());
+
+        Loup loup = new Loup(test.GetCellule(1, 1));
         test.setLoup(loup);
+        //mouton doit etre a x = ny- et y = nx-2 si tout en bas a droite
         Mouton mouton = new Mouton(test.GetCellule(test.getNx()-2, test.getNy()-2));
+        System.out.println("ceci est la cellule 0,0" + test.GetCellule(0, 0));
+        System.out.println("le mouton est en " + mouton.getX() + "en x et " + mouton.getY() + "en Y sur la cellule " + mouton.getPosition());
         test.setMouton(mouton);
         System.out.println(test.toString());
-        test.CasserMur(3,0);
-        test.PoserCactus(3,3);
-        test.PoserMargueurite(2,3);
-        test.CasserMur(0,3);
-        test.PoserMargueurite(1,4);
-        test.PoserMargueurite(3,4);
+        test.CasserMur(2, 0);
+        test.PoserCactus(1, 1);
+        test.PoserMargueurite(2, 1);
+        test.CasserMur(0,2 );
+        test.PoserMargueurite(1, 2);
         System.out.println(test.toString());
         test.sauvegarderLabyrinthe("labyrintheprefait.dat");
         Labyrinthe récup = Labyrinthe.chargerLabyrinthe("labyrintheprefait.dat");
         System.out.println(récup.toString());
-        /*int babouin_compteur = 0;
+        int babouin_compteur = 0;
         for(int x = 0;x<récup.getNx();x++){
             for (int y=0;y< test.getNy();y++){
                 if (récup.DéfinirSortie(x,y) == true){
@@ -59,13 +147,22 @@ public class HelloApplication extends Application {
                 }
             }
         }
-        System.out.println(babouin_compteur);*/
+        System.out.println(babouin_compteur);
         récup.DéfinirSortie(4,1);
         System.out.println(récup.toString());
         System.out.println("les voisins sont "+récup.getVoisins(récup.GetCellule(2,1)));
         récup.GetCellule(5,5).setÉlément(null);
         //System.out.println("les voisins sont"+récup.getVoisins(8,8));
         //System.out.println("les voisins sont"+récup.getVoisins(4,4));
+        Image image = new Image("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\Herbe.Png");
+        Image image2 = new Image("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\Mur.Png");
+        Image image3 = new Image("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\cactus.jpg");
+        Image image4 = new Image("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\Margeurites.jpg");
+        Image image5 = new Image ("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\Terre.png");
+        Image image6 = new Image("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\Terre.png");
+        Image image7 = new Image("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\Mouton.png");
+        Image image8 = new Image("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\Loup.jpg");
+        /*
         Image image = new Image("C:\\document\\cour\\src\\Herbe.Png");
         Image image2 = new Image("C:\\document\\cour\\src\\Mur.Png");
         Image image3 = new Image("C:\\document\\cour\\src\\cactus.jpg");
@@ -73,8 +170,28 @@ public class HelloApplication extends Application {
         Image image5 = new Image ("C:\\document\\cour\\src\\Terre.png");
         Image image6 = new Image("C:\\document\\cour\\src\\Terre.png");
         Image image7 = new Image("C:\\document\\cour\\src\\\\Mouton.png");
-        ImageView imageView = new ImageView(image6);
 
+ */
+        //ImageView imageView = new ImageView(image6);
+
+        ImageView imageView = new ImageView(image7);
+        imageView.setFitHeight(30);
+        imageView.setFitWidth(30);
+        ImageView imageView1 = new ImageView(image8);
+        imageView1.setFitHeight(30);
+        imageView1.setFitWidth(50);
+        imageView1.setMouseTransparent(true);
+        imageView1.setPreserveRatio(true);
+        Rectangle clip1 = new Rectangle(imageView1.getFitWidth(),imageView1.getFitHeight());
+        clip1.setArcWidth(10);
+        clip1.setArcHeight(10);
+        imageView1.setClip(clip1);
+        imageView.setMouseTransparent(true);
+        imageView.setPreserveRatio(true);
+        Rectangle clip2 = new Rectangle(imageView.getFitWidth(),imageView.getFitHeight());
+        clip2.setArcWidth(10);
+        clip2.setArcHeight(10);
+        imageView.setClip(clip2);
 
         BackgroundSize backgroundSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
@@ -86,100 +203,181 @@ public class HelloApplication extends Application {
         Background background2 = new Background(backgroundImage2);
         Background background3 = new Background(backgroundImage3);
         Background background4 = new Background(backgroundImage4);
-        Background background5 =  new Background(backgroundImage5);
+        Background background5 = new Background(backgroundImage5);
 
         GridPane gridPane = new GridPane();
         for (int row = 0; row < récup.getNx(); row++) {
-    for (int col = 0; col < récup.getNy(); col++) {
-        Button button = new Button();
-        button.setPrefSize(50, 50);
-        if (récup.GetCellule(col,row).getÉlément() instanceof Mur){
-            button.setBackground(background2);
-        } else if (récup.GetCellule(col,row).getÉlément() instanceof Cactus) {
-            button.setBackground(background3);
+            for (int col = 0; col < récup.getNy(); col++) {
+                Button button = new Button();
 
-        } else if (récup.GetCellule(col,row).getÉlément() instanceof marguerite) {
-            button.setBackground(background4);
+                button.setMinSize(50, 50);
+                button.setMaxSize(50,50);
+                if (récup.GetCellule(row, col).getÉlément() instanceof Mur) {
+                    button.setBackground(background2);
+                } else if (récup.GetCellule(row ,col).getÉlément() instanceof Cactus) {
+                    button.setBackground(background3);
 
-        } else if (récup.GetCellule(col,row).getÉlément() ==  null) {
-            button.setBackground(background5);
+                } else if (récup.GetCellule(row, col).getÉlément() instanceof marguerite) {
+                    button.setBackground(background4);
 
-        } else {
-            button.setBackground(background);
+                } else if (récup.GetCellule(row, col).getÉlément() == null) {
+                    button.setBackground(background5);
 
+                } else {
+                    button.setBackground(background);
+
+                }
+                if (récup.GetCellule(row,col).equals(récup.getMouton().getPosition())) {
+
+                    //stackPane.getChildren().addAll(button,imageView);
+                    Pane overlayPane = new Pane();
+                    overlayPane.setStyle("-fx-background-color: transparent;");
+                    imageView.setMouseTransparent(true);
+                    imageView.setPreserveRatio(true);
+                    Rectangle clip = new Rectangle(imageView.getFitWidth(), imageView.getFitHeight());
+                    clip.setArcHeight(10);
+                    clip.setArcWidth(10);
+                    imageView1.setClip(clip);
+                    overlayPane.getChildren().add(imageView);
+                    button.setGraphic(overlayPane);
+                    button.setOnMouseClicked(event -> {
+                        // Obtenir la position actuelle du loup
+                        déplacement(récup,gridPane, récup.getMouton().getX()-1, récup.getMouton().getY(),imageView,imageView1,récup.getMouton());
+                        //TODO inversion entre le graphic et le visuel , a réparer
+                        System.out.println(récup.toString());
+                    });
+                } else if (récup.GetCellule(row,col).equals(récup.getLoup().getPosition())) {
+                    Pane overlayPane = new Pane();
+                    overlayPane.setStyle("-fx-background-color: transparent;");
+                    imageView1.setMouseTransparent(true);
+                    imageView1.setPreserveRatio(true);
+                    Rectangle clip = new Rectangle(imageView1.getFitWidth(), imageView1.getFitHeight());
+                    clip.setArcHeight(10);
+                    clip.setArcWidth(10);
+                    imageView1.setClip(clip);
+                    overlayPane.getChildren().add(imageView1);
+                    button.setGraphic(overlayPane);
+                    button.setOnMouseClicked(event -> {
+                        récup.getLoup().errer(récup.getLoup(),récup);
+
+                        // Obtenir la position actuelle du loup
+                        déplacement(récup,gridPane, récup.getLoup().getX()+1, récup.getLoup().getY(),imageView,imageView1,récup.getLoup());
+                        //TODO inversion entre le graphic et le visuel , a réparer
+                        System.out.println(récup.toString());
+                    });
+
+
+                }
+                button.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
+                ((GridPane) gridPane).add(button, col, row);
+            }
         }
-        if(récup.GetCellule(col,row).equals(récup.getMouton().getPosition())){
-            System.out.println("la case "+col+1+row+1+"est l'emplacement du mouton");
-            //TODO finir l'implémentation de la superposition de l'image du mouton et du loup sur les cases
-            /*StackPane stackPane = new StackPane();
-            stackPane.getChildren().addAll(button,imageView);
-            button.getParent().getChildrenUnmodifiable().add(stackPane);*/
-        }
 
 
-
-        button.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        ((GridPane) gridPane).add(button, col, row);
-    }
-}
-//
-  //      public void handle(MouseEvent v) {
-  //          int colIndex = GridPane.getColumnIndex((Node) v.getTarget());
-  //          int rowIndex = GridPane.getRowIndex((Node) v.getTarget());
-  //          System.out.println("Cellule (" + colIndex + ", " + rowIndex + ") a été cliquée.");
-  //      }
-
-
-        GridPane boutonCote = new GridPane();
-        //buton pour placé un mur
-        Button placeMur = new Button();
-        placeMur.setText("Placer Mur");
-        //button pour placer une marguerite
-        Button placerMarguerite = new Button();
-        placerMarguerite.setText("placer Marguerite");
-
-        //button pour placer un cactus
-        Button placerCactus = new Button();
-        placerCactus.setText("placer Cactus");
-        //button pour place de l'herbe
-        Button placerHerbe = new Button();
-        placerHerbe.setText("placer Herbe");
-        //button pour mettre de la terre(enlever tout)
-        Button placerTerre = new Button();
-        placerTerre.setText("placer Terre");
-
-        //ajout dans boutonCote des bouton de haut en bas
-        boutonCote.add(placerTerre,0,1);
-        boutonCote.add(placeMur,0,2);
-        boutonCote.add(placerCactus,0,3);
-        boutonCote.add(placerHerbe,0,4);
-        boutonCote.add(placerMarguerite,0,5);
-
-
-        placerMarguerite.setOnAction(e);
-
-
-        int largeur = nbrLongueur*50;
-        int hauteur = nbrLargeur*55+150;
 
         gridPane.setLayoutX(0);
         gridPane.setLayoutY(0);
-        boutonCote.setLayoutX(nbrLongueur*55);
-        boutonCote.setLayoutY(10);
-        Group groupe = new Group();
-        groupe.getChildren().add(gridPane);
-        groupe.getChildren().add(boutonCote);
-        boutonCote.setVgap(20);
-        Scene scene = new Scene(groupe, hauteur, largeur);
 
-    stage = new Stage();
-    stage.setTitle("jeu wsh");
-    stage.setScene(scene);
-    stage.show();
+        gridPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                int colIndex = GridPane.getColumnIndex((Node) event.getTarget());
+                int rowIndex = GridPane.getRowIndex((Node) event.getTarget());
+                System.out.println("Cellule (" + colIndex + ", " + rowIndex + ") a été cliquée.");
+            }
+        });
+
+        VBox boutonGauche = new VBox();
+        VBox boutonDroite = new VBox();
+
+        //buton pour placé un mur
+        Button placeMur = new Button("Placer Mur");
+
+        //button pour placer une marguerite
+        Button placerMarguerite = new Button("placer Marguerite");
+
+
+        //button pour placer un cactus
+        Button placerCactus = new Button("placer Cactus");
+
+        //button pour place de l'herbe
+        Button placerHerbe = new Button("placer Herbe");
+
+        //button pour mettre de la terre(enlever tout)
+        Button placerTerre = new Button("placer Terre");
+
+        ChoiceBox<Integer> hauteur = new ChoiceBox<>();
+        for(int i = 4; i<41; i++){
+            hauteur.getItems().add(i);
+        }
+
+        ChoiceBox<Integer> largeur = new ChoiceBox<>();
+        for(int i = 4; i<41; i++){
+            largeur.getItems().add(i);
+        }
+        Button generer = new Button("generer");
+
+        Button Lancer = new Button("Lancer");
+
+
+
+        Button chargerLaby = new Button("charger labyrinthe");
+
+        boutonGauche.getChildren().add(hauteur);
+        boutonGauche.getChildren().add(largeur);
+        boutonGauche.getChildren().add(generer);
+        boutonGauche.getChildren().add(Lancer);
+        boutonGauche.getChildren().add(chargerLaby);
+
+        boutonGauche.setSpacing(10);
+
+        //ajout dans boutonCote des bouton de haut en bas
+        boutonDroite.getChildren().add(placerTerre);
+        boutonDroite.getChildren().add(placeMur);
+        boutonDroite.getChildren().add(placerCactus);
+        boutonDroite.getChildren().add(placerMarguerite);
+        boutonDroite.getChildren().add(placerHerbe);
+
+        boutonDroite.setSpacing(10);
+
+
+        //placerMarguerite.setOnAction(e);
+
+
+        int largeurGrille = nbrLongueur*50;
+        int hauteurGrille = nbrLargeur*55+150;
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setMaxSize(750,500);
+        scrollPane.setContent(gridPane);
+        gridPane.setLayoutX(0);
+        gridPane.setLayoutY(0);
+
+        HBox pageDeJeux = new HBox();
+
+        pageDeJeux.getChildren().add(boutonGauche);
+        pageDeJeux.getChildren().add(gridPane);
+        pageDeJeux.getChildren().add(boutonDroite);
+
+        pageDeJeux.setSpacing(10);
+
+        Scene scene = new Scene(pageDeJeux, 1525, 850);
+        Image logo = new Image("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\fantomForever.jpg");
+
+        stage = new Stage();
+        stage.setTitle("jeu wsh");
+        stage.setScene(scene);
+        stage.getIcons().add(logo);
+        stage.show();
     }
-
 
     public static void main(String[] args) {
         launch();
     }
+
+
+
+
 }
+
+
+
