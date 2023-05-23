@@ -282,5 +282,27 @@ public class Labyrinthe implements Serializable {
         return sauv;
     }
 
+    public void recup(String fichier) {
+        try {
+            //FileInputStream input = new FileInputStream(fichier);
+            FileInputStream input = new FileInputStream("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01");
+            InputStreamReader redar = new InputStreamReader(input);
+            BufferedReader bufRead = new BufferedReader(redar);
 
+            StringBuilder stBuilder = new StringBuilder();
+            String ligne;
+            while ((ligne = bufRead.readLine()) != null) {
+                stBuilder.append(ligne);
+                stBuilder.append(System.lineSeparator());
+            }
+
+            bufRead.close();
+
+            String contenuFichier = bufRead.toString();
+            System.out.println(contenuFichier);
+        } catch (IOException e) {
+            System.out.println("Erreur lors de la lecture du fichier : " + e.getMessage());
+        }
+    }
 }
+
