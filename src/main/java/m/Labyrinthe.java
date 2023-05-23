@@ -246,7 +246,7 @@ public class Labyrinthe implements Serializable {
                     //si les coordonnnées du mouton sont les mêmes que celles de cettes cellules, on le met dans la liste
                     sauv.add("L");
                 } else if (i == 0 || i == cellules.size()) {
-                    if (cellules.get(i).get(k).getÉlément() instanceof Herbe){
+                    if (cellules.get(i).get(k).getÉlément() instanceof Herbe) {
                         sauv.add("S");
                     }
 
@@ -271,6 +271,16 @@ public class Labyrinthe implements Serializable {
             }
             sauv.add("\n");
         }
+        try {
+            FileWriter fw = new FileWriter("laby.txt");
+            fw.write(sauv.toString());
+            fw.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
         return sauv;
     }
+
+
 }
