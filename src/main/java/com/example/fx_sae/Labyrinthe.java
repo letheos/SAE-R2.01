@@ -92,7 +92,24 @@ public class Labyrinthe implements Serializable {
         return cellules;
     }
 
+   public ArrayList<Object> GetElements() {
+    ArrayList<Object> elements = new ArrayList<>();
+
+    ArrayList<ArrayList<Cellule>> cellules = GetCellules(); // Appel à la méthode GetCellules()
+
+    for (ArrayList<Cellule> ligne : cellules) {
+        for (Cellule cellule : ligne) {
+            Object element = cellule.getÉlément(); // Utilisation de la méthode GetElement()
+            elements.add(element);
+        }
+    }
+
+    return elements;
+}
+
+
     public Cellule GetCellule(int x, int y) {
+
         return this.cellules.get(x).get(y);
     }
 
@@ -190,27 +207,49 @@ public class Labyrinthe implements Serializable {
         }
     }
 
-    //x = droite
-    //y = hauteur
+    //TODO xz = droite
+    //TODO y = hauteur
     //liste de boolean en format [N,S,E,O] pour indiquer si l'animal peut se déplacer dans une direction ou non
     public ArrayList<Cellule> getVoisins(Cellule cellule ) {
         ArrayList<Cellule> voisins = new ArrayList<>();
+        int x = cellule.getX();
+        int y = cellule.getY();
+        if (!(this.GetCellule(x-1,y).getÉlément() instanceof Mur )){
+            System.out.println("la cellule au dessus "+this.GetCellule(x-1,y).getÉlément()+" n'est pas un mur");
+            voisins.add(this.GetCellule(x-1,y));
+        } if (!(this.GetCellule(x+1,y).getÉlément() instanceof Mur )) {
+            System.out.println("la cellule en dessous "+this.GetCellule(x+1,y).getÉlément()+" n'est pas un mur");
+            voisins.add(this.GetCellule(x+1,y));
+        }  if (!(this.GetCellule(x,y-1).getÉlément() instanceof Mur)) {
+            System.out.println("la cellule a gauche "+this.GetCellule(x,y-1).getÉlément()+" n'est pas un mur");
+            voisins.add(this.GetCellule(x,y-1));
+        } if (!(this.GetCellule(x,y+1).getÉlément() instanceof Mur)) {
+            System.out.println("la cellule a droite "+this.GetCellule(x,y+1).getÉlément()+" n'est pas un mur");
+            voisins.add(this.GetCellule(x,y+1));
 
-        if (this.cellules.get(cellule.getX() - 1).get(cellule.getY()).getÉlément() instanceof Végétal || this.cellules.get(cellule.getX() - 1).get(cellule.getY()).getÉlément() == null) {
+        }
+        return voisins;
+
+
+
+
+        /*if (this.cellules.get(cellule.getX() - 1).get(cellule.getY()).getÉlément() instanceof Végétal || this.cellules.get(cellule.getX() - 1).get(cellule.getY()).getÉlément() == null) {
+            System.out.println("la cellule au dessus de "+cellule.getX()+","+cellule.getY()+"est  la cellule"+this.GetCellule(cellule.getX()-1, cellule.getY()).getX()+","+this.GetCellule(cellule.getX()-1, cellule.getY()).getY());
             voisins.add(this.cellules.get(cellule.getX() - 1).get(cellule.getY()));
-
         }
         if (this.cellules.get(cellule.getX() + 1).get(cellule.getY()).getÉlément() instanceof Végétal || this.cellules.get(cellule.getX() + 1).get(cellule.getY()).getÉlément() == null) {
+            System.out.println("la cellule en dessous de "+cellule.getX()+","+cellule.getY()+"est  la cellule"+this.GetCellule(cellule.getX()+1, cellule.getY()).getX()+","+this.GetCellule(cellule.getX()+1, cellule.getY()).getY());
             voisins.add(this.cellules.get(cellule.getX() + 1).get(cellule.getY()));
-
         }
         if (this.cellules.get(cellule.getX()).get(cellule.getY() + 1).getÉlément() instanceof Végétal || this.cellules.get(cellule.getX()).get(cellule.getY() + 1).getÉlément() == null) {
+            System.out.println("la cellule a droite de "+cellule.getX()+","+cellule.getY()+"est  la cellule"+this.GetCellule(cellule.getX(), cellule.getY()+1).getX()+","+this.GetCellule(cellule.getX(), cellule.getY()+1).getY());
             voisins.add(this.cellules.get(cellule.getX() + 1).get(cellule.getY()+1));
         }
         if (this.cellules.get(cellule.getX()).get(cellule.getY() - 1).getÉlément() instanceof Végétal ||this.cellules.get(cellule.getX()).get(cellule.getY() - 1).getÉlément() == null ) {
+            System.out.println("la cellule a gauche de "+cellule.getX()+","+cellule.getY()+"est  la cellule"+this.GetCellule(cellule.getX(), cellule.getY()-1).getX()+","+this.GetCellule(cellule.getX(), cellule.getY()-1).getY());
             voisins.add(this.cellules.get(cellule.getX()).get(cellule.getY() - 1));
         }
-        return voisins;
+        return voisins;*/
     }
     public void setLoup(Loup loup){
         this.loup = loup;

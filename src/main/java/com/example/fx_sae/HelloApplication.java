@@ -89,6 +89,7 @@ public class HelloApplication extends Application {
                     button2.setGraphic(imageView1);
                 }
             }
+            System.out.println("voici mes voisins "+récup.getVoisins(récup.getMouton().getPosition()));
             //TODO modifier pour corriger le déplacement du mouton , quand il marche sur une case de terre il n'apparait pas
 
             // Ajouter la nouvelle image à la nouvelle case
@@ -150,7 +151,7 @@ public class HelloApplication extends Application {
         System.out.println(babouin_compteur);
         récup.DéfinirSortie(1, 0);
         System.out.println(récup.toString());
-        System.out.println("les voisins sont " + récup.getVoisins(récup.GetCellule(2, 1)));
+
         récup.GetCellule(1, 1).setÉlément(null);
         //System.out.println("les voisins sont"+récup.getVoisins(8,8));
         //System.out.println("les voisins sont"+récup.getVoisins(4,4));
@@ -233,7 +234,7 @@ public class HelloApplication extends Application {
                         récup.getMouton().errer(récup.getMouton(),récup);
                         déplacement(récup, gridPane, récup.getMouton().getX(), récup.getMouton().getY(), imageView, imageView1, récup.getMouton());
 
-                        //TODO inversion entre le graphic et le visuel , a réparer
+
                         System.out.println(récup.toString());
                     });
                 } else if (récup.GetCellule(row, col).equals(récup.getLoup().getPosition())) {
@@ -252,7 +253,7 @@ public class HelloApplication extends Application {
 
                         // Obtenir la position actuelle du loup
                         déplacement(récup, gridPane, récup.getLoup().getX(), récup.getLoup().getY(), imageView, imageView1, récup.getLoup());
-                        //TODO inversion entre le graphic et le visuel , a réparer
+
                         System.out.println(récup.toString());
                     });
 
@@ -289,19 +290,42 @@ public class HelloApplication extends Application {
         stage.setTitle("Attrappe moi si tu peux ");
         Image logo = new Image("G:\\Mon Drive\\nonnon on a pas redoublé la\\R2.01 java\\Saé R2.01-2.02 theo 2,thomas,loick\\Textures\\logo.png");
         stage.getIcons().add(logo);
-        System.out.println("cellule 3,1 : "+récup.GetCellule(3,1));
-        System.out.println("cellule 3,1 X:"+récup.GetCellule(3,1).getX());
-        System.out.println("cellule 3,1 Y:"+récup.GetCellule(3,1).getY());
-        System.out.println("les voisins de la 3,1"+récup.getVoisins(récup.GetCellule(1,3))+'\n');
-        ArrayList voisins2 = new ArrayList();
+
+        /*ArrayList voisins2 = new ArrayList();
         for (int y = 0;y<récup.getVoisins(récup.GetCellule(3,1)).size();y++){
             ArrayList oui = new ArrayList();
             oui.add(récup.getVoisins(récup.GetCellule(3,1)).get(y).getX());
             oui.add(récup.getVoisins(récup.GetCellule(3,1)).get(y).getY());
             voisins2.add(oui);
         }
-
+        System.out.println("les voisins sont"+voisins2);*/
         System.out.println(récup.GetCellules());
+        System.out.println("\n");
+        System.out.println(récup.GetElements());
+        System.out.println("\n");
+        System.out.println("voici la cellule que je veux get en 0,1"+récup.GetCellule(0,1));
+        System.out.println("voici le X de la cellule en 0,1:"+récup.GetCellule(0,1).getX());
+        System.out.println("voici le Y de la cellule en 0,1:"+récup.GetCellule(0,1).getY());
+        System.out.println("voici le type de la cellule en 0,1:"+récup.GetCellule(0,1).getÉlément());
+
+
+        //TODO X correspond a la hauteur  du haut vers le bas et y a la largeur de la gauche vers la droite
+        for (int y= 1;y < récup.getNx()-1 ;y++ ){
+
+            for (int i = 1 ; i< récup.getNy()-1;i++){
+
+                System.out.println("je vais voir les voisins de la cellule "+y+","+i);
+                ArrayList<Cellule> liste = récup.getVoisins(récup.GetCellule(y,i));
+
+                ArrayList<Element> babouin_liste = new ArrayList();
+                System.out.println("je suis la en "+y+","+i);
+                System.out.println(liste);
+                for (int p = 0; p < liste.size(); p++) {
+                    babouin_liste.add(liste.get(p).getÉlément());}
+                System.out.println("voici la liste des voisins :"+babouin_liste);
+            }
+
+        }
 
         stage.show();
         System.out.println(récup.getMouton().mangé());
