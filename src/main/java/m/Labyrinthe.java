@@ -1,7 +1,7 @@
-package com.example.fx_sae;
+
+package m;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Labyrinthe implements Serializable {
@@ -55,16 +55,13 @@ public class Labyrinthe implements Serializable {
             sb.append("|");
             for (int x = 0; x < nx; x++) {
                 Cellule cell = cellules.get(x).get(y);
-                if ((y == mouton.getX() && (x == mouton.getY()))){
+                if ((y == mouton.getX() && (x == mouton.getY()))) {
                     sb.append(" M |");
-                }
-                else if ((y == loup.getX())&& (x==loup.getY())){
+                } else if ((y == loup.getX()) && (x == loup.getY())) {
                     sb.append(" L |");
-                }
-                else if (cell.getÉlément() == null){
+                } else if (cell.getÉlément() == null) {
                     sb.append("Ter|");
-                }
-                else if (cell.getÉlément() instanceof Mur) {
+                } else if (cell.getÉlément() instanceof Mur) {
                     sb.append("###|");
                 } else if (cell.getÉlément() instanceof Cactus) {
                     sb.append("/*/|");
@@ -193,7 +190,7 @@ public class Labyrinthe implements Serializable {
     //x = droite
     //y = hauteur
     //liste de boolean en format [N,S,E,O] pour indiquer si l'animal peut se déplacer dans une direction ou non
-    public ArrayList<Cellule> getVoisins(Cellule cellule ) {
+    public ArrayList<Cellule> getVoisins(Cellule cellule) {
         ArrayList<Cellule> voisins = new ArrayList<>();
 
         if (this.cellules.get(cellule.getX() - 1).get(cellule.getY()).getÉlément() instanceof Végétal) {
@@ -205,20 +202,23 @@ public class Labyrinthe implements Serializable {
 
         }
         if (this.cellules.get(cellule.getX()).get(cellule.getY() + 1).getÉlément() instanceof Végétal) {
-            voisins.add(this.cellules.get(cellule.getX() + 1).get(cellule.getY()+1));
+            voisins.add(this.cellules.get(cellule.getX() + 1).get(cellule.getY() + 1));
         }
         if (this.cellules.get(cellule.getX()).get(cellule.getY() - 1).getÉlément() instanceof Végétal) {
             voisins.add(this.cellules.get(cellule.getX()).get(cellule.getY() - 1));
         }
         return voisins;
     }
-    public void setLoup(Loup loup){
+
+    public void setLoup(Loup loup) {
         this.loup = loup;
     }
-    public void setMouton(Mouton mouton){
+
+    public void setMouton(Mouton mouton) {
         this.mouton = mouton;
     }
-    public Mouton getMouton(){
+
+    public Mouton getMouton() {
         return this.mouton;
     }
 
@@ -226,10 +226,51 @@ public class Labyrinthe implements Serializable {
         return loup;
     }
 
-    public int getNx(){
+    public int getNx() {
         return this.nx;
     }
-    public int getNy(){
+
+    public int getNy() {
         return this.ny;
+    }
+
+    public ArrayList<String> sauvegarde() {
+        ArrayList<String> sauv = new ArrayList<String>();
+        for (int i = 0; i < cellules.size(); i++) {
+            System.out.println(i);
+            for (int k = 0; k < cellules.get(i).size(); k++) {
+                if (cellules.get(i).get(k).getX() == mouton.getX() && cellules.get(i).get(k).getY() == mouton.getY()) {
+                    //si les coordonnnées du mouton sont les mêmes que celles de cettes cellules, on le met dans la liste
+                    sauv.add("M");
+                } else if (cellules.get(i).get(k).getX() == loup.getX() && cellules.get(i).get(k).getY() == loup.getY()) {
+                    //si les coordonnnées du mouton sont les mêmes que celles de cettes cellules, on le met dans la liste
+                    sauv.add("L");
+                } else if (i == 0 || i == cellules.size()) {
+                    if (cellules.get(i).get(k).getÉlément() instanceof Herbe){
+                        sauv.add("S");
+                    }
+
+                } else if (k == 0 || k == cellules.get(i).size()) {
+                    if (cellules.get(i).get(k).getÉlément() instanceof Herbe) {
+                        sauv.add("S");
+                    }
+                } else if (cellules.get(i).get(k).getÉlément() instanceof Mur) {
+                    sauv.add("x");
+                } else if (cellules.get(i).get(k).getÉlément() instanceof Herbe) {
+                    sauv.add("h");
+                } else if (cellules.get(i).get(k).getÉlément() instanceof Cactus) {
+                    sauv.add("c");
+                } else if (cellules.get(i).get(k).getÉlément() instanceof marguerite) {
+                    sauv.add("F");
+                    //selon le sujet, il y a 2 m donc on va considérer que une marguerite est une fleur et du coup f(f)
+                } else if (cellules.get(i).get(k).getX() == mouton.getX() && cellules.get(i).get(k).getY() == mouton.getY()) {
+                    sauv.add("M");
+
+                }
+
+            }
+            sauv.add("\n");
+        }
+        return sauv;
     }
 }
