@@ -1,7 +1,8 @@
 package com.example.fx_sae;
 
+import m.*;
+
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Labyrinthe implements Serializable {
@@ -41,30 +42,27 @@ public class Labyrinthe implements Serializable {
     }
 
     public String toString() {
-    StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-    // Dessiner la première ligne avec des barres horizontales en haut
-    sb.append("+");
-    for (int i = 0; i < ny; i++) {
-        sb.append("---+");
-    }
-    sb.append("\n");
+        // Dessiner la première ligne avec des barres horizontales en haut
+        sb.append("+");
+        for (int i = 0; i < ny; i++) {
+            sb.append("---+");
+        }
+        sb.append("\n");
 
         // Dessiner les lignes du milieu
         for (int y = 0; y < ny; y++) {
             sb.append("|");
             for (int x = 0; x < nx; x++) {
                 Cellule cell = cellules.get(x).get(y);
-                if ((y == mouton.getX() && (x == mouton.getY()))){
+                if ((y == mouton.getX() && (x == mouton.getY()))) {
                     sb.append(" M |");
-                }
-                else if ((y == loup.getX())&& (x==loup.getY())){
+                } else if ((y == loup.getX()) && (x == loup.getY())) {
                     sb.append(" L |");
-                }
-                else if (cell.getÉlément() == null){
+                } else if (cell.getÉlément() == null) {
                     sb.append("Ter|");
-                }
-                else if (cell.getÉlément() instanceof Mur) {
+                } else if (cell.getÉlément() instanceof Mur) {
                     sb.append("###|");
                 } else if (cell.getÉlément() instanceof Cactus) {
                     sb.append("/*/|");
@@ -193,7 +191,7 @@ public class Labyrinthe implements Serializable {
     //x = droite
     //y = hauteur
     //liste de boolean en format [N,S,E,O] pour indiquer si l'animal peut se déplacer dans une direction ou non
-    public ArrayList<Cellule> getVoisins(Cellule cellule ) {
+    public ArrayList<Cellule> getVoisins(Cellule cellule) {
         ArrayList<Cellule> voisins = new ArrayList<>();
 
         if (this.cellules.get(cellule.getX() - 1).get(cellule.getY()).getÉlément() instanceof Végétal) {
@@ -205,20 +203,23 @@ public class Labyrinthe implements Serializable {
 
         }
         if (this.cellules.get(cellule.getX()).get(cellule.getY() + 1).getÉlément() instanceof Végétal) {
-            voisins.add(this.cellules.get(cellule.getX() + 1).get(cellule.getY()+1));
+            voisins.add(this.cellules.get(cellule.getX() + 1).get(cellule.getY() + 1));
         }
         if (this.cellules.get(cellule.getX()).get(cellule.getY() - 1).getÉlément() instanceof Végétal) {
             voisins.add(this.cellules.get(cellule.getX()).get(cellule.getY() - 1));
         }
         return voisins;
     }
-    public void setLoup(Loup loup){
+
+    public void setLoup(Loup loup) {
         this.loup = loup;
     }
-    public void setMouton(Mouton mouton){
+
+    public void setMouton(Mouton mouton) {
         this.mouton = mouton;
     }
-    public Mouton getMouton(){
+
+    public Mouton getMouton() {
         return this.mouton;
     }
 
@@ -226,10 +227,11 @@ public class Labyrinthe implements Serializable {
         return loup;
     }
 
-    public int getNx(){
+    public int getNx() {
         return this.nx;
     }
-    public int getNy(){
+
+    public int getNy() {
         return this.ny;
     }
 
@@ -247,23 +249,29 @@ public class Labyrinthe implements Serializable {
                 } else if (i == 0 || i == cellules.size()) {
                     if (cellules.get(i).get(k).getÉlément() instanceof Herbe) {
                         sauv.add("S");
+                        //Si l'élément est sur les bord du labyrinthe on vérifie si c'est de l'herbe est donc la sortie
                     }
 
                 } else if (k == 0 || k == cellules.get(i).size()) {
                     if (cellules.get(i).get(k).getÉlément() instanceof Herbe) {
                         sauv.add("S");
+                        //Si l'élément est sur les bord du labyrinthe on vérifie si c'est de l'herbe est donc la sortie
                     }
                 } else if (cellules.get(i).get(k).getÉlément() instanceof Mur) {
                     sauv.add("x");
+                    //si l'élément est un mur, on met x dans la liste
                 } else if (cellules.get(i).get(k).getÉlément() instanceof Herbe) {
                     sauv.add("h");
+                    //si l'élément est de l'herbe, on met h dans la liste
                 } else if (cellules.get(i).get(k).getÉlément() instanceof Cactus) {
                     sauv.add("c");
+                    //si l'élément est un cactus, on met c dans la liste
                 } else if (cellules.get(i).get(k).getÉlément() instanceof marguerite) {
                     sauv.add("F");
-                    //selon le sujet, il y a 2 m donc on va considérer que une marguerite est une fleur et du coup f(f)
-                } else if (cellules.get(i).get(k).getX() == mouton.getX() && cellules.get(i).get(k).getY() == mouton.getY()) {
-                    sauv.add("M");
+                    //si l'élément est une marguerite, on met f dans la liste
+                } else if (cellules.get(i).get(k).getÉlément().equals(null) ) {
+                    sauv.add("T");
+                    //Si la cellule qu'on traite à la les coordonnées du monton alors on met le mouton
 
                 }
 
@@ -281,27 +289,56 @@ public class Labyrinthe implements Serializable {
         return sauv;
     }
 
-    public void recup(String fichier) {
-        try {
-            //FileInputStream input = new FileInputStream(fichier);
-            FileInputStream input = new FileInputStream("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01");
+    public ArrayList<String> recup(String fichier) {
+        ArrayList contenuFichier = new ArrayList<String>();
+
+        try  {
+            FileInputStream input = new FileInputStream(fichier);
             InputStreamReader redar = new InputStreamReader(input);
             BufferedReader bufRead = new BufferedReader(redar);
 
-            StringBuilder stBuilder = new StringBuilder();
             String ligne;
             while ((ligne = bufRead.readLine()) != null) {
-                stBuilder.append(ligne);
-                stBuilder.append(System.lineSeparator());
+                ArrayList<Character> elt = new ArrayList<Character>();
+                System.out.println(ligne);
+
+                //contenuFichier.add(elt.add(ligne));
+                for (char c : ligne.toCharArray()) {
+                    elt.add(c);
+                }
+                contenuFichier.add(elt);
             }
 
             bufRead.close();
-
-            String contenuFichier = bufRead.toString();
-            System.out.println(contenuFichier);
         } catch (IOException e) {
             System.out.println("Erreur lors de la lecture du fichier : " + e.getMessage());
         }
+
+        return contenuFichier;
     }
-}
+    public void recupToLaby(ArrayList<ArrayList<String>> bla){
+        int x = bla.size();
+        int y = bla.get(0).size();
+        Labyrinthe recup = new Labyrinthe(x,y);
+        for(int h = 0;h<bla.size();h++){
+            for (int lar = 0;lar < bla.get(h).size();lar++) {
+                if (bla.get(x).get(y).equals("x")){
+                    recup.PoserMur(h,lar);
+                } else if (bla.get(x).get(y).equals("f")) {
+                    recup.PoserMargueurite(h,lar);
+                } else if (bla.get(x).get(y).equals("h")) {
+                    recup.PoserHerbe(h,lar);
+                } else if (bla.get(x).get(y).equals("c")) {
+                    recup.PoserCactus(h,lar);
+                } else if (bla.get(x).get(y).equals("T")) {
+                    recup.GetCellule(h,lar).setÉlément(null);
+                }
+
+            }
+
+            }
+        }
+    }
+
+
 
