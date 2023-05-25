@@ -6,6 +6,8 @@ import javafx.event.EventHandler;
 
 import java.awt.*;
 import java.awt.event.*;
+
+import javafx.scene.control.Cell;
 import javafx.scene.control.ScrollPane;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
@@ -37,7 +39,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
 import javax.swing.text.Position;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.EventObject;
 
@@ -46,9 +51,9 @@ import static javafx.geometry.HPos.*;
 public class HelloApplication extends Application {
 
     private Node getButtonxy(GridPane gridPane, int x, int y) {
-        for (Node node : gridPane.getChildren()) {
-            if (GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y) {
-                return node;
+        for (Node button : gridPane.getChildren()) {
+            if (GridPane.getColumnIndex(button) == x && GridPane.getRowIndex(button) == y) {
+                return button;
             }
         }
         return null;
@@ -58,18 +63,22 @@ public class HelloApplication extends Application {
 
         // Vérifier si la nouvelle position est valide
         if (newX >= 1 && newX < récup.getNx() - 1 && newY >= 1 && newY < récup.getNy() - 1) {
-
+            int oldX;
+            int oldY;
             // Mettre à jour la position du loup
             if (animal instanceof Loup) {
+                oldX = récup.getLoup().getX();
+                oldY = récup.getLoup().getY();
                 récup.getLoup().setPosition(récup.GetCellule(newX, newY));
+
             } else {
+                oldX = récup.getMouton().getX();
+                oldY = récup.getMouton().getY();
                 récup.getMouton().setPosition(récup.GetCellule(newX, newY));
                 récup.getMouton().manger(récup.getMouton().getPosition(), gridPane);
             }
-
             // Enlever l'ancienne image de la case actuelle
             Button button2 = null;
-
             for (Node node : gridPane.getChildren()) {
                 if (GridPane.getColumnIndex(node) == newY && GridPane.getRowIndex(node) == newX) {
                     if (node instanceof Button) {
@@ -79,17 +88,27 @@ public class HelloApplication extends Application {
                 }
             }
 
+            Button button = null;
+            for (Node node : gridPane.getChildren()) {
+                if (GridPane.getColumnIndex(node) == oldY && GridPane.getRowIndex(node) == oldX) {
+                    if (node instanceof Button) {
+                        button = (Button) node;
+                        break;
+                    }
+                }
+            }
 // vérifier si le bouton a été trouvé
             if (button2 != null) {
                 // définir un nouveau graphique pour le bouton
                 if (animal instanceof Mouton) {
+                    button.setGraphic(null);
                     button2.setGraphic(imageView);
                 } else {
-
+                    button.setGraphic(null);
                     button2.setGraphic(imageView1);
                 }
             }
-            System.out.println("voici mes voisins "+récup.getVoisins(récup.getMouton().getPosition()));
+            //TODO corriger le code , quand un animal passe sur une case déja visitée il ne peux plus s'afficher dessus
             //TODO modifier pour corriger le déplacement du mouton , quand il marche sur une case de terre il n'apparait pas
 
             // Ajouter la nouvelle image à la nouvelle case
@@ -109,6 +128,7 @@ public class HelloApplication extends Application {
         GridPane.setValignment(newOverlayPane, VPos.CENTER);
 */
         }//TODO optimiser le code , dans les faits il marche mais pas de manière optimale
+
     }
 
     @Override
@@ -155,14 +175,21 @@ public class HelloApplication extends Application {
         récup.GetCellule(1, 1).setÉlément(null);
         //System.out.println("les voisins sont"+récup.getVoisins(8,8));
         //System.out.println("les voisins sont"+récup.getVoisins(4,4));
-        Image image = new Image("C:\\Users\\depla\\OneDrive\\Images\\Herbe.Png");
-        Image image2 = new Image("C:\\Users\\depla\\OneDrive\\Images\\Mur.Png");
-        Image image3 = new Image("C:\\Users\\depla\\OneDrive\\Images\\cactus.jpg");
-        Image image4 = new Image("C:\\Users\\depla\\OneDrive\\Images\\Margeurites.jpg");
-        Image image5 = new Image("C:\\Users\\depla\\OneDrive\\Images\\Terre.png");
-        Image image6 = new Image("C:\\\\Users\\\\depla\\\\OneDrive\\\\Images\\\\Terre.png");
-        Image image7 = new Image("C:\\Users\\depla\\OneDrive\\Images\\Mouton.png");
-        Image image8 = new Image("C:\\Users\\depla\\OneDrive\\Images\\Loup.png");
+        String  racineProjet = System.getProperty("user.dir");
+        String cheminHerbe = racineProjet+"\\src\\images\\Herbe.png";
+        String cheminMur = racineProjet+"\\src\\images\\Mur.png";
+        String chemincactus = racineProjet+"\\src\\images\\cactus.jpg";
+        String cheminMargeurite = racineProjet+"\\src\\images\\Margeurites.jpg";
+        String cheminTerre = racineProjet+"\\src\\images\\Terre.png";
+        String cheminMouton = racineProjet+"\\src\\images\\Mouton.png";
+        String cheminLoup = racineProjet+"\\src\\images\\Loup.png";
+        Image image = new Image(cheminHerbe);
+        Image image2 = new Image(cheminMur);
+        Image image3 = new Image(chemincactus);
+        Image image4 = new Image(cheminMargeurite);
+        Image image5 = new Image(cheminTerre);
+        Image image7 = new Image(cheminMouton);
+        Image image8 = new Image(cheminLoup);
         ImageView imageView = new ImageView(image7);
         imageView.setFitHeight(30);
         imageView.setFitWidth(30);
@@ -269,13 +296,13 @@ public class HelloApplication extends Application {
         gridPane.setLayoutX(0);
         gridPane.setLayoutY(0);
 
-        gridPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        /*gridPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
                 int colIndex = GridPane.getColumnIndex((Node) event.getTarget());
                 int rowIndex = GridPane.getRowIndex((Node) event.getTarget());
                 System.out.println("Cellule (" + colIndex + ", " + rowIndex + ") a été cliquée.");
             }
-        });
+        });*/
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setMaxSize(750,500);
         scrollPane.setContent(gridPane);
