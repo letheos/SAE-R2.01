@@ -1,6 +1,6 @@
-package com.example.fx_sae;
+package m;
 
-public class Loup extends Animaux{
+public class Loup extends Animaux {
 
     public Loup(Cellule cellule) {
         super(cellule);

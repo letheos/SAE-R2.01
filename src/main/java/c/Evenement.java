@@ -1,4 +1,4 @@
-package com.example.fx_sae;
+package c;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;

@@ -1,33 +1,21 @@
-package com.example.fx_sae;
+package v;
 
+import com.example.fx_sae.Labyrinthe;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
-import java.awt.*;
-import java.awt.event.*;
 import javafx.scene.control.ScrollPane;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
-import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -35,14 +23,10 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import m.*;
 
-import javax.swing.text.Position;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.EventObject;
-
-import static javafx.geometry.HPos.*;
 
 public class HelloApplication extends Application {
 
@@ -55,7 +39,7 @@ public class HelloApplication extends Application {
         return null;
     }
 
-    private void déplacement(Labyrinthe récup,GridPane gridPane,int newX,int newY,ImageView imageView,ImageView imageView1,Animaux animal){
+    private void déplacement(Labyrinthe récup, GridPane gridPane, int newX, int newY, ImageView imageView, ImageView imageView1, Animaux animal){
 
         // Vérifier si la nouvelle position est valide
         if (newX >= 1 && newX < récup.getNx()-1 && newY >= 1 && newY < récup.getNy()-1) {
@@ -155,6 +139,7 @@ public class HelloApplication extends Application {
         récup.GetCellule(5,5).setÉlément(null);
         //System.out.println("les voisins sont"+récup.getVoisins(8,8));
         //System.out.println("les voisins sont"+récup.getVoisins(4,4));
+        /*
         Image image = new Image("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\Herbe.Png");
         Image image2 = new Image("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\Mur.Png");
         Image image3 = new Image("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\cactus.jpg");
@@ -163,7 +148,7 @@ public class HelloApplication extends Application {
         Image image6 = new Image("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\Terre.png");
         Image image7 = new Image("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\Mouton.png");
         Image image8 = new Image("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\Loup.jpg");
-        /*
+        */
         Image image = new Image("C:\\document\\cour\\src\\Herbe.Png");
         Image image2 = new Image("C:\\document\\cour\\src\\Mur.Png");
         Image image3 = new Image("C:\\document\\cour\\src\\cactus.jpg");
@@ -171,8 +156,8 @@ public class HelloApplication extends Application {
         Image image5 = new Image ("C:\\document\\cour\\src\\Terre.png");
         Image image6 = new Image("C:\\document\\cour\\src\\Terre.png");
         Image image7 = new Image("C:\\document\\cour\\src\\\\Mouton.png");
+        Image image8 = new Image("C:\\document\\cour\\src\\Loup.jpg");
 
- */
         //ImageView imageView = new ImageView(image6);
 
         ImageView imageView = new ImageView(image7);
@@ -362,13 +347,22 @@ public class HelloApplication extends Application {
         pageDeJeux.setSpacing(10);
 
         Scene scene = new Scene(pageDeJeux, 1525, 850);
-        Image logo = new Image("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\fantomForever.jpg");
+        Image logo = new Image("C:\\Users\\loink\\Downloads\\IMG_4634.JPG");
 
         stage = new Stage();
         stage.setTitle("jeu wsh");
         stage.setScene(scene);
         stage.getIcons().add(logo);
         stage.show();
+        //ArrayList<String> bla = test.recup("e");
+        Labyrinthe lab = new Labyrinthe();
+        ArrayList<String> resultat = lab.recup("C:\\document\\cour\\src\\xxxxxxxxxx.txt");
+        System.out.println(resultat);
+        System.out.println(resultat.getClass());
+        System.out.println(resultat.size());
+        //lab.recupToLaby(resultat);
+
+
     }
 
     public static void main(String[] args) {

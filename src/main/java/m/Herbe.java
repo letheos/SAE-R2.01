@@ -1,4 +1,6 @@
-package com.example.fx_sae;
+package m;
+
+import m.Végétal;
 
 public class Herbe extends Végétal {
     public Herbe() {

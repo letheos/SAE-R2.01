@@ -1,10 +1,9 @@
-package com.example.fx_sae;
+package m;
 
-import java.awt.desktop.SystemSleepEvent;
+import com.example.fx_sae.Labyrinthe;
+
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 public class Animaux implements Serializable {
@@ -37,7 +36,7 @@ public class Animaux implements Serializable {
 
     }
 
-    public void errer(Animaux animal ,Labyrinthe labyrinthe){
+    public void errer(Animaux animal , Labyrinthe labyrinthe){
         ArrayList<Cellule> voisins = labyrinthe.getVoisins(this.position);
         if (voisins.size() == 0){
             System.out.println("aucun voisin");

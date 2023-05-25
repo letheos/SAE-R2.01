@@ -1,9 +1,7 @@
-package com.example.fx_sae;
+package m;
 
 import java.io.Serializable;
-import java.rmi.MarshalException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 public class Cellule implements Serializable {

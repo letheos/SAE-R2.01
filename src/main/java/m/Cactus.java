@@ -1,4 +1,4 @@
-package com.example.fx_sae;
+package m;
 
 public class Cactus extends Végétal {
     public Cactus() {

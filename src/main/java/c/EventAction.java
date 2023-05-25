@@ -1,4 +1,4 @@
-package com.example.fx_sae;
+package c;
 /*
 import javafx.application.Application;
 import javafx.event.ActionEvent;

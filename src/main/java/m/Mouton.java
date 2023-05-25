@@ -1,4 +1,4 @@
-package com.example.fx_sae;
+package m;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;

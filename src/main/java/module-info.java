@@ -7,4 +7,5 @@ module com.example.fx_sae {
 
     opens com.example.fx_sae to javafx.fxml;
     exports com.example.fx_sae;
+    exports v;
 }

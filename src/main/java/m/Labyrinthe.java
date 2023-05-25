@@ -40,6 +40,10 @@ public class Labyrinthe implements Serializable {
             }
         }
     }
+    public Labyrinthe(){
+        this.nx = 0;
+        this.ny = 0;
+    }
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -269,7 +273,7 @@ public class Labyrinthe implements Serializable {
                 } else if (cellules.get(i).get(k).getÉlément() instanceof marguerite) {
                     sauv.add("F");
                     //si l'élément est une marguerite, on met f dans la liste
-                } else if (cellules.get(i).get(k).getÉlément().equals(null) ) {
+                } else if (cellules.get(i).get(k).getÉlément().equals(null)) {
                     sauv.add("T");
                     //Si la cellule qu'on traite à la les coordonnées du monton alors on met le mouton
 
@@ -292,7 +296,7 @@ public class Labyrinthe implements Serializable {
     public ArrayList<String> recup(String fichier) {
         ArrayList contenuFichier = new ArrayList<String>();
 
-        try  {
+        try {
             FileInputStream input = new FileInputStream(fichier);
             InputStreamReader redar = new InputStreamReader(input);
             BufferedReader bufRead = new BufferedReader(redar);
@@ -316,29 +320,37 @@ public class Labyrinthe implements Serializable {
 
         return contenuFichier;
     }
-    public void recupToLaby(ArrayList<ArrayList<String>> bla){
+
+    public void recupToLaby(ArrayList<ArrayList<String>> bla) {
         int x = bla.size();
         int y = bla.get(0).size();
-        Labyrinthe recup = new Labyrinthe(x,y);
-        for(int h = 0;h<bla.size();h++){
-            for (int lar = 0;lar < bla.get(h).size();lar++) {
-                if (bla.get(x).get(y).equals("x")){
-                    recup.PoserMur(h,lar);
-                } else if (bla.get(x).get(y).equals("f")) {
-                    recup.PoserMargueurite(h,lar);
-                } else if (bla.get(x).get(y).equals("h")) {
-                    recup.PoserHerbe(h,lar);
-                } else if (bla.get(x).get(y).equals("c")) {
-                    recup.PoserCactus(h,lar);
-                } else if (bla.get(x).get(y).equals("T")) {
-                    recup.GetCellule(h,lar).setÉlément(null);
+        Labyrinthe recup = new Labyrinthe(x, y);
+        for (int h = 0; h < bla.size(); h++) {
+            for (int lar = 0; lar < bla.get(h).size(); lar++) {
+                if (bla.get(x).get(lar).equals("x")) {
+                    recup.PoserMur(h, lar);
+                } else if (bla.get(h).get(lar).equals("f")) {
+                    recup.PoserMargueurite(h, lar);
+                } else if (bla.get(h).get(lar).equals("h")) {
+                    recup.PoserHerbe(h, lar);
+                } else if (bla.get(h).get(lar).equals("c")) {
+                    recup.PoserCactus(h, lar);
+                } else if (bla.get(h).get(lar).equals("T")) {
+                    recup.GetCellule(h, lar).setÉlément(null);
+                } else if (bla.get(h).get(lar).equals("l")) {
+                    recup.setLoup(new Loup(recup.cellules.get(h).get(lar)));
+                    //on place sur le labyrinthe un nouveau loup à la position
+                } else if (bla.get(h).get(lar).equals("M")) {
+                    recup.setLoup(new Loup(recup.cellules.get(h).get(lar)));
+                    //on place sur le labyrinthe un nouveau Mouton à la position
                 }
 
             }
 
-            }
         }
+        recup.toString();
     }
+}
 
 
 
