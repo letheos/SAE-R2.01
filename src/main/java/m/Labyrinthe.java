@@ -1,9 +1,12 @@
 package com.example.fx_sae;
 
+import javafx.scene.control.Cell;
 import m.*;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Random;
 
 public class Labyrinthe implements Serializable {
     private int nx;
@@ -292,6 +295,41 @@ public class Labyrinthe implements Serializable {
 
         return sauv;
     }
+    public void PlaceAleatoire(int hauteur, int largeur){
+        ArrayList<String> t= new ArrayList<>();
+        t.add("m");
+        t.add("h");
+        t.add("h");
+        t.add("h");
+        t.add("h");
+        t.add("f");
+        t.add("f");
+        t.add("c");
+        t.add("c");
+        t.add("h");
+        Random random = new Random();
+        int caisseCsGo = random.nextInt(t.size()) ;
+        if (t.get(caisseCsGo) == "c"){
+            this.PoserCactus(hauteur,largeur);
+        } else if (t.get(caisseCsGo) == "h") {
+            this.PoserHerbe(hauteur,largeur);
+        }else if(t.get(caisseCsGo) == "f"){
+            this.PoserMargueurite(hauteur,largeur);
+        } else {
+            this.PoserMur(hauteur, largeur);
+        }
+    }
+    public void aleatoire(){
+        for (int i = 1; i <cellules.size() - 1 ; i++) {
+            for (int j = 1; j <cellules.get(i).size() - 1 ; j++) {
+                this.PlaceAleatoire(i,j);
+            }
+        }
+        this.PoserHerbe(this.getNx()-1,this.getNy()-1);
+        this.PoserHerbe(1,1);
+        this.setLoup(new Loup(cellules.get(1).get(1)));
+        this.setLoup(new Loup(cellules.get(this.getNx()-1).get(this.getNy()-1)));
+    }
 
     public ArrayList<String> recup(String fichier) {
         ArrayList contenuFichier = new ArrayList<String>();
@@ -310,46 +348,59 @@ public class Labyrinthe implements Serializable {
                 for (char c : ligne.toCharArray()) {
                     elt.add(c);
                 }
+
                 contenuFichier.add(elt);
+                System.out.println(elt.getClass());
+                System.out.println(contenuFichier.getClass());
             }
 
             bufRead.close();
         } catch (IOException e) {
-            System.out.println("Erreur lors de la lecture du fichier : " + e.getMessage());
+            //System.out.println("Erreur lors de la lecture du fichier : " + e.getMessage());
         }
 
         return contenuFichier;
     }
-
-    public void recupToLaby(ArrayList<ArrayList<String>> bla) {
+/*
+    public int recupToLaby(ArrayList<ArrayList<Character>> bla) {
+        return 1;
         int x = bla.size();
-        int y = bla.get(0).size();
+        int y = 0;
+        for (Character u:bla.get(1).toCharArray()) {
+            y+=1;
+        }
+        //int y = bla.get(0).;
         Labyrinthe recup = new Labyrinthe(x, y);
         for (int h = 0; h < bla.size(); h++) {
-            for (int lar = 0; lar < bla.get(h).size(); lar++) {
-                if (bla.get(x).get(lar).equals("x")) {
-                    recup.PoserMur(h, lar);
-                } else if (bla.get(h).get(lar).equals("f")) {
-                    recup.PoserMargueurite(h, lar);
-                } else if (bla.get(h).get(lar).equals("h")) {
-                    recup.PoserHerbe(h, lar);
-                } else if (bla.get(h).get(lar).equals("c")) {
-                    recup.PoserCactus(h, lar);
-                } else if (bla.get(h).get(lar).equals("T")) {
-                    recup.GetCellule(h, lar).setÉlément(null);
-                } else if (bla.get(h).get(lar).equals("l")) {
-                    recup.setLoup(new Loup(recup.cellules.get(h).get(lar)));
-                    //on place sur le labyrinthe un nouveau loup à la position
-                } else if (bla.get(h).get(lar).equals("M")) {
-                    recup.setLoup(new Loup(recup.cellules.get(h).get(lar)));
-                    //on place sur le labyrinthe un nouveau Mouton à la position
-                }
-
+            String c = null;
+            int lar = 0;
+            for (char l : bla.get(h).toCharArray()) {
+                c = Character.toString(l);
+                lar+=1;
+            }
+            if (Objects.equals(c, "x")) {
+                recup.PoserMur(h, lar);
+            } else if (c.equals("f")) {
+                recup.PoserMargueurite(h, lar);
+            } else if (c.equals("h")) {
+                recup.PoserHerbe(h, lar);
+            } else if (c.equals("c")) {
+                recup.PoserCactus(h, lar);
+            } else if (c.equals("T")) {
+                recup.GetCellule(h, lar).setÉlément(null);
+            } else if (c.equals("l")) {
+                recup.setLoup(new Loup(recup.cellules.get(h).get(lar)));
+                //on place sur le labyrinthe un nouveau loup à la position
+            } else if (c.equals("M")) {
+                recup.setLoup(new Loup(recup.cellules.get(h).get(lar)));
+                //on place sur le labyrinthe un nouveau Mouton à la position
             }
 
         }
         recup.toString();
     }
+
+ */
 }
 
 

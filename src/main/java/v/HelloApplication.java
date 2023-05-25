@@ -1,5 +1,6 @@
 package v;
 
+import c.Evenement;
 import com.example.fx_sae.Labyrinthe;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -103,6 +104,8 @@ public class HelloApplication extends Application {
         int nbrLongueur = 10;
         test = new Labyrinthe(nbrLargeur, nbrLongueur);
 
+        test.aleatoire();
+
 
         System.out.println(test.GetCellules());
         System.out.println("le labyrinthe est un "+test.getNx()+test.getNy());
@@ -124,19 +127,15 @@ public class HelloApplication extends Application {
         test.sauvegarderLabyrinthe("labyrintheprefait.dat");
         Labyrinthe récup = Labyrinthe.chargerLabyrinthe("labyrintheprefait.dat");
         System.out.println(récup.toString());
-        int babouin_compteur = 0;
-        for(int x = 0;x<récup.getNx();x++){
-            for (int y=0;y< test.getNy();y++){
-                if (récup.DéfinirSortie(x,y) == true){
-                    babouin_compteur +=1;
-                }
-            }
-        }
-        System.out.println(babouin_compteur);
+
+
         récup.DéfinirSortie(4,1);
         System.out.println(récup.toString());
         System.out.println("les voisins sont "+récup.getVoisins(récup.GetCellule(2,1)));
         récup.GetCellule(5,5).setÉlément(null);
+        test.aleatoire();
+        test.toString();
+
         //System.out.println("les voisins sont"+récup.getVoisins(8,8));
         //System.out.println("les voisins sont"+récup.getVoisins(4,4));
         /*
@@ -265,13 +264,7 @@ public class HelloApplication extends Application {
         gridPane.setLayoutX(0);
         gridPane.setLayoutY(0);
 
-        gridPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent event) {
-                int colIndex = GridPane.getColumnIndex((Node) event.getTarget());
-                int rowIndex = GridPane.getRowIndex((Node) event.getTarget());
-                System.out.println("Cellule (" + colIndex + ", " + rowIndex + ") a été cliquée.");
-            }
-        });
+
 
         VBox boutonGauche = new VBox();
         VBox boutonDroite = new VBox();
@@ -303,6 +296,10 @@ public class HelloApplication extends Application {
         }
         Button generer = new Button("generer");
 
+        Button aleatoire = new Button("aléatoire");
+        Evenement e = new Evenement(test);
+        aleatoire.setOnMouseClicked(e);
+        System.out.println(test);
         Button Lancer = new Button("Lancer");
 
 
@@ -312,6 +309,7 @@ public class HelloApplication extends Application {
         boutonGauche.getChildren().add(hauteur);
         boutonGauche.getChildren().add(largeur);
         boutonGauche.getChildren().add(generer);
+        boutonGauche.getChildren().add(aleatoire);
         boutonGauche.getChildren().add(Lancer);
         boutonGauche.getChildren().add(chargerLaby);
 
@@ -330,8 +328,7 @@ public class HelloApplication extends Application {
         //placerMarguerite.setOnAction(e);
 
 
-        int largeurGrille = nbrLongueur*50;
-        int hauteurGrille = nbrLargeur*55+150;
+
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setMaxSize(750,500);
         scrollPane.setContent(gridPane);
@@ -340,11 +337,17 @@ public class HelloApplication extends Application {
 
         HBox pageDeJeux = new HBox();
 
+        ScrollPane dc = new ScrollPane();
+        dc.setMaxSize(750,500);
+        dc.setContent(gridPane);
+
         pageDeJeux.getChildren().add(boutonGauche);
-        pageDeJeux.getChildren().add(gridPane);
+        pageDeJeux.getChildren().add(dc);
         pageDeJeux.getChildren().add(boutonDroite);
 
         pageDeJeux.setSpacing(10);
+
+        //ajout de la scroll pane au labyrinthe
 
         Scene scene = new Scene(pageDeJeux, 1525, 850);
         Image logo = new Image("C:\\Users\\loink\\Downloads\\IMG_4634.JPG");
@@ -354,13 +357,19 @@ public class HelloApplication extends Application {
         stage.setScene(scene);
         stage.getIcons().add(logo);
         stage.show();
+        /*
         //ArrayList<String> bla = test.recup("e");
         Labyrinthe lab = new Labyrinthe();
         ArrayList<String> resultat = lab.recup("C:\\document\\cour\\src\\xxxxxxxxxx.txt");
         System.out.println(resultat);
         System.out.println(resultat.getClass());
+        //System.out.println(resultat.get(1));
         System.out.println(resultat.size());
         //lab.recupToLaby(resultat);
+        */
+
+
+
 
 
     }
