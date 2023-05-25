@@ -357,16 +357,17 @@ public class HelloApplication extends Application {
         stage.setScene(scene);
         stage.getIcons().add(logo);
         stage.show();
-        /*
+
         //ArrayList<String> bla = test.recup("e");
         Labyrinthe lab = new Labyrinthe();
-        ArrayList<String> resultat = lab.recup("C:\\document\\cour\\src\\xxxxxxxxxx.txt");
-        System.out.println(resultat);
-        System.out.println(resultat.getClass());
+        test.sauvegarde();
+        // ArrayList<String> resultat = lab.recup("C:\\document\\cour\\src\\xxxxxxxxxx.txt");
+        //System.out.println(resultat);
+        //System.out.println(resultat.getClass());
         //System.out.println(resultat.get(1));
-        System.out.println(resultat.size());
+        //System.out.println(resultat.size());
         //lab.recupToLaby(resultat);
-        */
+
 
 
 

@@ -286,7 +286,7 @@ public class Labyrinthe implements Serializable {
             sauv.add("\n");
         }
         try {
-            FileWriter fw = new FileWriter("laby.txt");
+            FileWriter fw = new FileWriter("laby2.txt");
             fw.write(sauv.toString());
             fw.close();
         } catch (IOException ex) {
