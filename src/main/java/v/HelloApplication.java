@@ -40,21 +40,27 @@ public class HelloApplication extends Application {
         return null;
     }
 
-    private void déplacement(Labyrinthe récup, GridPane gridPane, int newX, int newY, ImageView imageView, ImageView imageView1, Animaux animal){
+
+    private void déplacement(Labyrinthe récup, GridPane gridPane, int newX, int newY, ImageView imageView, ImageView imageView1, Animaux animal) {
 
         // Vérifier si la nouvelle position est valide
-        if (newX >= 1 && newX < récup.getNx()-1 && newY >= 1 && newY < récup.getNy()-1) {
-
+        if (newX >= 1 && newX < récup.getNx() - 1 && newY >= 1 && newY < récup.getNy() - 1) {
+            int oldX;
+            int oldY;
             // Mettre à jour la position du loup
-            if (animal instanceof Loup){
-                récup.getLoup().setPosition(récup.GetCellule(newX,newY));}
-            else {
-                récup.getMouton().setPosition(récup.GetCellule(newX,newY));
-            }
+            if (animal instanceof Loup) {
+                oldX = récup.getLoup().getX();
+                oldY = récup.getLoup().getY();
+                récup.getLoup().setPosition(récup.GetCellule(newX, newY));
 
+            } else {
+                oldX = récup.getMouton().getX();
+                oldY = récup.getMouton().getY();
+                récup.getMouton().setPosition(récup.GetCellule(newX, newY));
+                récup.getMouton().manger(récup.getMouton().getPosition(), gridPane);
+            }
             // Enlever l'ancienne image de la case actuelle
             Button button2 = null;
-
             for (Node node : gridPane.getChildren()) {
                 if (GridPane.getColumnIndex(node) == newY && GridPane.getRowIndex(node) == newX) {
                     if (node instanceof Button) {
@@ -64,16 +70,30 @@ public class HelloApplication extends Application {
                 }
             }
 
+            Button button = null;
+            for (Node node : gridPane.getChildren()) {
+                if (GridPane.getColumnIndex(node) == oldY && GridPane.getRowIndex(node) == oldX) {
+                    if (node instanceof Button) {
+                        button = (Button) node;
+                        break;
+
+                    }
+                }
+            }
 // vérifier si le bouton a été trouvé
             if (button2 != null) {
                 // définir un nouveau graphique pour le bouton
-                if (animal instanceof Mouton){
-                    button2.setGraphic(imageView);}
-                else {
-
+                if (animal instanceof Mouton) {
+                    button.setGraphic(null);
+                    button2.setGraphic(imageView);
+                } else {
+                    button.setGraphic(null);
                     button2.setGraphic(imageView1);
                 }
             }
+            //TODO corriger le code , quand un animal passe sur une case déja visitée il ne peux plus s'afficher dessus
+            //TODO modifier pour corriger le déplacement du mouton , quand il marche sur une case de terre il n'apparait pas
+
             // Ajouter la nouvelle image à la nouvelle case
         /*Pane newOverlayPane = new Pane();
 
@@ -91,6 +111,7 @@ public class HelloApplication extends Application {
         GridPane.setValignment(newOverlayPane, VPos.CENTER);
 */
         }//TODO optimiser le code , dans les faits il marche mais pas de manière optimale
+
     }
     //TODO faire le code pour que le simu marche dans la console
 
@@ -136,8 +157,25 @@ public class HelloApplication extends Application {
         test.aleatoire();
         test.toString();
 
+        String  racineProjet = System.getProperty("user.dir");
+        String cheminHerbe = racineProjet+"\\src\\images\\Herbe.png";
+        String cheminMur = racineProjet+"\\src\\images\\Mur.png";
+        String chemincactus = racineProjet+"\\src\\images\\cactus.jpg";
+        String cheminMargeurite = racineProjet+"\\src\\images\\Margeurites.jpg";
+        String cheminTerre = racineProjet+"\\src\\images\\Terre.png";
+        String cheminMouton = racineProjet+"\\src\\images\\Mouton.png";
+        String cheminLoup = racineProjet+"\\src\\images\\Loup.png";
+
         //System.out.println("les voisins sont"+récup.getVoisins(8,8));
         //System.out.println("les voisins sont"+récup.getVoisins(4,4));
+        Image image = new Image(cheminHerbe);
+        Image image2 = new Image(cheminMur);
+        Image image3 = new Image(chemincactus);
+        Image image4 = new Image(cheminMargeurite);
+        Image image5 = new Image (cheminTerre);
+
+        Image image7 = new Image(cheminMouton);
+        Image image8 = new Image(cheminLoup);
         /*
         Image image = new Image("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\Herbe.Png");
         Image image2 = new Image("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\Mur.Png");
@@ -148,6 +186,7 @@ public class HelloApplication extends Application {
         Image image7 = new Image("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\Mouton.png");
         Image image8 = new Image("D:\\Datas\\delbord\\but s2\\r2.01 java\\SAE-R2.01\\Loup.jpg");
         */
+        /*
         Image image = new Image("C:\\document\\cour\\src\\Herbe.Png");
         Image image2 = new Image("C:\\document\\cour\\src\\Mur.Png");
         Image image3 = new Image("C:\\document\\cour\\src\\cactus.jpg");
@@ -156,7 +195,7 @@ public class HelloApplication extends Application {
         Image image6 = new Image("C:\\document\\cour\\src\\Terre.png");
         Image image7 = new Image("C:\\document\\cour\\src\\\\Mouton.png");
         Image image8 = new Image("C:\\document\\cour\\src\\Loup.jpg");
-
+        */
         //ImageView imageView = new ImageView(image6);
 
         ImageView imageView = new ImageView(image7);
@@ -266,6 +305,7 @@ public class HelloApplication extends Application {
 
 
 
+
         VBox boutonGauche = new VBox();
         VBox boutonDroite = new VBox();
 
@@ -350,7 +390,7 @@ public class HelloApplication extends Application {
         //ajout de la scroll pane au labyrinthe
 
         Scene scene = new Scene(pageDeJeux, 1525, 850);
-        Image logo = new Image("C:\\Users\\loink\\Downloads\\IMG_4634.JPG");
+        Image logo = new Image("C:\\Users\\Loick\\Downloads\\rafalersd2023.jpg");
 
         stage = new Stage();
         stage.setTitle("jeu wsh");

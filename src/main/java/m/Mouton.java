@@ -47,8 +47,11 @@ public class Mouton extends Animaux {
 // vérifier si le bouton a été trouvé
 if (button2 != null) {
     // définir un nouveau graphique pour le bouton
+    //pour avoir l'images quelque soit l'ordinateur
+    String  racineProjet = System.getProperty("user.dir");
+    String cheminTerre = racineProjet+"\\src\\images\\Terre.png";
 
-    Image image5 = new Image("C:\\Users\\depla\\OneDrive\\Images\\Terre.png");
+    Image image5 = new Image(cheminTerre);
     BackgroundSize backgroundSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
     BackgroundImage backgroundImage5 = new BackgroundImage(image5, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
     Background background5 = new Background(backgroundImage5);

@@ -250,10 +250,10 @@ public class Labyrinthe implements Serializable {
             for (int k = 0; k < cellules.get(i).size(); k++) {
                 if (cellules.get(i).get(k).getX() == mouton.getX() && cellules.get(i).get(k).getY() == mouton.getY()) {
                     //si les coordonnnées du mouton sont les mêmes que celles de cettes cellules, on le met dans la liste
-                    ligne.add("M");
+                    ligne.add("x");
                 } else if (cellules.get(i).get(k).getX() == loup.getX() && cellules.get(i).get(k).getY() == loup.getY()) {
                     //si les coordonnnées du mouton sont les mêmes que celles de cettes cellules, on le met dans la liste
-                    ligne.add("L");
+                    ligne.add("l");
                 } else if (i == 0 || i == cellules.size()-1) {
                     if (cellules.get(i).get(k).getÉlément() instanceof Herbe) {
                         ligne.add("s");
@@ -263,7 +263,7 @@ public class Labyrinthe implements Serializable {
                     } else if(cellules.get(i).get(k).getÉlément() instanceof Cactus){
                         ligne.add("S");
                     }else{
-                        ligne.add("M");
+                        ligne.add("x");
                     }
 
                 } else if (k == 0 || k == cellules.get(i).size()) {
@@ -281,10 +281,10 @@ public class Labyrinthe implements Serializable {
                     ligne.add("c");
                     //si l'élément est un cactus, on met c dans la liste
                 } else if (cellules.get(i).get(k).getÉlément() instanceof marguerite) {
-                    ligne.add("F");
+                    ligne.add("f");
                     //si l'élément est une marguerite, on met f dans la liste
                 } else if (cellules.get(i).get(k).getÉlément().equals(null)) {
-                    ligne.add("T");
+                    ligne.add("t");
                     //Si la cellule qu'on traite à la les coordonnées du monton alors on met le mouton
 
                 }
