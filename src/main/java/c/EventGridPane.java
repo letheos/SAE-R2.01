@@ -76,7 +76,14 @@ public class EventGridPane implements EventHandler<Event> {
             int x = GridPane.getRowIndex(bouton);
             int y = GridPane.getColumnIndex(bouton);
             Cellule cellule = laby.GetCellule(x, y);
-            if (evenementsMenu.getAction().equals("Définir sortie")) {
+            if (evenementsMenu.getAction() == null) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Erreur");
+                alert.setHeaderText("Aucune action sélectionnée");
+                alert.setContentText("Sélectionnez une action à réaliser avant de cliquer sur les cases du labyrinthe");
+                alert.showAndWait();
+            }
+            else if (evenementsMenu.getAction().equals("Définir sortie")) {
                 if (!(x >= 1 && x < this.gridPane.getRowCount() - 1 && y >= 1 && y < this.gridPane.getColumnCount() - 1) &&
                         !(x == 0 && y == 0) &&
                         !(x == 0 && y == this.gridPane.getColumnCount() - 1) &&
@@ -272,7 +279,15 @@ public class EventGridPane implements EventHandler<Event> {
                     alertBordures.setContentText("Essayez autre part");
                     alertBordures.showAndWait();
                 }
+
             }
+        else {
+            Alert Erreur = new Alert(Alert.AlertType.INFORMATION);
+            Erreur.setTitle("Erreur");
+            Erreur.setHeaderText("Erreur");
+            Erreur.setContentText("l'action ne proviens pas d'un bouton");
         }
+        }
+
     }
 
