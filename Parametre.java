@@ -1,16 +1,19 @@
 package com.example.sae_parametre;
 
 import javafx.application.Application;
+import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.media.Media;
@@ -72,8 +75,8 @@ public class Parametre extends Application {
         Text changer = new Text("Changer Musique");
 
         ChoiceBox<String> choixM = new ChoiceBox<>();
-        choixM.getItems().addAll("Musique1","Musique2","Musique3","Musique4","Musique5");
-        choixM.setValue("Musique1");
+        choixM.getItems().addAll("Temporal_Tower","Temporal_Tower_(Remix)","Temporal_Spire");
+        choixM.setValue("Temporal_Tower");
 
         changerM.getChildren().addAll(changer,choixM);
         changerM.setAlignment(Pos.CENTER);
@@ -85,13 +88,20 @@ public class Parametre extends Application {
         BorderPane.setAlignment(vbox, Pos.CENTER);
 
         Scene scene = new Scene(borderPane, 400, 600);
-        EventController event = new EventController(scene, borderPane);
-        sombre.setOnMouseClicked(event);
 
         String path = getClass().getResource("Temporal_Tower.mp3").toExternalForm();
         Media media = new Media(path);
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.play();
+
+        DoubleBinding volumeBinding = volumeSlider.valueProperty().divide(100);
+        mediaPlayer.volumeProperty().bind(volumeBinding);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+
+        EventController event = new EventController(text, mode, text1, changer, borderPane, mediaPlayer, choixM, volumeSlider);
+        sombre.setOnMouseClicked(event);
+        desactiver.setOnMouseClicked(event);
+        choixM.setOnMouseClicked(event);
 
         stage.setTitle("Paramètre");
         stage.setScene(scene);
