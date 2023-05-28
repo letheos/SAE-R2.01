@@ -7,6 +7,13 @@ import javafx.scene.layout.*;
 
 import java.util.HashMap;
 
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
+
+import java.util.HashMap;
+
 public class Mouton extends Animaux {
     private boolean fuite;
      private HashMap<String, Integer> mangés;
@@ -47,8 +54,8 @@ public class Mouton extends Animaux {
 // vérifier si le bouton a été trouvé
 if (button2 != null) {
     // définir un nouveau graphique pour le bouton
-
-    Image image5 = new Image("C:\\Users\\depla\\OneDrive\\Images\\Terre.png");
+    String  racineProjet = System.getProperty("user.dir");
+    Image image5 = new Image(racineProjet+"\\src\\images\\Terre.png");
     BackgroundSize backgroundSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
     BackgroundImage backgroundImage5 = new BackgroundImage(image5, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
     Background background5 = new Background(backgroundImage5);
@@ -59,4 +66,3 @@ if (button2 != null) {
 
 
     }
-

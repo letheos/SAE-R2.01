@@ -1,7 +1,5 @@
 package m;
 
-import com.example.fx_sae.Labyrinthe;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;

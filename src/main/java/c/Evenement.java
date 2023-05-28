@@ -1,9 +1,9 @@
-package c;
-import com.example.fx_sae.Labyrinthe;
+/*package c;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 
+import m.Labyrinthe;
 public class Evenement implements EventHandler {
     private String action;
     private Labyrinthe l;
@@ -31,4 +31,4 @@ public class Evenement implements EventHandler {
     public Evenement(Labyrinthe l){
         this.l = l;
     }
-}
+}*/
