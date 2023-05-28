@@ -1,39 +1,38 @@
-package com.example.iu;
+package com.example.sae_parametre;
 
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
+import javafx.scene.input.MouseEvent;
 
-public class EventController implements EventHandler{
-    Scene scene;
-    Stage stage;
+public class EventController implements EventHandler<MouseEvent> {
+    private Scene scene;
+    private BorderPane borderPane;
 
-    public EventController(Scene s, Stage st){
-        this.scene=s;
-        this.stage=st;
+    public EventController(Scene scene, BorderPane borderPane) {
+        this.scene = scene;
+        this.borderPane = borderPane;
     }
 
-    public EventController(){
-
+    public EventController() {
     }
 
     @Override
-    public void handle(Event event) {
-        if (event.getSource().getClass().toString().contains("ToggleButton")) {
+    public void handle(MouseEvent event) {
+        if (event.getSource() instanceof ToggleButton) {
             ToggleButton sombre = (ToggleButton) event.getSource();
             if (sombre.isSelected()) {
                 System.out.println("Activé");
                 sombre.setText("Désactiver");
                 scene.setFill(Color.BLACK);
-                stage.show();
+                borderPane.requestLayout();
             } else {
                 System.out.println("Désactivé");
                 sombre.setText("Activer");
                 scene.setFill(Color.BLUE);
-                stage.show();
+                borderPane.requestLayout();
             }
         }
     }

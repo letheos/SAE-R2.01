@@ -1,4 +1,4 @@
-package com.example.iu;
+package com.example.sae_parametre;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -11,15 +11,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 public class Parametre extends Application {
     @Override
     public void start(Stage stage) {
-        BorderPane border = new BorderPane();
+        BorderPane borderPane = new BorderPane();
 
         Text text = new Text("Paramètres");
         text.setFont(new Font(40));
@@ -61,8 +62,8 @@ public class Parametre extends Application {
 
         vbox.getChildren().add(volume);
 
-        border.setTop(text);
-        border.setAlignment(text, Pos.CENTER);
+        borderPane.setTop(text);
+        borderPane.setAlignment(text, Pos.CENTER);
 
         Button desactiver = new Button("Désactiver musique");
         vbox.getChildren().add(desactiver);
@@ -80,12 +81,17 @@ public class Parametre extends Application {
 
         vbox.getChildren().add(changerM);
 
-        border.setCenter(vbox);
+        borderPane.setCenter(vbox);
         BorderPane.setAlignment(vbox, Pos.CENTER);
 
-        Scene scene = new Scene(border, 400, 600);
-        EventController event = new EventController(scene, stage);
+        Scene scene = new Scene(borderPane, 400, 600);
+        EventController event = new EventController(scene, borderPane);
         sombre.setOnMouseClicked(event);
+
+        String path = getClass().getResource("Temporal_Tower.mp3").toExternalForm();
+        Media media = new Media(path);
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.play();
 
         stage.setTitle("Paramètre");
         stage.setScene(scene);
