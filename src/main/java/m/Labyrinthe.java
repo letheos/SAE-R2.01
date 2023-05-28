@@ -265,7 +265,7 @@ public class Labyrinthe implements Serializable {
         return this.ny;
     }
 
-    public StringBuilder sauvegarde() {
+    public void sauvegarde(String fichier) {
         StringBuilder sb = new StringBuilder();
         //ArrayList<Object> sauv = new ArrayList<>();
         for (int i = 0; i < cellules.size(); i++) {
@@ -315,10 +315,12 @@ public class Labyrinthe implements Serializable {
 
             }
             sb.append("\n");
-            System.out.println(sb);
+            //ajout d'un string pour passer la ligne
+
         }
         try {
             FileWriter fw = new FileWriter("laby2.txt", StandardCharsets.UTF_8);
+            //fileWriter permet d'écrire dans un fichier en lui donnant un chemin et un codage,
             //le codage en utf8 est pour éviter d'avoir des caractères chinois
             fw.write(sb.toString());
 
@@ -327,7 +329,7 @@ public class Labyrinthe implements Serializable {
             ex.printStackTrace();
         }
 
-        return sb;
+
     }
     public void PlaceAleatoire(int hauteur, int largeur){
         ArrayList<String> t= new ArrayList<>();
