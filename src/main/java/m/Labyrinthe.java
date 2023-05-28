@@ -368,35 +368,36 @@ public class Labyrinthe implements Serializable {
         this.setLoup(new Loup(cellules.get(this.getNx()-2).get(this.getNy()-2)));
     }
 
-    public ArrayList<String> recup(String fichier) {
-        ArrayList contenuFichier = new ArrayList<String>();
+    public String recup(String fichier) {
+        StringBuilder recup = new StringBuilder();
 
         try {
             FileInputStream input = new FileInputStream(fichier);
+            //ouvre un flux de lecture vers un fichier donné
             InputStreamReader redar = new InputStreamReader(input);
+            //convertit les octets lus en caractères
             BufferedReader bufRead = new BufferedReader(redar);
-
+            //met en mémoire tampon les caractères du flux d'entrée
             String ligne;
             while ((ligne = bufRead.readLine()) != null) {
-                ArrayList<Character> elt = new ArrayList<Character>();
+                recup.append(ligne);
+                //on ajoute à une ligne à chaque boucle du while
                 System.out.println(ligne);
-
+                recup.append("\n");
                 //contenuFichier.add(elt.add(ligne));
-                for (char c : ligne.toCharArray()) {
-                    elt.add(c);
-                }
 
-                contenuFichier.add(elt);
-                System.out.println(elt.getClass());
-                System.out.println(contenuFichier.getClass());
+
+                //contenuFichier.add(elt);
+                System.out.println(recup);
+
+
             }
 
             bufRead.close();
         } catch (IOException e) {
             //System.out.println("Erreur lors de la lecture du fichier : " + e.getMessage());
         }
-
-        return contenuFichier;
+        return recup.toString();
     }
 /*
     public int recupToLaby(ArrayList<ArrayList<Character>> bla) {
