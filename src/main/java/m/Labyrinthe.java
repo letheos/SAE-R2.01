@@ -327,7 +327,7 @@ public class Labyrinthe implements Serializable {
 
         }
         try {
-            FileWriter fw = new FileWriter("laby2.txt", StandardCharsets.US_ASCII);
+            FileWriter fw = new FileWriter(fichier+".txt", StandardCharsets.US_ASCII);
             //fileWriter permet d'écrire dans un fichier en lui donnant un chemin et un codage,
             //le codage en utf8 est pour éviter d'avoir des caractères chinois
             fw.write(sb.toString());
@@ -393,27 +393,26 @@ public class Labyrinthe implements Serializable {
             while ((ligne = bufRead.readLine()) != null) {
                 recup.append(ligne);
                 //on ajoute à une ligne à chaque boucle du while
-                System.out.println(ligne);
                 recup.append("\n");
                 //contenuFichier.add(elt.add(ligne));
 
 
                 //contenuFichier.add(elt);
-                System.out.println(recup);
+
 
 
             }
 
             bufRead.close();
         } catch (IOException e) {
-            //System.out.println("Erreur lors de la lecture du fichier : " + e.getMessage());
+            System.out.println("Erreur lors de la lecture du fichier : " + e.getMessage());
         }
         return recup.toString();
     }
 
     public int recupToLaby(String laby) {
         String[] lignes = laby.split("/n");
-        System.out.println(laby);
+        //System.out.println(laby);
         int longueur = lignes[0].length();
         int largueur = lignes.length;
         System.out.println(laby.length());
