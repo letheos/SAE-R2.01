@@ -47,8 +47,32 @@ public class Labyrinthe implements Serializable {
     }
 
     public Labyrinthe() {
-        this.nx = 0;
-        this.ny = 0;
+        this.nx = 4;
+        this.ny = 4;
+        this.cellules = new ArrayList<>();
+        int identifiant = 0;
+        for (int x = 0; x < nx; x++) {
+            this.cellules.add(new ArrayList<Cellule>());
+            for (int y = 0; y < ny; y++) {
+                // Vérification si la cellule est sur un bord
+                boolean isBorderCell = x == 0 || y == 0 || x == nx - 1 || y == ny - 1;
+                if (isBorderCell) {
+                    // Si la cellule est sur un bord, on la crée comme étant un mur
+                    this.cellules.get(x).add(new Cellule(identifiant, x, y, new Mur()));
+                } else {
+                    // Sinon, on la crée comme étant de l'herbe
+                    this.cellules.get(x).add(new Cellule(identifiant, x, y, new Herbe()));
+                }
+                identifiant++;
+            }
+        }
+    }
+    public Labyrinthe(Labyrinthe lab){
+        this.nx = lab.getNx();
+        this.ny = lab.getNy();
+        this.cellules = lab.GetCellules();
+        this.mouton = lab.getMouton();
+        this.loup = lab.getLoup();
     }
 
     public String toString() {
@@ -271,13 +295,22 @@ public class Labyrinthe implements Serializable {
         return this.ny;
     }
 
-    public Cellule getSortie(){return this.sortie;}
-    public void setSortie(Cellule cellule){this.sortie = cellule;}
+    public Cellule getSortie() {
+        return this.sortie;
+    }
+    public Labyrinthe getLab(){
+        return this;
+    }
+
+    public void setSortie(Cellule cellule) {
+        this.sortie = cellule;
+    }
 
 
     public void setNx(int nx) {
         this.nx = nx;
     }
+
     public void setNy(int ny) {
         this.ny = ny;
     }
@@ -378,26 +411,75 @@ public class Labyrinthe implements Serializable {
         }
     }
 
-    public void effaceTout(){
-        for (int i = 1; i < cellules.size() - 1; i++) {
-            for (int j = 1; j < cellules.get(i).size() - 1; j++) {
+    public void PlaceAleatoire2(int hauteur, int largeur, int probaM, int probaH, int probaF, int probaC) {
+        ArrayList<String> t = new ArrayList<>();
+        for (int m = 0; m < probaM; m++) {
+            t.add("m");
+        }
+        for (int h = 0; h < probaH; h++) {
+            t.add("h");
+        }
+        for (int f = 0; f < probaF; f++) {
+            t.add("f");
+        }
+        for (int c = 0; c < probaC; c++) {
+            t.add("c");
+        }
+        Random random = new Random();
+        int caisseCsGo = random.nextInt(t.size());
+        if (t.get(caisseCsGo) == "c") {
+            this.PoserCactus(hauteur, largeur);
+        } else if (t.get(caisseCsGo) == "h") {
+            this.PoserHerbe(hauteur, largeur);
+        } else if (t.get(caisseCsGo) == "f") {
+            this.PoserMargueurite(hauteur, largeur);
+        } else {
+            this.PoserMur(hauteur, largeur);
+        }
+    }
+
+    public void effaceTout() {
+
+        for (int i = 0; i < cellules.size(); i++) {
+            for (int j = 0; j < cellules.get(i).size(); j++) {
                 this.PoserHerbe(i, j);
             }
         }
-        if(this.loup == null){
-            this.setLoup(new Loup(cellules.get(2).get(2)));
-        }
-        else {
+        if (this.loup == null) {
+            this.setLoup(new Loup(cellules.get(this.nx - 3).get(this.ny - 3)));
+        } else {
             this.loup.setPosition(cellules.get(this.getNx() - 3).get(this.getNy() - 3));
         }
-        if(this.mouton == null){
-            this.setMouton(new Mouton(cellules.get(1).get(1)));
-        }else {
-            this.mouton.setPosition(cellules.get(1).get(1));
+        if (this.mouton == null) {
+            this.setMouton(new Mouton(cellules.get(1).get(2)));
+        } else {
+            this.mouton.setPosition(cellules.get(1).get(2));
+        }
+    }
+
+    public void effaceTout2(int x, int y) {
+        setNy(y);
+        setNx(x);
+
+        for (int i = 0; i < cellules.size(); i++) {
+            for (int j = 0; j < cellules.get(i).size(); j++) {
+                this.PoserHerbe(i, j);
+            }
+        }
+        if (this.loup == null) {
+            this.setLoup(new Loup(cellules.get(this.nx - 3).get(this.ny - 3)));
+        } else {
+            this.loup.setPosition(cellules.get(this.getNx() - 3).get(this.getNy() - 3));
+        }
+        if (this.mouton == null) {
+            this.setMouton(new Mouton(cellules.get(1).get(2)));
+        } else {
+            this.mouton.setPosition(cellules.get(1).get(2));
         }
     }
 
     public void aleatoire() {
+
         for (int i = 1; i < cellules.size() - 1; i++) {
             for (int j = 1; j < cellules.get(i).size() - 1; j++) {
                 this.PlaceAleatoire(i, j);
@@ -407,8 +489,8 @@ public class Labyrinthe implements Serializable {
         this.PoserHerbe(1, 1);
         this.setMouton(new Mouton(cellules.get(1).get(1)));
         this.PoserHerbe(this.getNx() - 2, this.getNy() - 2);
-        this.setLoup(new Loup(cellules.get(this.getNx() - 2).get(this.getNy() - 2)));
-        this.DéfinirSortie(0, 3);
+        this.setLoup(new Loup(cellules.get(this.getNx() - 3).get(this.getNy() - 2)));
+        this.DéfinirSortie(0, 1);
     }
 
     public String recup(String fichier) {
@@ -440,6 +522,7 @@ public class Labyrinthe implements Serializable {
         }
         return recup.toString();
     }
+
     public ArrayList<Object> GetElements() {
         ArrayList<Object> elements = new ArrayList<>();
 
@@ -454,67 +537,92 @@ public class Labyrinthe implements Serializable {
 
         return elements;
     }
-
-    public void recupToLaby(String laby) {
+    public ArrayList<Integer> TrouveSortie(String laby){
         String[] deligne = laby.split("\n");
+        ArrayList<Integer> co = new ArrayList<>();
+        int hauteur = deligne.length;
         int largueur = deligne[0].length();
-        int longueur = deligne.length;
-        System.out.println(largueur);
-
-
-        //int y = bla.get(0).;
-        //this.getLoup().setPosition();
-        this.effaceTout();
-        this.setNx(longueur);
-        this.setNy(largueur);
-
-        for (int h = 1; h < deligne.length-1; h++) {
-            String c = null;
-            int lar = 0;
-            for (char s:deligne[h].toCharArray()) {
-                lar+=1;
-                if (lar == 0){
-                    break;
-                }
-                if (lar == largueur){
-                    break;
-                }
-                String str = Character.toString(s);
-                if (str.equals("x") && this.cellules.get(h).get(lar).getÉlément() instanceof Mur)  {
-                    break;
-
-                } else if (str.equals("x") && !(this.cellules.get(h).get(lar).getÉlément() instanceof Mur)) {
-                    this.PoserMur(h, lar);
-                } else if (str.equals("f")) {
-                    this.PoserMargueurite(h, lar);
-                } else if (str.equals("h")) {
-                    this.PoserHerbe(h, lar);
-                } else if (str.equals("c")) {
-                    this.PoserCactus(h, lar);
-                } else if (str.equals("T")) {
-                    this.GetCellule(h, lar).setÉlément(null);
-                } else if (str.equals("l")) {
-                    //this.setLoup(new Loup(this.cellules.get(h).get(lar)));
-                    this.getMouton().setPosition(this.cellules.get(h).get(lar));
-                    System.out.println("nut");
-                    //on place sur le labyrinthe un nouveau loup à la position
-                } else if (str.equals("M")) {
-                    System.out.println("dez");
-                    this.getMouton().setPosition(this.cellules.get(h).get(lar));
-                    //on place sur le labyrinthe un nouveau Mouton à la position
-                    //this.getMouton().setPosition(this.cellules.get(h).get(lar));
+        for(int i =0; i < hauteur-1; i++){
+            for(int j = 0 ;j< deligne[i].length();j++){
+                char c = deligne[i].charAt(j);
+                String str = Character.toString(c);
+                if(str == "s"){
+                    co.add(i);
+                    co.add(j);
+                    return co;
                 }
 
             }
-            this.toString();
+        }
+        return co;
+    }
+
+    public Labyrinthe recupToLaby(String laby) {
+        String[] deligne = laby.split("\n");
+        System.out.println(laby);
+        int hauteur = deligne.length;
+        int largueur = deligne[0].length();
+        System.out.println(hauteur);
+        System.out.println(largueur);
+
+        Labyrinthe lab = new Labyrinthe(hauteur, largueur);
+        lab.setLoup(new Loup(lab.GetCellule(1, 1)));
+        lab.setMouton(new Mouton(lab.GetCellule(lab.nx - 2, lab.ny - 2)));
+        System.out.print(lab.toString());
+
+        for (int h = 0; h < hauteur-1; h++) {
+
+
+            int lar = 0;
+            for (int j = 0; j < deligne[h].length(); j++) {
+                System.out.println(deligne[h].toCharArray());
+
+                if (j == deligne[h].length()) {
+                    break;
+                }
+
+                char c = deligne[h].charAt(j);
+                String str = Character.toString(c);
+                if (str.equals("x") && this.cellules.get(h).get(j).getÉlément() instanceof Mur) {
+                    System.out.println("mur");
+                    ;
+
+                } else if (str.equals("x") && !(this.cellules.get(h).get(j).getÉlément() instanceof Mur)) {
+                    lab.PoserMur(j, h);
+                } else if (str.equals("f")) {
+                    lab.PoserMargueurite(j, h);
+                } else if (str.equals("h")) {
+                    lab.PoserHerbe(j, h);
+                } else if (str.equals("c")) {
+                    lab.PoserCactus(j, h);
+                } else if (str.equals("T")) {
+                    lab.GetCellule(j, h).setÉlément(null);
+                } else if (str.equals("l")) {
+                    //this.setLoup(new Loup(this.cellules.get(h).get(lar)));
+                    lab.PoserHerbe(h, j);
+                    lab.getLoup().setPosition(lab.GetCellules().get(h).get(j));
+                    //on place sur le labyrinthe un nouveau loup à la position
+                } else if (str.equals("m")) {
+                    lab.PoserHerbe(h, j);
+                    lab.getMouton().setPosition(lab.GetCellules().get(h).get(j));
+                    //on place sur le labyrinthe un nouveau Mouton à la position
+                } else if (str.equals("s")) {
+                    lab.DéfinirSortie(h, j);
+                    lab.setSortie(lab.GetCellules().get(h).get(j));
+                }
+
+            }
 
 
         }
+
+        return lab;
 
 
     }
 
 }
+
 
 
 
