@@ -276,9 +276,14 @@ public class Préparation extends Stage implements Serializable {
             scrollPane.setContent(eventGénération.getGridPane());
 
         });
+
+        Button sauvegarde = new Button("sauvergarde");
+        EventFonction ef = new EventFonction(test);
+        sauvegarde.setOnMouseClicked(ef);
+
         VBox gauche = new VBox();
         //TODO finir de corriger le bug
-        gauche.getChildren().addAll(boutonaccueil, labelTaille, hauteur, largeur, Lancer, générerLabyrinthe,chargerLabyrinthe,Aleatoire);
+        gauche.getChildren().addAll(boutonaccueil, labelTaille, hauteur, largeur, Lancer, générerLabyrinthe,chargerLabyrinthe,Aleatoire,sauvegarde);
         VBox milieu = new VBox();
         milieu.getChildren().add(stackPane);
         VBox droite = new VBox();
