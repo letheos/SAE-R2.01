@@ -322,10 +322,10 @@ public class Labyrinthe implements Serializable {
             //ArrayList<String> ligne = new ArrayList<>();
 
             for (int k = 0; k < cellules.get(i).size(); k++) {
-                if (cellules.get(i).get(k).getX() == mouton.getX() && cellules.get(i).get(k).getY() == mouton.getY()) {
+                if (mouton != null && cellules.get(i).get(k).getX() == mouton.getX() && cellules.get(i).get(k).getY() == mouton.getY()) {
                     //si les coordonnnées du mouton sont les mêmes que celles de cettes cellules, on le met dans la liste
                     sb.append("m");
-                } else if (cellules.get(i).get(k).getX() == loup.getX() && cellules.get(i).get(k).getY() == loup.getY()) {
+                } else if (loup != null && cellules.get(i).get(k).getX() == loup.getX() && cellules.get(i).get(k).getY() == loup.getY()) {
                     //si les coordonnnées du mouton sont les mêmes que celles de cettes cellules, on le met dans la liste
                     sb.append("l");
                 } else if (i == 0 || i == cellules.size() - 1) {
