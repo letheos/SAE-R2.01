@@ -216,16 +216,16 @@ public class Labyrinthe implements Serializable {
         int x = cellule.getX();
         int y = cellule.getY();
         if (!(this.GetCellule(x-1,y).getÉlément() instanceof Mur )){
-            System.out.println("la cellule au dessus "+this.GetCellule(x-1,y).getÉlément()+" n'est pas un mur");
+
             voisins.add(this.GetCellule(x-1,y));
         } if (!(this.GetCellule(x+1,y).getÉlément() instanceof Mur )) {
-            System.out.println("la cellule en dessous "+this.GetCellule(x+1,y).getÉlément()+" n'est pas un mur");
+
             voisins.add(this.GetCellule(x+1,y));
         }  if (!(this.GetCellule(x,y-1).getÉlément() instanceof Mur)) {
-            System.out.println("la cellule a gauche "+this.GetCellule(x,y-1).getÉlément()+" n'est pas un mur");
+
             voisins.add(this.GetCellule(x,y-1));
         } if (!(this.GetCellule(x,y+1).getÉlément() instanceof Mur)) {
-            System.out.println("la cellule a droite "+this.GetCellule(x,y+1).getÉlément()+" n'est pas un mur");
+
             voisins.add(this.GetCellule(x,y+1));
 
         }

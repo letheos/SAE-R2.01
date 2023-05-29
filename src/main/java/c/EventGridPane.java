@@ -257,10 +257,13 @@ public class EventGridPane implements EventHandler<Event> {
 
                     } else if (evenementsMenu.getAction().equals("PoserMur")) {
                         if (bouton.getGraphic() == null) {
+
                             bouton.setBackground(background2);
 
                             Mur mur = new Mur();
+
                             cellule.setÉlément(mur);
+
                             laby.toString();
                         } else {
                             Alert MuronAnimal = new Alert(Alert.AlertType.INFORMATION);

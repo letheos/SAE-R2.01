@@ -1,6 +1,8 @@
 package v;
 
 import c.*;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -9,13 +11,12 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import m.Cactus;
-import m.Labyrinthe;
-import m.Mur;
-import m.marguerite;
+import m.*;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Random;
 
 import c.EvenementsMenu;
 import c.EventGridPane;
@@ -34,6 +35,8 @@ public class Préparation extends Stage implements Serializable {
     private int ny;
 
     private Labyrinthe récup;
+
+    private GridPane gridPane;
 
     public Préparation(int nx,int ny) throws IOException, ClassNotFoundException {
         this.nx = nx;
@@ -121,6 +124,7 @@ public class Préparation extends Stage implements Serializable {
         EvenementsMenu eventmenu = new EvenementsMenu();
 
         GridPane gridPane = new GridPane();
+        this.gridPane = gridPane;
         EventGridPane eventPane = new EventGridPane(eventmenu, this.récup, gridPane);
 for (int row = 0; row < this.récup.getNx(); row++) {
     for (int col = 0; col < this.récup.getNy(); col++) {
@@ -228,7 +232,8 @@ for (int row = 0; row < this.récup.getNx(); row++) {
                 System.out.println(this.récup.getNx());
                 System.out.println(this.récup.getNy());
                 EventGénération eventGénération = new EventGénération(hauteur.getValue(),largeur.getValue(),this.récup,eventmenu);
-                scrollPane.setContent(eventGénération.getGridPane());}
+                scrollPane.setContent(eventGénération.getGridPane());
+                this.gridPane = eventGénération.getGridPane();}
                 else{
                     Alert reportThomasCeTrolleur = new Alert(Alert.AlertType.INFORMATION);
                     reportThomasCeTrolleur.setTitle("Erreur");
@@ -243,13 +248,49 @@ for (int row = 0; row < this.récup.getNx(); row++) {
             Lancer.setMaxSize(100, 100);
 
             Button chargerLabyrinthe = new Button("Charger Labyrinthe");
+
             VBox gauche = new VBox();
             //TODO finir de corriger le bug
             gauche.getChildren().addAll(boutonaccueil, labelTaille, hauteur, largeur, Lancer, générerLabyrinthe,chargerLabyrinthe);
             VBox milieu = new VBox();
             milieu.getChildren().add(stackPane);
             VBox droite = new VBox();
-            Lancer.setOnMouseClicked(new EventLancement(gauche,milieu,droite,eventmenu,this.récup));
+            Lancer.setOnMouseClicked(mouseEvent -> {
+                if(this.récup.getSortie() != null && this.récup.getMouton() != null && this.récup.getLoup() != null){
+
+                    for (Node node : gauche.getChildren()) {
+                    node.setVisible(false);
+                }
+                    for (Node node : droite.getChildren()){
+                        node.setVisible(false);
+
+                    }
+                    Button automatique = new Button("Automatique");
+                    Button Jouertour = new Button("Jouer Tour");
+                    Jouertour.setOnMouseClicked(mouseEvent1 ->
+                    {
+
+                        //TODO implémenter le déplacement alternatif pour loup et mouton
+                        ArrayList<Cellule> voisins= this.récup.getVoisins(this.récup.getMouton().getPosition());
+                        Random random = new Random();
+                        Cellule cell = voisins.get(random.nextInt(voisins.size()));
+                        déplacement(this.récup,this.gridPane,cell.getX(),cell.getY(),imageView,imageView1,this.récup.getMouton());});
+                    HBox boutons = new HBox();
+                    boutons.getChildren().addAll(automatique,Jouertour);
+                    boutons.setAlignment(Pos.CENTER);
+                    boutons.setSpacing(50);
+                    milieu.getChildren().add(boutons);
+                    eventmenu.setAction("null");
+                }
+                    else{
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Erreur");
+                        alert.setHeaderText("Lancement impossible");
+                        alert.setContentText("Il est impossible de lancer le jeu si celui-ci ne possède pas au moins un \n -Une sortie \n -Un Loup \n -Un Mouton");
+                        alert.showAndWait();
+                    }
+                }
+            );
             Button DéfinirSortie = new Button("Définir sortie");
             DéfinirSortie.setOnMouseClicked(eventmenu);
             //TODO finir d'implémenter le déplacement , rajouter logo accueil et empêcher le lancement si as de sortie, pas de mouton et pas de loup
@@ -274,13 +315,10 @@ for (int row = 0; row < this.récup.getNx(); row++) {
             paneGauche.setStyle("-fx-padding: 10px;");
             Pane paneMilieu = new Pane(milieu);
             paneMilieu.setStyle("-fx-padding: 10px;");
-            ;
             Pane paneDroite = new Pane(droite);
             paneDroite.setStyle("-fx-padding: 10px;");
             hbox.getChildren().addAll(paneGauche, paneMilieu, paneDroite);
             Scene scene = new Scene(hbox, 750, 750);
-
-
             stage.setScene(scene);
             stage.setTitle("Attrape moi si tu peux ");
             Image logo = new Image(racineProjet + "\\src\\images\\logo.png");
@@ -334,5 +372,80 @@ for (int row = 0; row < this.récup.getNx(); row++) {
         public int getNy(){
         return this.ny;
         }
+        public Labyrinthe getLaby(){
+        return this.récup;
+        }
+
+        private void déplacement(Labyrinthe récup, GridPane gridPane, int newX, int newY, ImageView imageView, ImageView imageView1, Animaux animal) {
+
+        // Vérifier si la nouvelle position est valide
+        if (newX >= 1 && newX < récup.getNx() - 1 && newY >= 1 && newY < récup.getNy() - 1) {
+            int oldX;
+            int oldY;
+            // Mettre à jour la position du loup
+            if (animal instanceof Loup) {
+                oldX = récup.getLoup().getX();
+                oldY = récup.getLoup().getY();
+                récup.getLoup().setPosition(récup.GetCellule(newX, newY));
+
+            } else {
+                oldX = récup.getMouton().getX();
+                oldY = récup.getMouton().getY();
+                récup.getMouton().setPosition(récup.GetCellule(newX, newY));
+                récup.getMouton().manger(récup.getMouton().getPosition(), gridPane);
+            }
+            // Enlever l'ancienne image de la case actuelle
+            Button button2 = null;
+            for (Node node : gridPane.getChildren()) {
+                if (GridPane.getColumnIndex(node) == newY && GridPane.getRowIndex(node) == newX) {
+                    if (node instanceof Button) {
+                        button2 = (Button) node;
+                        break;
+                    }
+                }
+            }
+
+            Button button = null;
+            for (Node node : gridPane.getChildren()) {
+                if (GridPane.getColumnIndex(node) == oldY && GridPane.getRowIndex(node) == oldX) {
+                    if (node instanceof Button) {
+                        button = (Button) node;
+                        break;
+
+                    }
+                }
+            }
+// vérifier si le bouton a été trouvé
+            if (button2 != null) {
+                // définir un nouveau graphique pour le bouton
+                if (animal instanceof Mouton) {
+                    button.setGraphic(null);
+                    button2.setGraphic(imageView);
+                } else {
+                    button.setGraphic(null);
+                    button2.setGraphic(imageView1);
+                }
+            }
+
+
+            // Ajouter la nouvelle image à la nouvelle case
+        /*Pane newOverlayPane = new Pane();
+
+        newOverlayPane.setStyle("-fx-background-color: transparent;");
+        imageView1.setMouseTransparent(true);
+        imageView1.setPreserveRatio(true);
+        Rectangle clip1 = new Rectangle(imageView1.getFitWidth(), imageView1.getFitHeight());
+        clip1.setArcHeight(10);
+        clip1.setArcWidth(10);
+        imageView1.setClip(clip1);
+
+        newOverlayPane.getChildren().add(imageView1);
+        ((GridPane) gridPane).add(newOverlayPane, newX, newY);
+
+        GridPane.setValignment(newOverlayPane, VPos.CENTER);
+*/
+        }//TODO optimiser le code , dans les faits il marche mais pas de manière optimale
+
+    }
     }
 
