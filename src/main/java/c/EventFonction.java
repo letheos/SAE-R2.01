@@ -3,6 +3,7 @@ package c;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import m.Labyrinthe;
@@ -18,7 +19,7 @@ import static java.awt.event.MouseEvent.MOUSE_CLICKED;
 public class EventFonction implements EventHandler<Event> {
     private Stage stage;
     //private EvenementsMenu evenementM;
-    private TextField tf;
+    private javafx.scene.control.TextField tf;
     private Labyrinthe lab;
 
     public EventFonction(Stage s, TextField t, Labyrinthe lab) {
@@ -30,12 +31,12 @@ public class EventFonction implements EventHandler<Event> {
 
     @Override
     public void handle(Event event) {
-        System.out.println("le bouton a été zi");
+        System.out.println("une banane");
         if (event.getSource() instanceof Button) {
             Button but = (Button) event.getSource();
 
             if (but.getText().contains("ChargerLabyrinthe")) {
-                System.out.println("une banane");
+
 
                 String racineProjet = System.getProperty("user.dir");
                 File debut = new File(racineProjet);
@@ -48,6 +49,9 @@ public class EventFonction implements EventHandler<Event> {
                 if (dossierSelec != null) {
                     tf.setText(dossierSelec.getAbsolutePath());
                     System.out.println(dossierSelec.getAbsolutePath());
+                    String recette = lab.recup(dossierSelec.getAbsolutePath());
+                    lab.recupToLaby(recette);
+                   System.out.println(lab.toString());
                 }
 
 

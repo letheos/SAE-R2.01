@@ -86,13 +86,13 @@ public class Labyrinthe implements Serializable {
         sb.append("\n");
 
         // Dessiner les lignes du milieu
-        for (int y = 0; y < ny; y++) {
+        for (int x = 0; x < nx; x++) {
             sb.append("|");
-            for (int x = 0; x < nx; x++) {
+            for (int y = 0; y < ny; y++) {
                 Cellule cell = cellules.get(x).get(y);
-                if ((y == mouton.getX() && (x == mouton.getY()))) {
+                if (mouton != null && x == mouton.getX() && y == mouton.getY()) {
                     sb.append(" M |");
-                } else if ((y == loup.getX()) && (x == loup.getY())) {
+                } else if (loup != null && x == loup.getX() && y == loup.getY()) {
                     sb.append(" L |");
                 } else if (cell.getÉlément() == null) {
                     sb.append("Ter|");
@@ -110,7 +110,7 @@ public class Labyrinthe implements Serializable {
 
             // Dessiner une ligne avec des barres horizontales entre chaque cellule
             sb.append("+");
-            for (int i = 0; i < nx; i++) {
+            for (int i = 0; i < ny; i++) {
                 sb.append("---+");
             }
             sb.append("\n");
@@ -231,19 +231,19 @@ public class Labyrinthe implements Serializable {
         int x = cellule.getX();
         int y = cellule.getY();
         if (!(this.GetCellule(x - 1, y).getÉlément() instanceof Mur)) {
-            System.out.println("la cellule au dessus " + this.GetCellule(x - 1, y).getÉlément() + " n'est pas un mur");
+
             voisins.add(this.GetCellule(x - 1, y));
         }
         if (!(this.GetCellule(x + 1, y).getÉlément() instanceof Mur)) {
-            System.out.println("la cellule en dessous " + this.GetCellule(x + 1, y).getÉlément() + " n'est pas un mur");
+
             voisins.add(this.GetCellule(x + 1, y));
         }
         if (!(this.GetCellule(x, y - 1).getÉlément() instanceof Mur)) {
-            System.out.println("la cellule a gauche " + this.GetCellule(x, y - 1).getÉlément() + " n'est pas un mur");
+
             voisins.add(this.GetCellule(x, y - 1));
         }
         if (!(this.GetCellule(x, y + 1).getÉlément() instanceof Mur)) {
-            System.out.println("la cellule a droite " + this.GetCellule(x, y + 1).getÉlément() + " n'est pas un mur");
+
             voisins.add(this.GetCellule(x, y + 1));
 
         }
@@ -400,14 +400,21 @@ public class Labyrinthe implements Serializable {
         t.add("h");
         Random random = new Random();
         int caisseCsGo = random.nextInt(t.size());
+
         if (t.get(caisseCsGo) == "c") {
-            this.PoserCactus(hauteur, largeur);
+            this.GetCellule(hauteur,largeur).setÉlément(new Cactus());
         } else if (t.get(caisseCsGo) == "h") {
-            this.PoserHerbe(hauteur, largeur);
+            this.GetCellule(hauteur,largeur).setÉlément(new Herbe());
         } else if (t.get(caisseCsGo) == "f") {
-            this.PoserMargueurite(hauteur, largeur);
+            this.GetCellule(hauteur,largeur).setÉlément(new marguerite());
         } else {
-            this.PoserMur(hauteur, largeur);
+            this.GetCellule(hauteur,largeur).setÉlément(new Mur());
+        }if (this.loup.getX() == hauteur && this.loup.getY() == largeur){
+            this.GetCellule(hauteur,largeur).setÉlément(new Herbe());
+
+        }if (this.mouton.getX() == hauteur && this.mouton.getY() == largeur){
+            this.GetCellule(hauteur,largeur).setÉlément(new Herbe());
+
         }
     }
 
@@ -479,7 +486,7 @@ public class Labyrinthe implements Serializable {
     }
 
     public void aleatoire() {
-
+        this.effaceTout();
         for (int i = 1; i < cellules.size() - 1; i++) {
             for (int j = 1; j < cellules.get(i).size() - 1; j++) {
                 this.PlaceAleatoire(i, j);
@@ -559,23 +566,34 @@ public class Labyrinthe implements Serializable {
 
     public Labyrinthe recupToLaby(String laby) {
         String[] deligne = laby.split("\n");
-        System.out.println(laby);
+
         int hauteur = deligne.length;
         int largueur = deligne[0].length();
-        System.out.println(hauteur);
-        System.out.println(largueur);
+
 
         Labyrinthe lab = new Labyrinthe(hauteur, largueur);
         lab.setLoup(new Loup(lab.GetCellule(1, 1)));
         lab.setMouton(new Mouton(lab.GetCellule(lab.nx - 2, lab.ny - 2)));
-        System.out.print(lab.toString());
+
 
         for (int h = 0; h < hauteur-1; h++) {
+            System.out.println(hauteur-1);
+            System.out.println(hauteur);
+            System.out.println(largueur);
+            System.out.println("\n");
+
+            System.out.println(lab.nx);
+
+            System.out.println(lab.ny);
+
+
+
+
 
 
             int lar = 0;
-            for (int j = 0; j < deligne[h].length(); j++) {
-                System.out.println(deligne[h].toCharArray());
+            for (int j = 0; j < deligne[h].length()-1; j++) {
+
 
                 if (j == deligne[h].length()) {
                     break;
@@ -583,11 +601,11 @@ public class Labyrinthe implements Serializable {
 
                 char c = deligne[h].charAt(j);
                 String str = Character.toString(c);
-                if (str.equals("x") && this.cellules.get(h).get(j).getÉlément() instanceof Mur) {
+                if (str.equals("x") && lab.cellules.get(h).get(j).getÉlément() instanceof Mur) {
                     System.out.println("mur");
-                    ;
 
-                } else if (str.equals("x") && !(this.cellules.get(h).get(j).getÉlément() instanceof Mur)) {
+
+                } else if (str.equals("x") && !(lab.cellules.get(h).get(j).getÉlément() instanceof Mur)) {
                     lab.PoserMur(j, h);
                 } else if (str.equals("f")) {
                     lab.PoserMargueurite(j, h);
@@ -615,7 +633,7 @@ public class Labyrinthe implements Serializable {
 
 
         }
-
+        System.out.println(lab.toString());
         return lab;
 
 

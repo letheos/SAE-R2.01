@@ -26,7 +26,14 @@ public class EvenementsMenu implements EventHandler {
         return this.action;
     }
 
-
+    public void setAction(String effet){
+        if (effet == "null"){
+            this.action = null;
+        }
+        else {
+            this.action = effet;
+        }
+    }
 
     public void handle(Event event) {
         //System.out.println("le bouton a été cliqué");
