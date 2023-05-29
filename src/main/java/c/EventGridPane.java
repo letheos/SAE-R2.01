@@ -113,7 +113,8 @@ public class EventGridPane implements EventHandler<Event> {
                         Alert horsbord = new Alert(Alert.AlertType.INFORMATION);
                         horsbord.setTitle("Erreur");
                         horsbord.setHeaderText("Action impossible");
-                        horsbord.setContentText("Vous essayez de définir une sortie alors que vous n'êtes pas en bord de carte");
+                        horsbord.setContentText("Vous essayez de définir une sortie alors que vous n'êtes pas en bord de carte ou dans un coin");
+                        horsbord.showAndWait();
                     }
 
                 } else if (x >= 1 && x < this.gridPane.getRowCount() - 1 && y >= 1 && y < this.gridPane.getColumnCount() - 1) {

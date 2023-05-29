@@ -17,7 +17,14 @@ public class EvenementsMenu implements EventHandler {
     public String getAction(){
         return this.action;
     }
-
+    public void setAction(String effet){
+        if (effet == "null"){
+            this.action = null;
+        }
+        else {
+            this.action = effet;
+        }
+    }
 
 
     public void handle(Event event) {
