@@ -1,6 +1,6 @@
 package m;
 
-import com.example.fx_sae.Labyrinthe;
+import m.Labyrinthe;
 
 import java.io.Serializable;
 import java.util.ArrayList;
