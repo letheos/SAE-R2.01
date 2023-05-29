@@ -88,10 +88,10 @@ public class Parametre extends Application {
         EventController event = new EventController(scene, borderPane);
         sombre.setOnMouseClicked(event);
 
-        //String path = getClass().getResource("Temporal_Tower.mp3").toExternalForm();
-        //Media media = new Media(path);
-        //MediaPlayer mediaPlayer = new MediaPlayer(media);
-        //mediaPlayer.play();
+        String path = getClass().getResource("Temporal_Tower.mp3").toExternalForm();
+        Media media = new Media(path);
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.play();
 
         stage.setTitle("Paramètre");
         stage.setScene(scene);
@@ -103,4 +103,3 @@ public class Parametre extends Application {
         Application.launch(args);
     }
 }
-
