@@ -1,5 +1,5 @@
 package c;
-import com.example.fx_sae.Labyrinthe;
+import m.*;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;

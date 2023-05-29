@@ -29,7 +29,7 @@ public class EvenementsMenu implements EventHandler {
 
 
     public void handle(Event event) {
-        System.out.println("le bouton a été cliqué");
+        //System.out.println("le bouton a été cliqué");
         if (event.getSource() instanceof Button){
             Button button = (Button)event.getSource();
             if (button.getText().toString().equals("Définir sortie")){
@@ -57,19 +57,6 @@ public class EvenementsMenu implements EventHandler {
                 this.action = "ChargerLabyrinthe";
             }
         }
-        if(event.getSource() instanceof ComboBox){
-            System.out.println("le ComboBox à été cliqué");
-            ComboBox cb = (ComboBox) event.getSource();
-            if(cb.getPromptText() == "hauteur"){
-                this.action = "hauteur";
-            }
-            if(cb.getPromptText().equals("largueur")){
-                this.action = "largueur";
-            }
-        }
-
-
-
     }
 
 }
