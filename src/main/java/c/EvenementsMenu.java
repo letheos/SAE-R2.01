@@ -2,6 +2,7 @@ package c;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import m.Labyrinthe;
 
@@ -54,6 +55,16 @@ public class EvenementsMenu implements EventHandler {
             }
             if(button.getText().toString().equals("ChargerLabyrinthe")){
                 this.action = "ChargerLabyrinthe";
+            }
+        }
+        if(event.getSource() instanceof ComboBox){
+            System.out.println("le ComboBox à été cliqué");
+            ComboBox cb = (ComboBox) event.getSource();
+            if(cb.getPromptText() == "hauteur"){
+                this.action = "hauteur";
+            }
+            if(cb.getPromptText().equals("largueur")){
+                this.action = "largueur";
             }
         }
 
