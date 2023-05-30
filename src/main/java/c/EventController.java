@@ -15,6 +15,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
+import java.io.File;
+import java.net.MalformedURLException;
+
 public class EventController implements EventHandler<MouseEvent> {
     //importation des variable pour modifier la fenêtre
     private Text text;
@@ -72,11 +75,20 @@ public class EventController implements EventHandler<MouseEvent> {
         } choixM.setOnAction(events -> {//si l'événement vient de la choise box lorsqu'un choix est donner
             //la valeur du choix est mis dans cette variable
             String newValue = choixM.getValue();
+            String racine = System.getProperty("user.dir");
             //la valeur est modifier, on rajoute .mp3 au fichier puis on cherche le fichier dans le dossier ressouce
-            String newMusicPath = getClass().getResource(newValue + ".mp3").toExternalForm();
+            String newMusicPath = racine + "\\src\\" + newValue + ".mp3";
+            File file = new File(newMusicPath);
+            String uriString;
+            try {
+                uriString = file.toURI().toURL().toExternalForm();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return;
+            }
             //on arrête l'ancienne musique puis on lance la nouvelle
             mediaPlayer.stop();
-            Media newMedia = new Media(newMusicPath);
+            Media newMedia = new Media(uriString);
             mediaPlayer = new MediaPlayer(newMedia);
             mediaPlayer.play();
 
