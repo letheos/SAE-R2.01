@@ -271,15 +271,13 @@ public class Préparation extends Stage implements Serializable {
         Button Aleatoire = new Button("Aléatoire");
 
         Aleatoire.setOnMouseClicked(mouseEvent -> {
-            this.récup = new Labyrinthe(test);
+            récup.setSortie(null);
             récup.aleatoire();
             EventGénération eventGénération = new EventGénération(récup.getNx(),récup.getNy(),this.récup,eventmenu);
-            scrollPane.setContent(eventGénération.getGridPane());
-
-        });
+            scrollPane.setContent(eventGénération.getGridPane());});
 
         Button sauvegarde = new Button("sauvergarde");
-        EventFonction ef = new EventFonction(test);
+        EventFonction ef = new EventFonction(récup);
         sauvegarde.setOnMouseClicked(ef);
 
         VBox gauche = new VBox();
@@ -293,6 +291,15 @@ public class Préparation extends Stage implements Serializable {
                     System.out.println("voici le mouton : " + this.récup.getMouton());
                     System.out.println("voici le Loup :" + this.récup.getLoup());
                     System.out.println("voici la sortie : " + this.récup.getSortie());
+                    if(this.récup.getSortie() == null){
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Erreur");
+                        alert.setHeaderText("Lancement impossible");
+                        alert.setContentText("La sortir est nul");
+                        alert.showAndWait();
+
+                    }
+
                     System.out.println(this.récup.toString());
                     if (this.récup.getSortie() != null && this.récup.getMouton() != null && this.récup.getLoup() != null) {
 
