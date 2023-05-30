@@ -23,7 +23,7 @@ import javafx.stage.Stage;
 //création d'une classe Paramètre qui servira a la création de la page javaFX
 public class Paramètres extends Stage {
     //création de la page
-    public Paramètre() {
+    public Paramètres() {
         //création de la stage
         Stage stage = new Stage();
         //création d'une layout pour pouvoir placer les widget sur la page comme on le souhaite
