@@ -323,8 +323,21 @@ public class Préparation extends Stage implements Serializable {
                     if (this.récup.getSortie() != null && this.récup.getMouton() != null && this.récup.getLoup() != null) {
 
                         for (Node node : gauche.getChildren()) {
-                            node.setVisible(false);
+
+                            if (node instanceof  Button){
+
+                                Button but = (Button)node;
+                                if(but.getText().equals("Accueil")){
+
+
+                                }else {
+                                    but.setVisible(false);
+                                }
+                            }else{
+                                node.setVisible(false);
+                            }
                         }
+
                         for (Node node : droite.getChildren()) {
                             node.setVisible(false);
 
