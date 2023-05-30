@@ -40,7 +40,7 @@ public class Crédits extends Stage {
         Label label5 = new Label("\n\n Membres de la société:");
         label5.setTextFill(Color.RED);
         Label label6 = new Label("Theo Duterte-Richardot");
-        Label label7 = new Label("Thomas Meriaux");
+        Label label7 = new Label("Thomas Meriaux/bouffon");
 
         bas.getChildren().add(label3);
         bas.getChildren().add(label4);
