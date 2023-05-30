@@ -416,7 +416,7 @@ public class Labyrinthe implements Serializable {
             this.GetCellule(hauteur, largeur).setÉlément(new Herbe());
 
         }
-        if (this.mouton.getX() == hauteur && this.mouton.getY() == largeur) {
+        else if (this.mouton.getX() == hauteur && this.mouton.getY() == largeur) {
             this.GetCellule(hauteur, largeur).setÉlément(new Herbe());
 
         }
@@ -510,11 +510,16 @@ public class Labyrinthe implements Serializable {
         this.effaceTout();
         for (int i = 1; i < cellules.size() - 1; i++) {
             for (int j = 1; j < cellules.get(i).size() - 1; j++) {
+                if(this.getLoup() != null && this.getLoup().getX() == i && this.getLoup().getY() == j) {
+                    break;
+                }if(this.getMouton() != null && this.getMouton().getX() == i && this.getMouton().getY() == j) {
+                    break;
+                }
                 this.PlaceAleatoire(i, j);
             }
         }
 
-        this.PoserHerbe(1, 1);
+        this.GetCellule(1,1).setÉlément(new Herbe());
         this.setMouton(new Mouton(cellules.get(1).get(1)));
         this.PoserHerbe(this.getNx() - 3, this.getNy() - 2);
         this.setLoup(new Loup(cellules.get(this.getNx() - 3).get(this.getNy() - 2)));
@@ -690,6 +695,7 @@ public class Labyrinthe implements Serializable {
         }
         lab.trouvelaSortie(deligne,lab);
         System.out.println(lab.toString());
+        System.out.println(lab.getSortie().toString());
         return lab;
 
 
@@ -702,8 +708,12 @@ public class Labyrinthe implements Serializable {
             if (sortie.equals(Character.toString(lab[0].charAt(i)))) {
                 //si sortie en haut
                 System.out.println("bla la sortie bouhou");
-                nouv.setSortie(nouv.cellules.get(0).get(i));
+                Cellule laSortie = nouv.GetCellule(0, i);
+                nouv.setSortie(laSortie);
                 nouv.DéfinirSortie(0, i);
+                laSortie.setÉlément(new Herbe());
+
+
                 System.out.println("bla la sortie couhou");
                 //this.setSortie(this.cellules.get(0).get(i));
                 System.out.println("bla la sortie douhou");
@@ -711,8 +721,12 @@ public class Labyrinthe implements Serializable {
             if (sortie.equals(Character.toString(lab[lab.length - 1].charAt(i)))) {
                 //si la sortie est sur la dernière ligne
                 System.out.println("bla la sortie douhou");
+
+                Cellule laSortie = nouv.GetCellule(lab.length - 1, i);
+                nouv.setSortie(laSortie);
                 nouv.DéfinirSortie(lab.length - 1, i);
-                nouv.setSortie(nouv.GetCellules().get(lab.length - 1).get(i));
+                laSortie.setÉlément(new Herbe());
+
             }
         }
         for (int y = 1; y < lab.length - 1; y++) {
@@ -720,14 +734,18 @@ public class Labyrinthe implements Serializable {
             if (sortie.equals(Character.toString(lab[y].charAt(0)))) {
                 //si la sortie est sur la colone de gauche
                 System.out.println("bla la sortie aouhou");
-                nouv.DéfinirSortie(y, 0);
-                nouv.setSortie(nouv.GetCellules().get(y).get(0));
+                Cellule laSortie = nouv.GetCellule(y, 0);
+                nouv.setSortie(laSortie);
+                this.DéfinirSortie(y, 0);
+                laSortie.setÉlément(new Herbe());
             }
             if (sortie.equals(Character.toString(lab[y].charAt(lab[0].length() - 1)))) {
                 //si la sortie est sur la colonne de droite
                 System.out.println("bla la sortie uouhou");
+                Cellule laSortie = nouv.GetCellule(y, lab[0].length() - 1);
+                nouv.setSortie(laSortie);
                 this.DéfinirSortie(y, lab[0].length() - 1);
-                nouv.setSortie(nouv.GetCellules().get(y).get(lab[0].length() - 1));
+                laSortie.setÉlément(new Herbe());
             }
 
         }
