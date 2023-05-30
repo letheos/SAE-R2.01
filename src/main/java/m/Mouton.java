@@ -16,6 +16,8 @@ import java.util.HashMap;
 
 public class Mouton extends Animaux {
     private boolean fuite;
+
+    private int déplacement;
      private HashMap<String, Integer> mangés;
     public Mouton(Cellule cellule){
         super(cellule);
@@ -23,19 +25,24 @@ public class Mouton extends Animaux {
         this.mangés.put("Herbe",0);
         this.mangés.put("Cactus",0);
         this.mangés.put("margeurite",0);
+        this.déplacement = 2;
     }
     public String mangé(){
-        return "le mouton a mangé "+this.mangés.get("Herbe")+" cases d'herbe "+this.mangés.get("Cactus")+" Cactus et "+this.mangés.get("margeurite")+" margeurites";
+        return "le mouton a mangé \n-"+this.mangés.get("Herbe")+"  cases d'herbe \n-"+this.mangés.get("Cactus")+" Cactus et \n-"+this.mangés.get("margeurite")+" margeurites";
     }
+
     public void manger(Cellule position, GridPane gridPane){
         if (position.getÉlément()instanceof Herbe){
             this.mangés.put("Herbe",this.mangés.get("Herbe")+1);
+            this.déplacement = 2;
         }
         else if (position.getÉlément()instanceof marguerite){
             this.mangés.put("margeurite",this.mangés.get("margeurite")+1);
+            this.déplacement = 4;
         }
         else if (position.getÉlément()instanceof Cactus){
             this.mangés.put("Cactus",this.mangés.get("Cactus")+1);
+            this.déplacement = 1;
         }
         else {
         }
@@ -62,6 +69,10 @@ if (button2 != null) {
     button2.setBackground(background5);
 
     }
+}
+
+public int getDéplacement(){
+        return this.déplacement;
 }
 
 

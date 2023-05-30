@@ -10,9 +10,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import m.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,29 +39,32 @@ public class Préparation extends Stage implements Serializable {
     private Labyrinthe récup;
 
     private GridPane gridPane;
-
+    private EventDéplacement eventDéplacement;
     public Préparation(int nx,int ny) throws IOException, ClassNotFoundException {
+        Stage stage = new Stage();
+        eventDéplacement  =new EventDéplacement(this.récup,this.gridPane,stage);
         this.nx = nx;
         this.ny = ny;
-        Stage stage = new Stage();
+
         Labyrinthe test;
         //nx correspond a la hauteur et ny a la largeur
-        test = new Labyrinthe(this.nx, this.ny);
+        récup = new Labyrinthe(this.nx, this.ny);
 
 
-        System.out.println(test.GetCellules());
-        System.out.println("le labyrinthe est un " + test.getNx() + test.getNy());
+        System.out.println(récup.GetCellules());
+        System.out.println("le labyrinthe est un " + récup.getNx() + récup.getNy());
 
 
 
         //mouton doit etre a x = ny- et y = nx-2 si tout en bas a droite
 
 
-        System.out.println(test.toString());
+        System.out.println(récup.toString());
 
-        System.out.println(test.toString());
-        test.sauvegarderLabyrinthe("labyrintheprefait.dat");
-        this.récup = Labyrinthe.chargerLabyrinthe("labyrintheprefait.dat");
+        System.out.println(récup.toString());
+
+
+
         System.out.println(this.récup.toString());
         /*int babouin_compteur = 0;
         for (int x = 0; x < this.récup.getNx(); x++) {
@@ -247,7 +252,26 @@ for (int row = 0; row < this.récup.getNx(); row++) {
             Lancer.setMinSize(100, 100);
             Lancer.setMaxSize(100, 100);
 
-            Button chargerLabyrinthe = new Button("Charger Labyrinthe");
+            Button chargerLabyrinthe = new Button("ChargerLabyrinthe");
+        chargerLabyrinthe.setOnMouseClicked(mouseEvent -> {
+            File debut = new File(racineProjet);
+            FileChooser explorateur = new FileChooser();
+
+            explorateur.setInitialDirectory(debut);
+            FileChooser.ExtensionFilter filtreText = new FileChooser.ExtensionFilter("Text", "*.txt");
+            explorateur.getExtensionFilters().add(filtreText);
+            File dossierSelec = explorateur.showOpenDialog(stage);
+            if (dossierSelec != null) {
+
+                System.out.println(dossierSelec.getAbsolutePath());
+                String recette = this.récup.recup(dossierSelec.getAbsolutePath());
+                this.récup = new Labyrinthe(récup.recupToLaby(recette));
+
+                //System.out.println(test.toString());
+                EventGénération eventGénération = new EventGénération(récup.getNx(),récup.getNy(),this.récup,eventmenu);
+                scrollPane.setContent(eventGénération.getGridPane());
+            }
+        });
 
             VBox gauche = new VBox();
             //TODO finir de corriger le bug
@@ -255,7 +279,15 @@ for (int row = 0; row < this.récup.getNx(); row++) {
             VBox milieu = new VBox();
             milieu.getChildren().add(stackPane);
             VBox droite = new VBox();
+            Button Jouertour = new Button("Jouer Tour");
+
             Lancer.setOnMouseClicked(mouseEvent -> {
+
+                System.out.println("voici le labyrinthe que je prend en entrée");
+                System.out.println("voici le mouton : "+this.récup.getMouton());
+                System.out.println("voici le Loup :"+this.récup.getLoup());
+                System.out.println("voici la sortie : "+this.récup.getSortie());
+                System.out.println(this.récup.toString());
                 if(this.récup.getSortie() != null && this.récup.getMouton() != null && this.récup.getLoup() != null){
 
                     for (Node node : gauche.getChildren()) {
@@ -266,21 +298,17 @@ for (int row = 0; row < this.récup.getNx(); row++) {
 
                     }
                     Button automatique = new Button("Automatique");
-                    Button Jouertour = new Button("Jouer Tour");
-                    Jouertour.setOnMouseClicked(mouseEvent1 ->
-                    {
 
-                        //TODO implémenter le déplacement alternatif pour loup et mouton
-                        ArrayList<Cellule> voisins= this.récup.getVoisins(this.récup.getMouton().getPosition());
-                        Random random = new Random();
-                        Cellule cell = voisins.get(random.nextInt(voisins.size()));
-                        déplacement(this.récup,this.gridPane,cell.getX(),cell.getY(),imageView,imageView1,this.récup.getMouton());});
+
                     HBox boutons = new HBox();
                     boutons.getChildren().addAll(automatique,Jouertour);
                     boutons.setAlignment(Pos.CENTER);
                     boutons.setSpacing(50);
                     milieu.getChildren().add(boutons);
                     eventmenu.setAction("null");
+                    EventDéplacement eventDep = new EventDéplacement(this.récup,this.gridPane,stage);
+                    Jouertour.setOnMouseClicked(eventDep);
+
                 }
                     else{
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -294,6 +322,12 @@ for (int row = 0; row < this.récup.getNx(); row++) {
             Button DéfinirSortie = new Button("Définir sortie");
             DéfinirSortie.setOnMouseClicked(eventmenu);
             //TODO finir d'implémenter le déplacement , rajouter logo accueil et empêcher le lancement si as de sortie, pas de mouton et pas de loup
+
+
+
+            Button sauvegarde = new Button("sauvergarde");
+            EventFonction ef = new EventFonction(récup);
+            sauvegarde.setOnMouseClicked(ef);
 
             Button PoserMur = new Button("PoserMur");
             PoserMur.setOnMouseClicked(eventmenu);
@@ -315,8 +349,19 @@ for (int row = 0; row < this.récup.getNx(); row++) {
             paneGauche.setStyle("-fx-padding: 10px;");
             Pane paneMilieu = new Pane(milieu);
             paneMilieu.setStyle("-fx-padding: 10px;");
+            Button Aleatoire = new Button("Aléatoire");
+
+        Aleatoire.setOnMouseClicked(mouseEvent -> {
+            this.récup = new Labyrinthe(this.récup);
+            récup.aleatoire();
+            EventGénération eventGénération = new EventGénération(récup.getNx(),récup.getNy(),this.récup,eventmenu);
+            scrollPane.setContent(eventGénération.getGridPane());
+
+        });
             Pane paneDroite = new Pane(droite);
             paneDroite.setStyle("-fx-padding: 10px;");
+            gauche.getChildren().add(Aleatoire);
+            gauche.getChildren().add(sauvegarde);
             hbox.getChildren().addAll(paneGauche, paneMilieu, paneDroite);
             Scene scene = new Scene(hbox, 750, 750);
             stage.setScene(scene);
@@ -376,76 +421,6 @@ for (int row = 0; row < this.récup.getNx(); row++) {
         return this.récup;
         }
 
-        private void déplacement(Labyrinthe récup, GridPane gridPane, int newX, int newY, ImageView imageView, ImageView imageView1, Animaux animal) {
 
-        // Vérifier si la nouvelle position est valide
-        if (newX >= 1 && newX < récup.getNx() - 1 && newY >= 1 && newY < récup.getNy() - 1) {
-            int oldX;
-            int oldY;
-            // Mettre à jour la position du loup
-            if (animal instanceof Loup) {
-                oldX = récup.getLoup().getX();
-                oldY = récup.getLoup().getY();
-                récup.getLoup().setPosition(récup.GetCellule(newX, newY));
-
-            } else {
-                oldX = récup.getMouton().getX();
-                oldY = récup.getMouton().getY();
-                récup.getMouton().setPosition(récup.GetCellule(newX, newY));
-                récup.getMouton().manger(récup.getMouton().getPosition(), gridPane);
-            }
-            // Enlever l'ancienne image de la case actuelle
-            Button button2 = null;
-            for (Node node : gridPane.getChildren()) {
-                if (GridPane.getColumnIndex(node) == newY && GridPane.getRowIndex(node) == newX) {
-                    if (node instanceof Button) {
-                        button2 = (Button) node;
-                        break;
-                    }
-                }
-            }
-
-            Button button = null;
-            for (Node node : gridPane.getChildren()) {
-                if (GridPane.getColumnIndex(node) == oldY && GridPane.getRowIndex(node) == oldX) {
-                    if (node instanceof Button) {
-                        button = (Button) node;
-                        break;
-
-                    }
-                }
-            }
-// vérifier si le bouton a été trouvé
-            if (button2 != null) {
-                // définir un nouveau graphique pour le bouton
-                if (animal instanceof Mouton) {
-                    button.setGraphic(null);
-                    button2.setGraphic(imageView);
-                } else {
-                    button.setGraphic(null);
-                    button2.setGraphic(imageView1);
-                }
-            }
-
-
-            // Ajouter la nouvelle image à la nouvelle case
-        /*Pane newOverlayPane = new Pane();
-
-        newOverlayPane.setStyle("-fx-background-color: transparent;");
-        imageView1.setMouseTransparent(true);
-        imageView1.setPreserveRatio(true);
-        Rectangle clip1 = new Rectangle(imageView1.getFitWidth(), imageView1.getFitHeight());
-        clip1.setArcHeight(10);
-        clip1.setArcWidth(10);
-        imageView1.setClip(clip1);
-
-        newOverlayPane.getChildren().add(imageView1);
-        ((GridPane) gridPane).add(newOverlayPane, newX, newY);
-
-        GridPane.setValignment(newOverlayPane, VPos.CENTER);
-*/
-        }//TODO optimiser le code , dans les faits il marche mais pas de manière optimale
-
-    }
     }
 
