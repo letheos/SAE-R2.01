@@ -178,7 +178,7 @@ public class EventDéplacement implements EventHandler {
 
 
             }
-                if (BunTour.size()> 0){
+                if (untour.size()> 0){
                 for (int y = 0;y<BunTour.size();y++){
                     BunTour.get(y).setBackground(background);
                     untour.get(y).setÉlément(new Herbe());
@@ -213,6 +213,10 @@ public class EventDéplacement implements EventHandler {
                         System.out.println("arret urgence");
                         break;
                     }
+                    System.out.println(Bdeuxtours);
+            System.out.println(deuxtours);
+            System.out.println(BunTour);
+            System.out.println(untour);
                     System.out.println(récup.toString());
                 }
 
@@ -229,7 +233,11 @@ public class EventDéplacement implements EventHandler {
                 }
             }
             Bdeuxtours.add(button2);
-            if (BunTour.size()> 0){
+            System.out.println(Bdeuxtours);
+            System.out.println(deuxtours);
+            System.out.println(BunTour);
+            System.out.println(untour);
+            if (untour.size()> 0){
                 for (int x = 0;x<BunTour.size();x++){
                     BunTour.get(x).setBackground(background);
                     untour.get(x).setÉlément(new Herbe());
