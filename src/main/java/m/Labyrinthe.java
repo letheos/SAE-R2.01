@@ -67,7 +67,8 @@ public class Labyrinthe implements Serializable {
             }
         }
     }
-    public Labyrinthe(Labyrinthe lab){
+
+    public Labyrinthe(Labyrinthe lab) {
         this.nx = lab.getNx();
         this.ny = lab.getNy();
         this.cellules = lab.GetCellules();
@@ -166,7 +167,7 @@ public class Labyrinthe implements Serializable {
 
     public boolean PoserMargueurite(int x, int y) {
         if (this.cellules.get(x).get(y).getÉlément() instanceof Mur) {
-            System.out.println("ce n'est pas possible de poser une plante sur un mur");
+            //System.out.println("ce n'est pas possible de poser une plante sur un mur");
             return false;
         }
         this.cellules.get(x).get(y).setÉlément(new marguerite());
@@ -175,7 +176,7 @@ public class Labyrinthe implements Serializable {
 
     public boolean PoserCactus(int x, int y) {
         if (this.cellules.get(x).get(y).getÉlément() instanceof Mur) {
-            System.out.println("ce n'est pas possible de poser une plante sur un mur");
+            //System.out.println("ce n'est pas possible de poser une plante sur un mur");
             return false;
         }
         this.cellules.get(x).get(y).setÉlément(new Cactus());
@@ -184,7 +185,7 @@ public class Labyrinthe implements Serializable {
 
     public boolean PoserHerbe(int x, int y) {
         if (this.cellules.get(x).get(y).getÉlément() instanceof Mur) {
-            System.out.println("ce n'est pas possible de poser une plante sur un mur");
+            //System.out.println("ce n'est pas possible de poser une plante sur un mur");
             return false;
         }
         this.cellules.get(x).get(y).setÉlément(new Herbe());
@@ -298,7 +299,8 @@ public class Labyrinthe implements Serializable {
     public Cellule getSortie() {
         return this.sortie;
     }
-    public Labyrinthe getLab(){
+
+    public Labyrinthe getLab() {
         return this;
     }
 
@@ -402,18 +404,20 @@ public class Labyrinthe implements Serializable {
         int caisseCsGo = random.nextInt(t.size());
 
         if (t.get(caisseCsGo) == "c") {
-            this.GetCellule(hauteur,largeur).setÉlément(new Cactus());
+            this.GetCellule(hauteur, largeur).setÉlément(new Cactus());
         } else if (t.get(caisseCsGo) == "h") {
-            this.GetCellule(hauteur,largeur).setÉlément(new Herbe());
+            this.GetCellule(hauteur, largeur).setÉlément(new Herbe());
         } else if (t.get(caisseCsGo) == "f") {
-            this.GetCellule(hauteur,largeur).setÉlément(new marguerite());
+            this.GetCellule(hauteur, largeur).setÉlément(new marguerite());
         } else {
-            this.GetCellule(hauteur,largeur).setÉlément(new Mur());
-        }if (this.loup.getX() == hauteur && this.loup.getY() == largeur){
-            this.GetCellule(hauteur,largeur).setÉlément(new Herbe());
+            this.GetCellule(hauteur, largeur).setÉlément(new Mur());
+        }
+        if (this.loup.getX() == hauteur && this.loup.getY() == largeur) {
+            this.GetCellule(hauteur, largeur).setÉlément(new Herbe());
 
-        }if (this.mouton.getX() == hauteur && this.mouton.getY() == largeur){
-            this.GetCellule(hauteur,largeur).setÉlément(new Herbe());
+        }
+        if (this.mouton.getX() == hauteur && this.mouton.getY() == largeur) {
+            this.GetCellule(hauteur, largeur).setÉlément(new Herbe());
 
         }
     }
@@ -445,7 +449,23 @@ public class Labyrinthe implements Serializable {
         }
     }
 
+    public void metMur(){
+        for(int i = 0;i<this.cellules.size()-1;i++){
+            this.PoserMur(i,0);
+            this.PoserMur(i,this.getNy()-1);
+        }
+        for(int y = 0;y<this.cellules.get(0).size()-1;y++){
+            this.PoserMur(0,y);
+            this.PoserMur(this.getNx()-1,y);
+        }
+        System.out.println(this.toString());
+    }
+
+
     public void effaceTout() {
+        if (this.sortie != null){
+            this.sortie.setÉlément(null);
+        }
 
         for (int i = 0; i < cellules.size(); i++) {
             for (int j = 0; j < cellules.get(i).size(); j++) {
@@ -486,6 +506,7 @@ public class Labyrinthe implements Serializable {
     }
 
     public void aleatoire() {
+        this.metMur();
         this.effaceTout();
         for (int i = 1; i < cellules.size() - 1; i++) {
             for (int j = 1; j < cellules.get(i).size() - 1; j++) {
@@ -495,9 +516,45 @@ public class Labyrinthe implements Serializable {
 
         this.PoserHerbe(1, 1);
         this.setMouton(new Mouton(cellules.get(1).get(1)));
-        this.PoserHerbe(this.getNx() - 2, this.getNy() - 2);
+        this.PoserHerbe(this.getNx() - 3, this.getNy() - 2);
         this.setLoup(new Loup(cellules.get(this.getNx() - 3).get(this.getNy() - 2)));
-        this.DéfinirSortie(0, 1);
+        if(this.sortie == null){
+            Random randomX = new Random();
+            Random random1 = new Random();
+            int coX = randomX.nextInt(this.getNx());
+            System.out.println(coX);
+            if(coX == 0 || coX == this.getNx()-1){
+                System.out.println(coX);
+
+                //nombre maximum que le random peut sortir ici this.getNy
+                int max = this.getNy()-1;
+                //nombre minimum que le random peut sortir ici 1
+                int min = 1;
+                int coY = random1.nextInt(max - min)+min;
+                //this.GetCellule(this.getSortie().getX(),this.getSortie().getY()).setÉlément(new Mur());
+                //this.PoserMur(this.getSortie().getX(),this.getSortie().getY());
+                this.setSortie(this.GetCellule(coX,coY));
+                this.GetCellule(coX,coY).setÉlément(new Herbe());
+                this.DéfinirSortie(coX,coY);
+            } else if (coX>0 && coX<this.getNx()-1) {
+                int[]valeur = new int[2];
+                valeur[0] = 0;
+                valeur[1] = this.getNy()-1;
+                //met dans une liste 0 ou le max en largeur
+                //choisi un nombre aléatoire dans le tableau
+                int coY = valeur[random1.nextInt(2)];
+                this.setSortie(this.GetCellule(coX,coY));
+                //this.GetCellule(this.getSortie().getX(),this.getSortie().getY()).setÉlément(new Mur());
+                this.GetCellule(coX,coY).setÉlément(new Herbe());
+                this.DéfinirSortie(coX,coY);
+            } else {
+                System.out.println("marche Po");
+            }
+
+
+        }
+        System.out.println(this.toString());
+
     }
 
     public String recup(String fichier) {
@@ -544,16 +601,17 @@ public class Labyrinthe implements Serializable {
 
         return elements;
     }
-    public ArrayList<Integer> TrouveSortie(String laby){
+
+    public ArrayList<Integer> TrouveSortie(String laby) {
         String[] deligne = laby.split("\n");
         ArrayList<Integer> co = new ArrayList<>();
         int hauteur = deligne.length;
         int largueur = deligne[0].length();
-        for(int i =0; i < hauteur-1; i++){
-            for(int j = 0 ;j< deligne[i].length();j++){
+        for (int i = 0; i < hauteur - 1; i++) {
+            for (int j = 0; j < deligne[i].length(); j++) {
                 char c = deligne[i].charAt(j);
                 String str = Character.toString(c);
-                if(str == "s"){
+                if (str == "s") {
                     co.add(i);
                     co.add(j);
                     return co;
@@ -576,8 +634,8 @@ public class Labyrinthe implements Serializable {
         lab.setMouton(new Mouton(lab.GetCellule(lab.nx - 2, lab.ny - 2)));
 
 
-        for (int h = 0; h < hauteur-1; h++) {
-            System.out.println(hauteur-1);
+        for (int h = 0; h < hauteur - 1; h++) {
+            System.out.println(hauteur - 1);
             System.out.println(hauteur);
             System.out.println(largueur);
             System.out.println("\n");
@@ -587,12 +645,8 @@ public class Labyrinthe implements Serializable {
             System.out.println(lab.ny);
 
 
-
-
-
-
             int lar = 0;
-            for (int j = 0; j < deligne[h].length()-1; j++) {
+            for (int j = 0; j < deligne[h].length() - 1; j++) {
 
 
                 if (j == deligne[h].length()) {
@@ -606,15 +660,15 @@ public class Labyrinthe implements Serializable {
 
 
                 } else if (str.equals("x") && !(lab.cellules.get(h).get(j).getÉlément() instanceof Mur)) {
-                    lab.PoserMur(j, h);
+                    lab.PoserMur(h, j);
                 } else if (str.equals("f")) {
-                    lab.PoserMargueurite(j, h);
+                    lab.PoserMargueurite(h, j);
                 } else if (str.equals("h")) {
-                    lab.PoserHerbe(j, h);
+                    lab.PoserHerbe(h, j);
                 } else if (str.equals("c")) {
-                    lab.PoserCactus(j, h);
+                    lab.PoserCactus(h, j);
                 } else if (str.equals("T")) {
-                    lab.GetCellule(j, h).setÉlément(null);
+                    lab.GetCellule(h, j).setÉlément(null);
                 } else if (str.equals("l")) {
                     //this.setLoup(new Loup(this.cellules.get(h).get(lar)));
                     lab.PoserHerbe(h, j);
