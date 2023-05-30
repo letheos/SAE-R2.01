@@ -13,8 +13,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+
 import javafx.stage.Stage;
 
 public class Parametre extends Application {
@@ -89,9 +88,9 @@ public class Parametre extends Application {
         sombre.setOnMouseClicked(event);
 
         String path = getClass().getResource("Temporal_Tower.mp3").toExternalForm();
-        Media media = new Media(path);
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.play();
+        //Media media = new Media(path);
+        //MediaPlayer mediaPlayer = new MediaPlayer(media);
+        //mediaPlayer.play();
 
         stage.setTitle("Paramètre");
         stage.setScene(scene);
