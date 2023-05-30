@@ -5,7 +5,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import v.Crédits;
-import c.Parametre;
+import v.Paramètres;
+import v.Paramètres;
 import v.Préparation;
 
 import java.awt.*;
@@ -39,7 +40,8 @@ public class EventAccueil implements EventHandler<Event> {
                 Crédits creds = new Crédits();
             } else if (bouton.getText().equals("Paramètres")) {
                 stage.close();
-                Parametre param = new Parametre();
+                Paramètres param = new Paramètres();
+
             }
         }
     }
