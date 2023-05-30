@@ -144,6 +144,14 @@ public class Paramètres extends Stage {
         sombre.setOnMouseClicked(event);
         desactiver.setOnMouseClicked(event);
         choixM.setOnMouseClicked(event);
+        
+        Button accueil = new Button("accueil");
+        accueil.setOnMouseClicked(mouseEvent -> {
+            stage.close();
+            Accueil ij = new Accueil();
+        });
+
+        vbox.getChildren().add(accueil);
 
         //initialisation de la fenêtre
         stage.setTitle("Paramètre");
