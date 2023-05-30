@@ -449,21 +449,21 @@ public class Labyrinthe implements Serializable {
         }
     }
 
-    public void metMur(){
-        for(int i = 0;i<this.cellules.size()-1;i++){
-            this.PoserMur(i,0);
-            this.PoserMur(i,this.getNy()-1);
+    public void metMur() {
+        for (int i = 0; i < this.cellules.size() - 1; i++) {
+            this.PoserMur(i, 0);
+            this.PoserMur(i, this.getNy() - 1);
         }
-        for(int y = 0;y<this.cellules.get(0).size()-1;y++){
-            this.PoserMur(0,y);
-            this.PoserMur(this.getNx()-1,y);
+        for (int y = 0; y < this.cellules.get(0).size() - 1; y++) {
+            this.PoserMur(0, y);
+            this.PoserMur(this.getNx() - 1, y);
         }
         System.out.println(this.toString());
     }
 
 
     public void effaceTout() {
-        if (this.sortie != null){
+        if (this.sortie != null) {
             this.sortie.setÉlément(null);
         }
 
@@ -518,35 +518,35 @@ public class Labyrinthe implements Serializable {
         this.setMouton(new Mouton(cellules.get(1).get(1)));
         this.PoserHerbe(this.getNx() - 3, this.getNy() - 2);
         this.setLoup(new Loup(cellules.get(this.getNx() - 3).get(this.getNy() - 2)));
-        if(this.sortie == null){
+        if (this.sortie == null) {
             Random randomX = new Random();
             Random random1 = new Random();
             int coX = randomX.nextInt(this.getNx());
             System.out.println(coX);
-            if(coX == 0 || coX == this.getNx()-1){
+            if (coX == 0 || coX == this.getNx() - 1) {
                 System.out.println(coX);
 
                 //nombre maximum que le random peut sortir ici this.getNy
-                int max = this.getNy()-1;
+                int max = this.getNy() - 1;
                 //nombre minimum que le random peut sortir ici 1
                 int min = 1;
-                int coY = random1.nextInt(max - min)+min;
+                int coY = random1.nextInt(max - min) + min;
                 //this.GetCellule(this.getSortie().getX(),this.getSortie().getY()).setÉlément(new Mur());
                 //this.PoserMur(this.getSortie().getX(),this.getSortie().getY());
-                this.setSortie(this.GetCellule(coX,coY));
-                this.GetCellule(coX,coY).setÉlément(new Herbe());
-                this.DéfinirSortie(coX,coY);
-            } else if (coX>0 && coX<this.getNx()-1) {
-                int[]valeur = new int[2];
+                this.setSortie(this.GetCellule(coX, coY));
+                this.GetCellule(coX, coY).setÉlément(new Herbe());
+                this.DéfinirSortie(coX, coY);
+            } else if (coX > 0 && coX < this.getNx() - 1) {
+                int[] valeur = new int[2];
                 valeur[0] = 0;
-                valeur[1] = this.getNy()-1;
+                valeur[1] = this.getNy() - 1;
                 //met dans une liste 0 ou le max en largeur
                 //choisi un nombre aléatoire dans le tableau
                 int coY = valeur[random1.nextInt(2)];
-                this.setSortie(this.GetCellule(coX,coY));
+                this.setSortie(this.GetCellule(coX, coY));
                 //this.GetCellule(this.getSortie().getX(),this.getSortie().getY()).setÉlément(new Mur());
-                this.GetCellule(coX,coY).setÉlément(new Herbe());
-                this.DéfinirSortie(coX,coY);
+                this.GetCellule(coX, coY).setÉlément(new Herbe());
+                this.DéfinirSortie(coX, coY);
             } else {
                 System.out.println("marche Po");
             }
@@ -686,10 +686,53 @@ public class Labyrinthe implements Serializable {
             }
 
 
+
         }
+        lab.trouvelaSortie(deligne,lab);
         System.out.println(lab.toString());
         return lab;
 
+
+    }
+
+    private void trouvelaSortie(String[] lab,Labyrinthe nouv) {
+        String sortie = "s";
+        for (int i = 1; i < lab[0].length() - 1; i++) {
+            //débute à 1 et finit à longueur -1 pour éviter d'avoir la sortie dans un coin
+            if (sortie.equals(Character.toString(lab[0].charAt(i)))) {
+                //si sortie en haut
+                System.out.println("bla la sortie bouhou");
+                nouv.setSortie(nouv.cellules.get(0).get(i));
+                nouv.DéfinirSortie(0, i);
+                System.out.println("bla la sortie couhou");
+                //this.setSortie(this.cellules.get(0).get(i));
+                System.out.println("bla la sortie douhou");
+            }
+            if (sortie.equals(Character.toString(lab[lab.length - 1].charAt(i)))) {
+                //si la sortie est sur la dernière ligne
+                System.out.println("bla la sortie douhou");
+                nouv.DéfinirSortie(lab.length - 1, i);
+                nouv.setSortie(nouv.GetCellules().get(lab.length - 1).get(i));
+            }
+        }
+        for (int y = 1; y < lab.length - 1; y++) {
+            //débute à 1 et finit à longueur -1 pour éviter d'avoir la sortie dans un coin
+            if (sortie.equals(Character.toString(lab[y].charAt(0)))) {
+                //si la sortie est sur la colone de gauche
+                System.out.println("bla la sortie aouhou");
+                nouv.DéfinirSortie(y, 0);
+                nouv.setSortie(nouv.GetCellules().get(y).get(0));
+            }
+            if (sortie.equals(Character.toString(lab[y].charAt(lab[0].length() - 1)))) {
+                //si la sortie est sur la colonne de droite
+                System.out.println("bla la sortie uouhou");
+                this.DéfinirSortie(y, lab[0].length() - 1);
+                nouv.setSortie(nouv.GetCellules().get(y).get(lab[0].length() - 1));
+            }
+
+        }
+        System.out.println("bla la sortie houhou");
+        System.out.println(nouv.toString());
 
     }
 

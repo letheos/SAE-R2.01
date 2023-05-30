@@ -1,6 +1,8 @@
 package v;
 
 import c.*;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -10,14 +12,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import m.Cactus;
-import m.Labyrinthe;
-import m.Mur;
-import m.marguerite;
+import m.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Random;
 
 import c.EvenementsMenu;
 import c.EventGridPane;
@@ -287,7 +288,47 @@ public class Préparation extends Stage implements Serializable {
         VBox milieu = new VBox();
         milieu.getChildren().add(stackPane);
         VBox droite = new VBox();
-        Lancer.setOnMouseClicked(new EventLancement(gauche,milieu,droite,eventmenu,this.récup));
+        Lancer.setOnMouseClicked(mouseEvent -> {
+                    System.out.println("voici le labyrinthe que je prend en entrée");
+                    System.out.println("voici le mouton : " + this.récup.getMouton());
+                    System.out.println("voici le Loup :" + this.récup.getLoup());
+                    System.out.println("voici la sortie : " + this.récup.getSortie());
+                    System.out.println(this.récup.toString());
+                    if (this.récup.getSortie() != null && this.récup.getMouton() != null && this.récup.getLoup() != null) {
+
+                        for (Node node : gauche.getChildren()) {
+                            node.setVisible(false);
+                        }
+                        for (Node node : droite.getChildren()) {
+                            node.setVisible(false);
+
+                        }
+                        Button automatique = new Button("Automatique");
+                        Button Jouertour = new Button("Jouer Tour");
+                        Jouertour.setOnMouseClicked(mouseEvent1 ->
+                        {
+
+                            //TODO implémenter le déplacement alternatif pour loup et mouton
+                            ArrayList<Cellule> voisins = this.récup.getVoisins(this.récup.getMouton().getPosition());
+                            Random random = new Random();
+                            Cellule cell = voisins.get(random.nextInt(voisins.size()));
+                        });
+                        HBox boutons = new HBox();
+                        boutons.getChildren().addAll(automatique, Jouertour);
+                        boutons.setAlignment(Pos.CENTER);
+                        boutons.setSpacing(50);
+                        milieu.getChildren().add(boutons);
+                        eventmenu.setAction("null");
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Erreur");
+                        alert.setHeaderText("Lancement impossible");
+                        alert.setContentText("Il est impossible de lancer le jeu si celui-ci ne possède pas au moins un \n -Une sortie \n -Un Loup \n -Un Mouton");
+                        alert.showAndWait();
+                    }
+                });
+
+
         Button DéfinirSortie = new Button("Définir sortie");
         DéfinirSortie.setOnMouseClicked(eventmenu);
         //TODO finir d'implémenter le déplacement , rajouter logo accueil et empêcher le lancement si as de sortie, pas de mouton et pas de loup
