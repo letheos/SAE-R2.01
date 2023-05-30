@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -55,7 +56,7 @@ public class EventController implements EventHandler<MouseEvent> {
             //si le bouton est sur le mode inactif, change le texte du bouton, la couleur du texte, et la couleur de fond
             if (sombre.isSelected()) {
                 sombre.setText("Désactiver");
-                borderPane.backgroundProperty().set(Background.fill(Color.valueOf("#534643")));
+                borderPane.setBackground(new Background(new BackgroundFill(Color.valueOf("#534643"), null, null)));
                 text.setFill(Color.WHITE);
                 mode.setFill(Color.WHITE);
                 text1.setFill(Color.WHITE);
@@ -63,7 +64,7 @@ public class EventController implements EventHandler<MouseEvent> {
                 vollabel.setTextFill(Color.WHITE);
             } else { //sinon on rétablie le texte du bouton et les couleurs
                 sombre.setText("Activer");
-                borderPane.backgroundProperty().set(Background.fill(Color.WHITE));
+                borderPane.setBackground(new Background(new BackgroundFill(Color.WHITE,null,null)));
                 text.setFill(Color.BLACK);
                 mode.setFill(Color.BLACK);
                 text1.setFill(Color.BLACK);
