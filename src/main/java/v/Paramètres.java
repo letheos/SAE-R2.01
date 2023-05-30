@@ -20,6 +20,10 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URLEncoder;
+
 //création d'une classe Paramètre qui servira a la création de la page javaFX
 public class Paramètres extends Stage {
     //création de la page
@@ -98,7 +102,7 @@ public class Paramètres extends Stage {
 
         //création de la choise box, on lui indique les choix qu'il peut donner puis on lui donne une valeur par défaut
         ChoiceBox<String> choixM = new ChoiceBox<>();
-        choixM.getItems().addAll("Temporal_Tower", "Temporal_Tower_(Remix)", "Temporal_Spire");
+        choixM.getItems().addAll("Temporal_Tower", "Temporal_Tower_Remix", "Temporal_Spire");
         choixM.setValue("Temporal_Tower");
 
         //ajout du texte et la choise box dans la HBox
@@ -115,8 +119,17 @@ public class Paramètres extends Stage {
         Scene scene = new Scene(borderPane, 400, 600);
 
         //récupération de la musique puis création du lecteur de music
-        String path = getClass().getResource("Temporal_Tower.mp3").toExternalForm();
-        Media media = new Media(path);
+        String racine = System.getProperty("user.dir");
+        String path = racine + "\\src\\Temporal_Tower_Remix.mp3";
+        File file = new File(path);
+        String uriString;
+        try {
+            uriString = file.toURI().toURL().toExternalForm();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return;
+        }
+        Media media = new Media(uriString);
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.play();
 
