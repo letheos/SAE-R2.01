@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Random;
 
 import c.EvenementsMenu;
@@ -277,8 +278,26 @@ public class Préparation extends Stage implements Serializable {
             scrollPane.setContent(eventGénération.getGridPane());});
 
         Button sauvegarde = new Button("sauvergarde");
-        EventFonction ef = new EventFonction(récup);
-        sauvegarde.setOnMouseClicked(ef);
+        sauvegarde.setOnMouseClicked(mouseEvent -> {
+                    TextInputDialog dialog = new TextInputDialog();
+                    dialog.setTitle("Saisir du texte");
+                    dialog.setHeaderText("Veuillez saisir le nom de la sauvegarde :");
+                    dialog.setContentText("Texte :");
+
+                    Optional<String> result = dialog.showAndWait();
+                    if(result.isPresent()){
+                        String fichier = result.get();
+                        récup.sauvegarde(fichier);
+                        System.out.println("sauvegarder");
+                    }else {
+                        récup.sauvegarde("labyrintheSansNom");
+                    }
+
+
+
+        });
+        //EventFonction ef = new EventFonction(récup);
+        //sauvegarde.setOnMouseClicked(ef);
 
         VBox gauche = new VBox();
         //TODO finir de corriger le bug
