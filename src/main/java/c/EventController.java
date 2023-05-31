@@ -64,15 +64,18 @@ public class EventController implements EventHandler<MouseEvent> {
                 vollabel.setTextFill(Color.WHITE);
             } else { //sinon on rétablie le texte du bouton et les couleurs
                 sombre.setText("Activer");
-                borderPane.setBackground(new Background(new BackgroundFill(Color.WHITE,null,null)));
+                borderPane.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
                 text.setFill(Color.BLACK);
                 mode.setFill(Color.BLACK);
                 text1.setFill(Color.BLACK);
                 changer.setFill(Color.BLACK);
                 vollabel.setTextFill(Color.BLACK);
             }
-        } else if (event.getSource().getClass().toString().contains("Button")){//si l'événement vient d'un bouton, arrête la musique
-            mediaPlayer.stop();
+        } else if (event.getSource().getClass().toString().contains("Button")) {
+                if (mediaPlayer != null) {
+                    mediaPlayer.stop();
+                    mediaPlayer = null;
+                }
         } choixM.setOnAction(events -> {//si l'événement vient de la choise box lorsqu'un choix est donner
             //la valeur du choix est mis dans cette variable
             String newValue = choixM.getValue();
@@ -88,7 +91,9 @@ public class EventController implements EventHandler<MouseEvent> {
                 return;
             }
             //on arrête l'ancienne musique puis on lance la nouvelle
-            mediaPlayer.stop();
+            if (this.mediaPlayer != null) {
+                this.mediaPlayer.stop();
+            }
             Media newMedia = new Media(uriString);
             mediaPlayer = new MediaPlayer(newMedia);
             mediaPlayer.play();
