@@ -26,11 +26,21 @@ public class EventDéplacement implements EventHandler {
 
     private Stage stage;
 
+    private ArrayList <Cellule> deuxtours;
+    private ArrayList <Cellule> untour;
+    private ArrayList<Button> Bdeuxtours;
+    private ArrayList<Button> BunTour;
+
+
     public EventDéplacement(Labyrinthe labyrinthe, GridPane gridPane, Stage stage) {
         this.récup = labyrinthe;
         this.gridPane = gridPane;
         this.animal = false;
         this.stage = stage;
+        this.deuxtours = new ArrayList<>();
+        this.untour = new ArrayList<>();
+        this.Bdeuxtours = new ArrayList<>();
+        this.BunTour = new ArrayList<>();
     }
 
 
@@ -143,10 +153,7 @@ public class EventDéplacement implements EventHandler {
         imageView.setPreserveRatio(true);
         imageView1.setMouseTransparent(true);
         imageView1.setPreserveRatio(true);
-        ArrayList <Cellule> deuxtours = new ArrayList<Cellule>();
-        ArrayList <Cellule> untour = new ArrayList<Cellule>();
-        ArrayList<Button> Bdeuxtours = new ArrayList<Button>();
-        ArrayList<Button> BunTour = new ArrayList<Button>();
+
 
 
         if (animal == true) {
@@ -197,7 +204,7 @@ public class EventDéplacement implements EventHandler {
                 if (voisins.size() == 0) {
                     Alert impossible = new Alert(Alert.AlertType.INFORMATION);
                     impossible.setTitle("Erreur");
-                    impossible.setHeaderText("Arret du jeu ");
+                    impossible.setHeaderText("Arret du jeu");
                     impossible.setContentText("le Mouton ne peux pas se déplacer par conséquent \n le jeu va se terminer sur une victoire du Loup");
                     impossible.showAndWait();
                     stage.close();
@@ -213,16 +220,16 @@ public class EventDéplacement implements EventHandler {
                         System.out.println("arret urgence");
                         break;
                     }
-                    System.out.println(Bdeuxtours);
+                    /*System.out.println(Bdeuxtours);
             System.out.println(deuxtours);
             System.out.println(BunTour);
             System.out.println(untour);
-                    System.out.println(récup.toString());
+                    System.out.println(récup.toString());*/
                 }
 
             }
             récup.getMouton().manger(récup.getMouton().getPosition(), gridPane);
-            deuxtours.add(récup.getMouton().getPosition());
+            this.deuxtours.add(récup.getMouton().getPosition());
             Button button2 = null;
             for (Node node : gridPane.getChildren()) {
                 if (GridPane.getColumnIndex(node) == récup.getMouton().getY() && GridPane.getRowIndex(node) == récup.getMouton().getX()) {
@@ -232,15 +239,15 @@ public class EventDéplacement implements EventHandler {
                     }
                 }
             }
-            Bdeuxtours.add(button2);
-            System.out.println(Bdeuxtours);
-            System.out.println(deuxtours);
+            this.Bdeuxtours.add(button2);
+            System.out.println(this.Bdeuxtours);
+            System.out.println(this.deuxtours);
             System.out.println(BunTour);
             System.out.println(untour);
-            if (untour.size()> 0){
-                for (int x = 0;x<BunTour.size();x++){
-                    BunTour.get(x).setBackground(background);
-                    untour.get(x).setÉlément(new Herbe());
+            if (this.untour.size()> 0){
+                for (int x = 0;x<this.BunTour.size();x++){
+                    this.BunTour.get(x).setBackground(background);
+                    this.untour.get(x).setÉlément(new Herbe());
                 }
                 BunTour.clear();
                 untour.clear();
