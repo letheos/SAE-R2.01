@@ -60,7 +60,6 @@ public class HelloApplication extends Application {
                     if (node instanceof Button) {
                         button = (Button) node;
                         break;
-
                     }
                 }
             }
