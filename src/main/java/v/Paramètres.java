@@ -27,6 +27,7 @@ import java.net.URLEncoder;
 
 //création d'une classe Paramètre qui servira a la création de la page javaFX
 public class Paramètres extends Stage {
+    private static MediaPlayer mediaPlayer;
     //création de la page
     public Paramètres() {
         //création de la stage
@@ -119,33 +120,33 @@ public class Paramètres extends Stage {
 
         Scene scene = new Scene(borderPane, 400, 600);
 
-        //récupération de la musique puis création du lecteur de music
-        String racine = System.getProperty("user.dir");
-        String path = racine + "\\src\\Temporal_Tower_Remix.mp3";
-        File file = new File(path);
-        String uriString;
-        try {
-            uriString = file.toURI().toURL().toExternalForm();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return;
-        }
-        Media media = new Media(uriString);
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.play();
+        if (mediaPlayer == null) {
+            // Lancer le MediaPlayer car aucune musique n'est en cours de lecture
+            String racine = System.getProperty("user.dir");
+            String path = racine + "\\src\\Temporal_Tower.mp3";
+            File file = new File(path);
+            String uriString;
+            try {
+                uriString = file.toURI().toURL().toExternalForm();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return;
+            }
+            Media media = new Media(uriString);
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
 
-        //changement du volume en récupérant la valeur de la barre de volume en temps réel
-        DoubleBinding volumeBinding = volumeSlider.valueProperty().divide(100);
-        mediaPlayer.volumeProperty().bind(volumeBinding);
-        //lecture en boucle de la musique
-        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            DoubleBinding volumeBinding = volumeSlider.valueProperty().divide(100);
+            mediaPlayer.volumeProperty().bind(volumeBinding);
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        }
 
         //attribution des événements
         EventController event = new EventController(text, mode, text1, changer, borderPane, mediaPlayer, choixM, volumeSlider, volumeLabel);
         sombre.setOnMouseClicked(event);
         desactiver.setOnMouseClicked(event);
         choixM.setOnMouseClicked(event);
-        
+
         Button accueil = new Button("accueil");
         accueil.setOnMouseClicked(mouseEvent -> {
             stage.close();
