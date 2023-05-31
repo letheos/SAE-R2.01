@@ -38,39 +38,28 @@ public class Préparation extends Stage implements Serializable {
     private int ny;
 
     private Labyrinthe récup;
-
+    private GridPane gridPane;
+    private EventDéplacement eventDéplacement;
     public Préparation(int nx,int ny) throws IOException, ClassNotFoundException {
         this.nx = nx;
         this.ny = ny;
         Stage stage = new Stage();
+        eventDéplacement  =new EventDéplacement(this.récup,this.gridPane,stage);
         Labyrinthe test;
         //nx correspond a la hauteur et ny a la largeur
-        test = new Labyrinthe(this.nx, this.ny);
+        récup = new Labyrinthe(this.nx, this.ny);
 
 
-        System.out.println(test.GetCellules());
-        System.out.println("le labyrinthe est un " + test.getNx() + test.getNy());
+        //System.out.println(test.GetCellules());
+        //System.out.println("le labyrinthe est un " + test.getNx() + test.getNy());
 
 
 
         //mouton doit etre a x = ny- et y = nx-2 si tout en bas a droite
 
 
-        System.out.println(test.
-                toString());
 
-        System.out.println(test.toString());
-        test.sauvegarderLabyrinthe("labyrintheprefait.dat");
-        this.récup = Labyrinthe.chargerLabyrinthe("labyrintheprefait.dat");
-        System.out.println(this.récup.toString());
-        /*int babouin_compteur = 0;
-        for (int x = 0; x < this.récup.getNx(); x++) {
-            for (int y = 0; y < test.getNy(); y++) {
-                if (this.récup.DéfinirSortie(x, y) == true) {
-                    babouin_compteur += 1;
-                }
-            }
-        }*/
+
 
 
         System.out.println(this.récup.toString());
@@ -126,6 +115,7 @@ public class Préparation extends Stage implements Serializable {
         EvenementsMenu eventmenu = new EvenementsMenu();
 
         GridPane gridPane = new GridPane();
+        this.gridPane = gridPane;
         EventGridPane eventPane = new EventGridPane(eventmenu, this.récup, gridPane);
         for (int row = 0; row < this.récup.getNx(); row++) {
             for (int col = 0; col < this.récup.getNy(); col++) {
@@ -226,20 +216,24 @@ public class Préparation extends Stage implements Serializable {
         environnement.getItems().add("Pokémon");
         Button générerLabyrinthe = new Button("Générer Labyrinthe");
         générerLabyrinthe.setOnMouseClicked(mouseEvent -> {
-            if(hauteur.getValue() != null && largeur.getValue() != null){
-                this.récup = new Labyrinthe(hauteur.getValue(),largeur.getValue());
-                System.out.println("le labyrinthe a bien été changé en x:"+this.récup.getNx()+"y:"+this.récup.getNy());
+            if(hauteur.getValue() != null && largeur.getValue() != null) {
+                this.récup = new Labyrinthe(hauteur.getValue(), largeur.getValue());
+                System.out.println("le labyrinthe a bien été changé en x:" + this.récup.getNx() + "y:" + this.récup.getNy());
                 this.récup.toString();
                 System.out.println(this.récup.getNx());
                 System.out.println(this.récup.getNy());
-                EventGénération eventGénération = new EventGénération(hauteur.getValue(),largeur.getValue(),this.récup,eventmenu);
-                scrollPane.setContent(eventGénération.getGridPane());}
+                EventGénération eventGénération = new EventGénération(hauteur.getValue(), largeur.getValue(), this.récup, eventmenu);
+                scrollPane.setContent(eventGénération.getGridPane());
+                this.gridPane = eventGénération.getGridPane();
+            }
             else{
+
                 Alert reportThomasCeTrolleur = new Alert(Alert.AlertType.INFORMATION);
                 reportThomasCeTrolleur.setTitle("Erreur");
                 reportThomasCeTrolleur.setHeaderText("Action impossible");
                 reportThomasCeTrolleur.setContentText("Vous essayez de générer un labyrinthe alors que vous n'avez pas sélectionné correctement les deux valeurs hauteur et largeur");
                 reportThomasCeTrolleur.showAndWait();
+
             }
 
         });
@@ -259,8 +253,8 @@ public class Préparation extends Stage implements Serializable {
             if (dossierSelec != null) {
 
                 System.out.println(dossierSelec.getAbsolutePath());
-                String recette = test.recup(dossierSelec.getAbsolutePath());
-                this.récup = new Labyrinthe(test.recupToLaby(recette));
+                String recette = this.récup.recup(dossierSelec.getAbsolutePath());
+                this.récup = new Labyrinthe(récup.recupToLaby(recette));
 
                 //System.out.println(test.toString());
                 EventGénération eventGénération = new EventGénération(récup.getNx(),récup.getNy(),this.récup,eventmenu);
@@ -296,8 +290,7 @@ public class Préparation extends Stage implements Serializable {
 
 
         });
-        //EventFonction ef = new EventFonction(récup);
-        //sauvegarde.setOnMouseClicked(ef);
+
 
         VBox gauche = new VBox();
         //TODO finir de corriger le bug
@@ -305,6 +298,7 @@ public class Préparation extends Stage implements Serializable {
         VBox milieu = new VBox();
         milieu.getChildren().add(stackPane);
         VBox droite = new VBox();
+        Button Jouertour = new Button("Jouer Tour");
         Lancer.setOnMouseClicked(mouseEvent -> {
                     System.out.println("voici le labyrinthe que je prend en entrée");
                     System.out.println("voici le mouton : " + this.récup.getMouton());
@@ -320,7 +314,7 @@ public class Préparation extends Stage implements Serializable {
                     }
 
                     System.out.println(this.récup.toString());
-                    if (this.récup.getSortie() != null && this.récup.getMouton() != null && this.récup.getLoup() != null) {
+                    if(this.récup.getSortie() != null && this.récup.getMouton() != null && this.récup.getLoup() != null){
 
                         for (Node node : gauche.getChildren()) {
 
@@ -337,35 +331,33 @@ public class Préparation extends Stage implements Serializable {
                                 node.setVisible(false);
                             }
                         }
-
-                        for (Node node : droite.getChildren()) {
+                        for (Node node : droite.getChildren()){
                             node.setVisible(false);
 
                         }
                         Button automatique = new Button("Automatique");
-                        Button Jouertour = new Button("Jouer Tour");
-                        Jouertour.setOnMouseClicked(mouseEvent1 ->
-                        {
 
-                            //TODO implémenter le déplacement alternatif pour loup et mouton
-                            ArrayList<Cellule> voisins = this.récup.getVoisins(this.récup.getMouton().getPosition());
-                            Random random = new Random();
-                            Cellule cell = voisins.get(random.nextInt(voisins.size()));
-                        });
+
                         HBox boutons = new HBox();
-                        boutons.getChildren().addAll(automatique, Jouertour);
+                        boutons.getChildren().addAll(automatique,Jouertour);
                         boutons.setAlignment(Pos.CENTER);
                         boutons.setSpacing(50);
                         milieu.getChildren().add(boutons);
                         eventmenu.setAction("null");
-                    } else {
+                        EventDéplacement eventDep = new EventDéplacement(this.récup,this.gridPane,stage);
+                        Jouertour.setOnMouseClicked(eventDep);
+
+                    }
+                    else{
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Erreur");
                         alert.setHeaderText("Lancement impossible");
                         alert.setContentText("Il est impossible de lancer le jeu si celui-ci ne possède pas au moins un \n -Une sortie \n -Un Loup \n -Un Mouton");
                         alert.showAndWait();
                     }
-                });
+                }
+        );
+
 
 
         Button DéfinirSortie = new Button("Définir sortie");
@@ -451,5 +443,8 @@ public class Préparation extends Stage implements Serializable {
     }
     public int getNy(){
         return this.ny;
+    }
+    public Labyrinthe getLaby(){
+        return this.récup;
     }
 }
