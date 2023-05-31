@@ -157,6 +157,9 @@ public class Paramètres extends Stage {
         stage.setTitle("Paramètre");
         stage.setScene(scene);
         stage.sizeToScene();
+        String racineProjet = System.getProperty("user.dir");
+        Image logo = new Image(racineProjet + "\\src\\images\\logo.png");
+        stage.getIcons().add(logo);
         stage.show();
     }
 }
