@@ -25,12 +25,17 @@ public class EventDéplacement implements EventHandler {
     private Boolean animal;//false pour mouton et true pour loup
 
     private Stage stage;
+    private ArrayList<Cellule> positionsMouton;
+    private ArrayList<Cellule> positionsLoup;
+
 
     public EventDéplacement(Labyrinthe labyrinthe, GridPane gridPane, Stage stage) {
         this.récup = labyrinthe;
         this.gridPane = gridPane;
         this.animal = false;
         this.stage = stage;
+        this.positionsMouton = new ArrayList<>();
+        this.positionsLoup = new ArrayList<>();
     }
 
 
@@ -44,6 +49,7 @@ public class EventDéplacement implements EventHandler {
         if (animal instanceof Loup) {
             oldX = récup.getLoup().getX();
             oldY = récup.getLoup().getY();
+
             récup.getLoup().setPosition(récup.GetCellule(newX, newY));
 
         } else {
@@ -150,10 +156,14 @@ public class EventDéplacement implements EventHandler {
 
 
         if (animal == true) {
+            //loup
+            ArrayList<Cellule> voisins1 = récup.getVoisins(récup.getLoup().getPosition());
+
             for (int x = 0; x < 3; x++) {
                 ArrayList<Cellule> voisins = récup.getVoisins(récup.getLoup().getPosition());
                 if(voisins.contains(this.récup.getSortie())){
                     voisins.remove(this.récup.getSortie());
+
                 }
                 if (voisins.size() == 0){
                     Alert impossible  = new Alert(Alert.AlertType.INFORMATION);
@@ -165,7 +175,13 @@ public class EventDéplacement implements EventHandler {
                     Victoire v = new Victoire(récup.getMouton());
                     break;
                 }
+
                 else {
+                    for (Cellule cell:positionsLoup){
+                        if(voisins.contains(cell)){
+                            voisins.remove(cell);
+                        }
+                    }
                     Random random = new Random();
                     int oui = random.nextInt(voisins.size());
 
@@ -173,7 +189,13 @@ public class EventDéplacement implements EventHandler {
                     int newX = choix.getX();
                     int newY = choix.getY();
                     déplacement(this.récup, this.gridPane, newX, newY, imageView, imageView1, récup.getLoup());
-
+                    if(this.positionsLoup.size() == 4){
+                        this.positionsLoup.remove(0);
+                        this.positionsLoup.add(récup.getLoup().getPosition());
+                    }
+                    else{
+                        this.positionsLoup.add(récup.getLoup().getPosition());
+                    }
                     System.out.println(récup.toString());
 
 
