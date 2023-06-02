@@ -27,7 +27,6 @@ public class EventLancement implements EventHandler {
         this.laby = laby;
     }
     public void handle(Event event) {
-        System.out.println("voici mon labyrinthe"+laby.getNx()+" "+laby.getNy());
         if(this.laby.getSortie() != null && this.laby.getMouton() != null && this.laby.getLoup() != null){
 
             for (Node node : gauche.getChildren()) {

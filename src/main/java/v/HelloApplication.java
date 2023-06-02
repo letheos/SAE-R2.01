@@ -73,10 +73,7 @@ public class HelloApplication extends Application {
                     button.setGraphic(null);
                     button2.setGraphic(imageView1);
                 }
-            }
-
-
-            // Ajouter la nouvelle image à la nouvelle case
+            }// Ajouter la nouvelle image à la nouvelle case
         /*Pane newOverlayPane = new Pane();
 
         newOverlayPane.setStyle("-fx-background-color: transparent;");
