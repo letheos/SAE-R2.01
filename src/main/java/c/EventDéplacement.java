@@ -177,6 +177,7 @@ public class EventDéplacement implements EventHandler {
                 }
 
                 else {
+                    //evite a la bestiolle de retourner sur ses pas
                     for (Cellule cell:positionsLoup){
                         if(voisins.contains(cell)){
                             voisins.remove(cell);
@@ -190,10 +191,13 @@ public class EventDéplacement implements EventHandler {
                     int newY = choix.getY();
                     déplacement(this.récup, this.gridPane, newX, newY, imageView, imageView1, récup.getLoup());
                     if(this.positionsLoup.size() == 4){
+                        //si il y a 4 cellules dans la liste, on enlève la 1er positions et rajoute la dernière
                         this.positionsLoup.remove(0);
                         this.positionsLoup.add(récup.getLoup().getPosition());
+                        System.out.println(positionsLoup);
                     }
                     else{
+                        //si il y a moins 4 cellules dans la liste, on rajoute la dernière cellule
                         this.positionsLoup.add(récup.getLoup().getPosition());
                     }
                     System.out.println(récup.toString());
@@ -225,12 +229,27 @@ public class EventDéplacement implements EventHandler {
                     stage.close();
                     Défaite d = new Défaite(récup.getMouton());
                 } else {
+                    for (Cellule cell:positionsMouton){
+                        if(voisins.contains(cell)){
+                            voisins.remove(cell);
+                        }
+                    }
                     Random random = new Random();
                     int oui = random.nextInt(voisins.size());
                     Cellule choix = voisins.get(oui);
                     int newX = choix.getX();
                     int newY = choix.getY();
                     déplacement(this.récup, this.gridPane, newX, newY, imageView, imageView1, récup.getMouton());
+                    if(this.positionsMouton.size() == 4){
+                        //si il y a 4 cellules dans la liste, on enlève la 1er positions et rajoute la dernière
+                        this.positionsMouton.remove(0);
+                        this.positionsMouton.add(récup.getMouton().getPosition());
+                        System.out.println(positionsMouton);
+                    }
+                    else{
+                        //si il y a moins 4 cellules dans la liste, on rajoute la dernière cellule
+                        this.positionsMouton.add(récup.getMouton().getPosition());
+                    }
                     if (stage.isShowing() == false) {
                         System.out.println("arret urgence");
                         break;
