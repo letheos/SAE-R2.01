@@ -27,25 +27,24 @@ public class EventLancement implements EventHandler {
         this.laby = laby;
     }
     public void handle(Event event) {
-        System.out.println("voici mon labyrinthe"+laby.getNx()+" "+laby.getNy());
         if(this.laby.getSortie() != null && this.laby.getMouton() != null && this.laby.getLoup() != null){
 
-        for (Node node : gauche.getChildren()) {
-        node.setVisible(false);
-    }
-        for (Node node : droite.getChildren()){
-            node.setVisible(false);
+            for (Node node : gauche.getChildren()) {
+                node.setVisible(false);
+            }
+            for (Node node : droite.getChildren()){
+                node.setVisible(false);
 
+            }
+            Button automatique = new Button("Automatique");
+            Button Jouertour = new Button("Jouer Tour");
+            HBox boutons = new HBox();
+            boutons.getChildren().addAll(automatique,Jouertour);
+            boutons.setAlignment(Pos.CENTER);
+            boutons.setSpacing(50);
+            this.milieu.getChildren().add(boutons);
+            this.evenementsMenu.setAction("null");
         }
-        Button automatique = new Button("Automatique");
-        Button Jouertour = new Button("Jouer Tour");
-        HBox boutons = new HBox();
-        boutons.getChildren().addAll(automatique,Jouertour);
-        boutons.setAlignment(Pos.CENTER);
-        boutons.setSpacing(50);
-        this.milieu.getChildren().add(boutons);
-        this.evenementsMenu.setAction("null");
-    }
         else{
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Erreur");

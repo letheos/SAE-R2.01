@@ -1,5 +1,7 @@
 package m;
 
+import m.Labyrinthe;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
@@ -34,7 +36,7 @@ public class Animaux implements Serializable {
 
     }
 
-    public void errer(Animaux animal , Labyrinthe labyrinthe){
+    public void errer(Animaux animal ,Labyrinthe labyrinthe){
         ArrayList<Cellule> voisins = labyrinthe.getVoisins(this.position);
         if (voisins.size() == 0){
             System.out.println("aucun voisin");

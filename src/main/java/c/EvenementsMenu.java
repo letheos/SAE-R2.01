@@ -2,21 +2,30 @@ package c;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.stage.Stage;
 import m.Labyrinthe;
+
+import java.util.Stack;
 
 
 public class EvenementsMenu implements EventHandler {
 
 
     private String action;
-
+    private Stage stage;
     public EvenementsMenu(){
+        action = null;
+    }
+    public EvenementsMenu(Stage s){
+        this.stage = s;
         action = null;
     }
 
     public String getAction(){
         return this.action;
     }
+
     public void setAction(String effet){
         if (effet == "null"){
             this.action = null;
@@ -26,9 +35,8 @@ public class EvenementsMenu implements EventHandler {
         }
     }
 
-
     public void handle(Event event) {
-        System.out.println("le bouton a été cliqué");
+        //System.out.println("le bouton a été cliqué");
         if (event.getSource() instanceof Button){
             Button button = (Button)event.getSource();
             if (button.getText().toString().equals("Définir sortie")){
@@ -52,10 +60,10 @@ public class EvenementsMenu implements EventHandler {
             if(button.getText().toString().equals("PoserMur")){
                 this.action = "PoserMur";
             }
+            if(button.getText().toString().equals("ChargerLabyrinthe")){
+                this.action = "ChargerLabyrinthe";
+            }
         }
-
-
-
     }
 
 }

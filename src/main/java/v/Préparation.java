@@ -39,6 +39,9 @@ public class Préparation extends Stage implements Serializable {
     private Labyrinthe récup;
 
     private GridPane gridPane;
+
+
+
     private EventDéplacement eventDéplacement;
     public Préparation(int nx,int ny) throws IOException, ClassNotFoundException {
         Stage stage = new Stage();
@@ -238,7 +241,8 @@ for (int row = 0; row < this.récup.getNx(); row++) {
                 System.out.println(this.récup.getNy());
                 EventGénération eventGénération = new EventGénération(hauteur.getValue(),largeur.getValue(),this.récup,eventmenu);
                 scrollPane.setContent(eventGénération.getGridPane());
-                this.gridPane = eventGénération.getGridPane();}
+                this.gridPane = eventGénération.getGridPane();
+                }
                 else{
                     Alert reportThomasCeTrolleur = new Alert(Alert.AlertType.INFORMATION);
                     reportThomasCeTrolleur.setTitle("Erreur");
@@ -265,11 +269,13 @@ for (int row = 0; row < this.récup.getNx(); row++) {
 
                 System.out.println(dossierSelec.getAbsolutePath());
                 String recette = this.récup.recup(dossierSelec.getAbsolutePath());
-                this.récup = new Labyrinthe(récup.recupToLaby(recette));
+                this.récup= récup.recupToLaby(recette);
 
                 //System.out.println(test.toString());
                 EventGénération eventGénération = new EventGénération(récup.getNx(),récup.getNy(),this.récup,eventmenu);
                 scrollPane.setContent(eventGénération.getGridPane());
+                this.gridPane = eventGénération.getGridPane();
+
             }
         });
 
@@ -277,48 +283,44 @@ for (int row = 0; row < this.récup.getNx(); row++) {
             //TODO finir de corriger le bug
             gauche.getChildren().addAll(boutonaccueil, labelTaille, hauteur, largeur, Lancer, générerLabyrinthe,chargerLabyrinthe);
             VBox milieu = new VBox();
+
             milieu.getChildren().add(stackPane);
             VBox droite = new VBox();
             Button Jouertour = new Button("Jouer Tour");
 
             Lancer.setOnMouseClicked(mouseEvent -> {
+    System.out.println("voici le labyrinthe que je prend en entrée");
+    System.out.println("voici le mouton : " + this.récup.getMouton());
+    System.out.println("voici le Loup :" + this.récup.getLoup());
+    System.out.println("voici la sortie : " + this.récup.getSortie());
+    System.out.println(this.récup.toString());
+    if (this.récup.getSortie() != null && this.récup.getMouton() != null && this.récup.getLoup() != null) {
+        for (Node node : gauche.getChildren()) {
+            if (node != boutonaccueil) { // Exclure le bouton "Accueil"
+                node.setVisible(false);
+            }
+        }
+        for (Node node : droite.getChildren()) {
+            node.setVisible(false);
+        }
 
-                System.out.println("voici le labyrinthe que je prend en entrée");
-                System.out.println("voici le mouton : "+this.récup.getMouton());
-                System.out.println("voici le Loup :"+this.récup.getLoup());
-                System.out.println("voici la sortie : "+this.récup.getSortie());
-                System.out.println(this.récup.toString());
-                if(this.récup.getSortie() != null && this.récup.getMouton() != null && this.récup.getLoup() != null){
+        HBox boutons = new HBox();
+        boutons.getChildren().addAll(Jouertour);
+        boutons.setAlignment(Pos.CENTER);
+        boutons.setSpacing(50);
+        milieu.getChildren().add(boutons);
+        eventmenu.setAction("null");
+        EventDéplacement eventDep = new EventDéplacement(this.récup, this.gridPane, stage);
+        Jouertour.setOnMouseClicked(eventDep);
+    } else {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Erreur");
+        alert.setHeaderText("Lancement impossible");
+        alert.setContentText("Il est impossible de lancer le jeu si celui-ci ne possède pas au moins un \n -Une sortie \n -Un Loup \n -Un Mouton");
+        alert.showAndWait();
+    }
+});
 
-                    for (Node node : gauche.getChildren()) {
-                    node.setVisible(false);
-                }
-                    for (Node node : droite.getChildren()){
-                        node.setVisible(false);
-
-                    }
-                    Button automatique = new Button("Automatique");
-
-
-                    HBox boutons = new HBox();
-                    boutons.getChildren().addAll(automatique,Jouertour);
-                    boutons.setAlignment(Pos.CENTER);
-                    boutons.setSpacing(50);
-                    milieu.getChildren().add(boutons);
-                    eventmenu.setAction("null");
-                    EventDéplacement eventDep = new EventDéplacement(this.récup,this.gridPane,stage);
-                    Jouertour.setOnMouseClicked(eventDep);
-
-                }
-                    else{
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Erreur");
-                        alert.setHeaderText("Lancement impossible");
-                        alert.setContentText("Il est impossible de lancer le jeu si celui-ci ne possède pas au moins un \n -Une sortie \n -Un Loup \n -Un Mouton");
-                        alert.showAndWait();
-                    }
-                }
-            );
             Button DéfinirSortie = new Button("Définir sortie");
             DéfinirSortie.setOnMouseClicked(eventmenu);
             //TODO finir d'implémenter le déplacement , rajouter logo accueil et empêcher le lancement si as de sortie, pas de mouton et pas de loup
@@ -352,10 +354,11 @@ for (int row = 0; row < this.récup.getNx(); row++) {
             Button Aleatoire = new Button("Aléatoire");
 
         Aleatoire.setOnMouseClicked(mouseEvent -> {
-            this.récup = new Labyrinthe(this.récup);
+
             récup.aleatoire();
             EventGénération eventGénération = new EventGénération(récup.getNx(),récup.getNy(),this.récup,eventmenu);
             scrollPane.setContent(eventGénération.getGridPane());
+            this.gridPane = eventGénération.getGridPane();
 
         });
             Pane paneDroite = new Pane(droite);
@@ -420,6 +423,9 @@ for (int row = 0; row < this.récup.getNx(); row++) {
         public Labyrinthe getLaby(){
         return this.récup;
         }
+
+
+
 
 
     }

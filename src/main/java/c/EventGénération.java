@@ -78,63 +78,63 @@ public class EventGénération {
 
         GridPane gridPane = new GridPane();
         EventGridPane eventPane = new EventGridPane(eventmenu, récup, gridPane);
-for (int row = 0; row < this.x; row++) {
-    for (int col = 0; col < this.y; col++) {
+        for (int row = 0; row < this.x; row++) {
+            for (int col = 0; col < this.y; col++) {
 
-        Button button = new Button();
-        button.setMinSize(50, 50);
-        button.setMaxSize(50, 50);
+                Button button = new Button();
+                button.setMinSize(50, 50);
+                button.setMaxSize(50, 50);
 
-        if (récup.GetCellule(row, col).getÉlément() instanceof Mur) {
-            button.setBackground(background2);
-        } else if (récup.GetCellule(row, col).getÉlément() instanceof Cactus) {
-            button.setBackground(background3);
-        } else if (récup.GetCellule(row, col).getÉlément() instanceof marguerite) {
-            button.setBackground(background4);
-        } else if (récup.GetCellule(row, col).getÉlément() == null) {
-            button.setBackground(background5);
-        } else {
-            button.setBackground(background);
+                if (récup.GetCellule(row, col).getÉlément() instanceof Mur) {
+                    button.setBackground(background2);
+                } else if (récup.GetCellule(row, col).getÉlément() instanceof Cactus) {
+                    button.setBackground(background3);
+                } else if (récup.GetCellule(row, col).getÉlément() instanceof marguerite) {
+                    button.setBackground(background4);
+                } else if (récup.GetCellule(row, col).getÉlément() == null) {
+                    button.setBackground(background5);
+                } else {
+                    button.setBackground(background);
+                }
+
+                if (récup.getMouton() != null && récup.GetCellule(row, col).equals(récup.getMouton().getPosition())) {
+                    Pane overlayPane = new Pane();
+                    overlayPane.setStyle("-fx-background-color: transparent;");
+                    imageView.setMouseTransparent(true);
+                    imageView.setPreserveRatio(true);
+                    Rectangle clip = new Rectangle(imageView.getFitWidth(), imageView.getFitHeight());
+                    clip.setArcHeight(10);
+                    clip.setArcWidth(10);
+                    imageView1.setClip(clip);
+                    overlayPane.getChildren().add(imageView);
+                    button.setGraphic(overlayPane);
+                } else if (récup.getLoup() != null && récup.GetCellule(row, col).equals(récup.getLoup().getPosition())) {
+                    Pane overlayPane = new Pane();
+                    overlayPane.setStyle("-fx-background-color: transparent;");
+                    imageView1.setMouseTransparent(true);
+                    imageView1.setPreserveRatio(true);
+                    Rectangle clip = new Rectangle(imageView1.getFitWidth(), imageView1.getFitHeight());
+                    clip.setArcHeight(10);
+                    clip.setArcWidth(10);
+                    imageView1.setClip(clip);
+                    overlayPane.getChildren().add(imageView1);
+                    button.setGraphic(overlayPane);
+                }
+
+                button.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                button.setOnMouseClicked(eventPane);
+                button.setOnMouseEntered(mouseEvent -> {
+                    button.setStyle("-fx-border-color: blue;");
+                });
+                button.setOnMouseExited(mouseEvent -> {
+                    button.setStyle("-fx-border-color: black;");
+                });
+
+                gridPane.add(button, col, row);
+                this.gridPane  =gridPane;
+
+            }
         }
-
-        if (récup.getMouton() != null && récup.GetCellule(row, col).equals(récup.getMouton().getPosition())) {
-            Pane overlayPane = new Pane();
-            overlayPane.setStyle("-fx-background-color: transparent;");
-            imageView.setMouseTransparent(true);
-            imageView.setPreserveRatio(true);
-            Rectangle clip = new Rectangle(imageView.getFitWidth(), imageView.getFitHeight());
-            clip.setArcHeight(10);
-            clip.setArcWidth(10);
-            imageView1.setClip(clip);
-            overlayPane.getChildren().add(imageView);
-            button.setGraphic(overlayPane);
-        } else if (récup.getLoup() != null && récup.GetCellule(row, col).equals(récup.getLoup().getPosition())) {
-            Pane overlayPane = new Pane();
-            overlayPane.setStyle("-fx-background-color: transparent;");
-            imageView1.setMouseTransparent(true);
-            imageView1.setPreserveRatio(true);
-            Rectangle clip = new Rectangle(imageView1.getFitWidth(), imageView1.getFitHeight());
-            clip.setArcHeight(10);
-            clip.setArcWidth(10);
-            imageView1.setClip(clip);
-            overlayPane.getChildren().add(imageView1);
-            button.setGraphic(overlayPane);
-        }
-
-        button.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        button.setOnMouseClicked(eventPane);
-        button.setOnMouseEntered(mouseEvent -> {
-            button.setStyle("-fx-border-color: blue;");
-        });
-        button.setOnMouseExited(mouseEvent -> {
-            button.setStyle("-fx-border-color: black;");
-        });
-
-        gridPane.add(button, col, row);
-        this.gridPane  =gridPane;
-
-    }
-}
     }
     public GridPane getGridPane(){
         return this.gridPane;

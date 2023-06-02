@@ -109,23 +109,23 @@ public class EventGridPane implements EventHandler<Event> {
                         laby.setSortie(cellule);
                     }
                     System.out.println(laby.toString());
-                    } else {
-                        Alert horsbord = new Alert(Alert.AlertType.INFORMATION);
-                        horsbord.setTitle("Erreur");
-                        horsbord.setHeaderText("Action impossible");
-                        horsbord.setContentText("Vous essayez de définir une sortie alors que vous n'êtes pas en bord de carte ou dans un coin");
-                        horsbord.showAndWait();
-                    }
+                } else {
+                    Alert horsbord = new Alert(Alert.AlertType.INFORMATION);
+                    horsbord.setTitle("Erreur");
+                    horsbord.setHeaderText("Action impossible");
+                    horsbord.setContentText("Vous essayez de définir une sortie alors que vous n'êtes pas en bord de carte ou dans un coin");
+                    horsbord.showAndWait();
+                }
 
-                } else if (x >= 1 && x < this.gridPane.getRowCount() - 1 && y >= 1 && y < this.gridPane.getColumnCount() - 1) {
+            } else if (x >= 1 && x < this.gridPane.getRowCount() - 1 && y >= 1 && y < this.gridPane.getColumnCount() - 1) {
 
 
-                    if (evenementsMenu.getAction() == null) {
-                        Alert pasElement = new Alert(Alert.AlertType.INFORMATION);
-                        pasElement.setTitle("Erreur");
-                        pasElement.setHeaderText("Aucune action n'a été sélectionnée");
-                        pasElement.showAndWait();
-                    } /*else if (evenementsMenu.getAction().equals("Casser Mur")) {
+                if (evenementsMenu.getAction() == null) {
+                    Alert pasElement = new Alert(Alert.AlertType.INFORMATION);
+                    pasElement.setTitle("Erreur");
+                    pasElement.setHeaderText("Aucune action n'a été sélectionnée");
+                    pasElement.showAndWait();
+                } /*else if (evenementsMenu.getAction().equals("Casser Mur")) {
                     if (laby.GetCellule(x, y).getÉlément() instanceof Mur) {
                         System.out.println("C'est un mur !");
                     } else {
@@ -136,162 +136,158 @@ public class EventGridPane implements EventHandler<Event> {
                         pasunMur.showAndWait();
                     }
                 }*/ else if (evenementsMenu.getAction().equals("PoserHerbe")) {
-                        bouton.setBackground(background);
-                        Herbe herbe = new Herbe();
-                        cellule.setÉlément(herbe);
-                        System.out.println(laby.toString());
-                    } else if (evenementsMenu.getAction().equals("PoserMargeurite")) {
-                        bouton.setBackground(background4);
-                        marguerite marguerite = new marguerite();
-                        cellule.setÉlément(marguerite);
-                        System.out.println(laby.toString());
-                    } else if (evenementsMenu.getAction().equals("PoserCactus")) {
-                        bouton.setBackground(background3);
-                        Cactus cactus = new Cactus();
-                        cellule.setÉlément(cactus);
-                        System.out.println(laby.toString());
+                    bouton.setBackground(background);
+                    Herbe herbe = new Herbe();
+                    cellule.setÉlément(herbe);
+                    System.out.println(laby.toString());
+                } else if (evenementsMenu.getAction().equals("PoserMargeurite")) {
+                    bouton.setBackground(background4);
+                    marguerite marguerite = new marguerite();
+                    cellule.setÉlément(marguerite);
+                    System.out.println(laby.toString());
+                } else if (evenementsMenu.getAction().equals("PoserCactus")) {
+                    bouton.setBackground(background3);
+                    Cactus cactus = new Cactus();
+                    cellule.setÉlément(cactus);
+                    System.out.println(laby.toString());
 
-                        // TODO: Logique pour poser un cactus
-                    } else if (evenementsMenu.getAction().equals("PoserMouton")) {
-                        if (laby.getMouton() == null) {
-                            if (bouton.getGraphic() != null) {
-                                Alert deuxanimaux = new Alert(Alert.AlertType.INFORMATION);
-                                deuxanimaux.setTitle("Erreur");
-                                deuxanimaux.setContentText("Vous essayez de placer un animal sur une case ou il y en a déja un");
-                                deuxanimaux.setHeaderText("Action impossible");
-                                deuxanimaux.showAndWait();
-                            } else if (cellule.getÉlément() instanceof Mur) {
-                                Alert animalCailloux = new Alert(Alert.AlertType.INFORMATION);
-                                animalCailloux.setTitle("Erreur");
-                                animalCailloux.setHeaderText("Action impossible");
-                                animalCailloux.setContentText("Vous essayez de placer un animal sur un Mur , ce qui est impossible");
-                                animalCailloux.showAndWait();
-                            } else {
-                                Mouton mouton = new Mouton(cellule);
-                                laby.setMouton(mouton);
-                                bouton.setGraphic(imageView);
-                            }
+                    // TODO: Logique pour poser un cactus
+                } else if (evenementsMenu.getAction().equals("PoserMouton")) {
+                    if (laby.getMouton() == null) {
+                        if (bouton.getGraphic() != null) {
+                            Alert deuxanimaux = new Alert(Alert.AlertType.INFORMATION);
+                            deuxanimaux.setTitle("Erreur");
+                            deuxanimaux.setContentText("Vous essayez de placer un animal sur une case ou il y en a déja un");
+                            deuxanimaux.setHeaderText("Action impossible");
+                            deuxanimaux.showAndWait();
+                        } else if (cellule.getÉlément() instanceof Mur) {
+                            Alert animalCailloux = new Alert(Alert.AlertType.INFORMATION);
+                            animalCailloux.setTitle("Erreur");
+                            animalCailloux.setHeaderText("Action impossible");
+                            animalCailloux.setContentText("Vous essayez de placer un animal sur un Mur , ce qui est impossible");
+                            animalCailloux.showAndWait();
                         } else {
-                            if (bouton.getGraphic() != null) {
-                                Alert deuxanimaux = new Alert(Alert.AlertType.INFORMATION);
-                                deuxanimaux.setTitle("Erreur");
-                                deuxanimaux.setContentText("Vous essayez de placer un animal sur une case ou il y en a déja un");
-                                deuxanimaux.setHeaderText("Action impossible");
-                                deuxanimaux.showAndWait();
-                            } else if (cellule.getÉlément() instanceof Mur) {
-                                Alert animalCailloux = new Alert(Alert.AlertType.INFORMATION);
-                                animalCailloux.setTitle("Erreur");
-                                animalCailloux.setHeaderText("Action impossible");
-                                animalCailloux.setContentText("Vous essayez de placer un animal sur un Mur , ce qui est impossible");
-                                animalCailloux.showAndWait();
-                            } else {
-                                Button reference = null;
-                                for (Node node : gridPane.getChildren()) {
-                                    if (GridPane.getColumnIndex(node) == laby.getMouton().getY() && GridPane.getRowIndex(node) == laby.getMouton().getX()) {
-                                        if (node instanceof Button) {
-                                            reference = (Button) node;
-                                            break;
-                                        }
-                                    }
-                                }
-                                reference.setGraphic(null);
-                                laby.getMouton().setPosition(cellule);
-                                bouton.setGraphic(imageView);
-                            }
+                            Mouton mouton = new Mouton(cellule);
+                            laby.setMouton(mouton);
+                            bouton.setGraphic(imageView);
                         }
-                        System.out.println(laby.toString());
-
-
-                        // TODO: Logique pour poser un mouton
-                    } else if (evenementsMenu.getAction().equals("PoserLoup")) {
-                        if (laby.getLoup() == null) {
-                            if (bouton.getGraphic() != null) {
-                                Alert deuxanimaux = new Alert(Alert.AlertType.INFORMATION);
-                                deuxanimaux.setTitle("Erreur");
-                                deuxanimaux.setContentText("Vous essayez de placer un animal sur une case ou il y en a déja un");
-                                deuxanimaux.setHeaderText("Action impossible");
-                                deuxanimaux.showAndWait();
-                            } else if (cellule.getÉlément() instanceof Mur) {
-                                Alert animalCailloux = new Alert(Alert.AlertType.INFORMATION);
-                                animalCailloux.setTitle("Erreur");
-                                animalCailloux.setHeaderText("Action impossible");
-                                animalCailloux.setContentText("Vous essayez de placer un animal sur un Mur , ce qui est impossible");
-                                animalCailloux.showAndWait();
-                            } else {
-                                Loup loup = new Loup(cellule);
-                                laby.setLoup(loup);
-                                bouton.setGraphic(imageView1);
-                            }
-                        } else {
-                            if (bouton.getGraphic() != null) {
-                                Alert deuxanimaux = new Alert(Alert.AlertType.INFORMATION);
-                                deuxanimaux.setTitle("Erreur");
-                                deuxanimaux.setContentText("Vous essayez de placer un animal sur une case ou il y en a déja un");
-                                deuxanimaux.setHeaderText("Action impossible");
-                                deuxanimaux.showAndWait();
-                            } else if (cellule.getÉlément() instanceof Mur) {
-                                Alert animalCailloux = new Alert(Alert.AlertType.INFORMATION);
-                                animalCailloux.setTitle("Erreur");
-                                animalCailloux.setHeaderText("Action impossible");
-                                animalCailloux.setContentText("Vous essayez de placer un animal sur un Mur , ce qui est impossible");
-                                animalCailloux.showAndWait();
-                            } else {
-                                Button reference = null;
-                                for (Node node : gridPane.getChildren()) {
-                                    if (GridPane.getColumnIndex(node) == laby.getLoup().getY() && GridPane.getRowIndex(node) == laby.getLoup().getX()) {
-                                        if (node instanceof Button) {
-                                            reference = (Button) node;
-                                            break;
-
-                                        }
-                                    }
-                                }
-                                reference.setGraphic(null);
-                                laby.getLoup().setPosition(cellule);
-                                bouton.setGraphic(imageView1);
-                            }
-
-                        }
-                        System.out.println(laby.toString());
-
-
-                    } else if (evenementsMenu.getAction().equals("PoserMur")) {
-                        if (bouton.getGraphic() == null) {
-
-                            bouton.setBackground(background2);
-
-                            Mur mur = new Mur();
-
-                            cellule.setÉlément(mur);
-
-                            laby.toString();
-                        } else {
-                            Alert MuronAnimal = new Alert(Alert.AlertType.INFORMATION);
-                            MuronAnimal.setTitle("Erreur");
-                            MuronAnimal.setHeaderText("Action impossible");
-                            MuronAnimal.setContentText("Vous essayez de placer un Mur sur un animal ce qui est impossible , déplacez l'animal ou placez un autre élément");
-                            MuronAnimal.showAndWait();
-                        }
-
                     } else {
-                        System.out.println("Action non reconnue");
+                        if (bouton.getGraphic() != null) {
+                            Alert deuxanimaux = new Alert(Alert.AlertType.INFORMATION);
+                            deuxanimaux.setTitle("Erreur");
+                            deuxanimaux.setContentText("Vous essayez de placer un animal sur une case ou il y en a déja un");
+                            deuxanimaux.setHeaderText("Action impossible");
+                            deuxanimaux.showAndWait();
+                        } else if (cellule.getÉlément() instanceof Mur) {
+                            Alert animalCailloux = new Alert(Alert.AlertType.INFORMATION);
+                            animalCailloux.setTitle("Erreur");
+                            animalCailloux.setHeaderText("Action impossible");
+                            animalCailloux.setContentText("Vous essayez de placer un animal sur un Mur , ce qui est impossible");
+                            animalCailloux.showAndWait();
+                        } else {
+                            Button reference = null;
+                            for (Node node : gridPane.getChildren()) {
+                                if (GridPane.getColumnIndex(node) == laby.getMouton().getY() && GridPane.getRowIndex(node) == laby.getMouton().getX()) {
+                                    if (node instanceof Button) {
+                                        reference = (Button) node;
+                                        break;
+                                    }
+                                }
+                            }
+                            reference.setGraphic(null);
+                            laby.getMouton().setPosition(cellule);
+                            bouton.setGraphic(imageView);
+                        }
                     }
-                } else {
-                    Alert alertBordures = new Alert(Alert.AlertType.INFORMATION);
-                    alertBordures.setTitle("Erreur");
-                    alertBordures.setHeaderText("L'élément que vous essayez de placer est hors des limites autorisées");
-                    alertBordures.setContentText("Essayez autre part");
-                    alertBordures.showAndWait();
-                }
+                    System.out.println(laby.toString());
 
+
+                    // TODO: Logique pour poser un mouton
+                } else if (evenementsMenu.getAction().equals("PoserLoup")) {
+                    if (laby.getLoup() == null) {
+                        if (bouton.getGraphic() != null) {
+                            Alert deuxanimaux = new Alert(Alert.AlertType.INFORMATION);
+                            deuxanimaux.setTitle("Erreur");
+                            deuxanimaux.setContentText("Vous essayez de placer un animal sur une case ou il y en a déja un");
+                            deuxanimaux.setHeaderText("Action impossible");
+                            deuxanimaux.showAndWait();
+                        } else if (cellule.getÉlément() instanceof Mur) {
+                            Alert animalCailloux = new Alert(Alert.AlertType.INFORMATION);
+                            animalCailloux.setTitle("Erreur");
+                            animalCailloux.setHeaderText("Action impossible");
+                            animalCailloux.setContentText("Vous essayez de placer un animal sur un Mur , ce qui est impossible");
+                            animalCailloux.showAndWait();
+                        } else {
+                            Loup loup = new Loup(cellule);
+                            laby.setLoup(loup);
+                            bouton.setGraphic(imageView1);
+                        }
+                    } else {
+                        if (bouton.getGraphic() != null) {
+                            Alert deuxanimaux = new Alert(Alert.AlertType.INFORMATION);
+                            deuxanimaux.setTitle("Erreur");
+                            deuxanimaux.setContentText("Vous essayez de placer un animal sur une case ou il y en a déja un");
+                            deuxanimaux.setHeaderText("Action impossible");
+                            deuxanimaux.showAndWait();
+                        } else if (cellule.getÉlément() instanceof Mur) {
+                            Alert animalCailloux = new Alert(Alert.AlertType.INFORMATION);
+                            animalCailloux.setTitle("Erreur");
+                            animalCailloux.setHeaderText("Action impossible");
+                            animalCailloux.setContentText("Vous essayez de placer un animal sur un Mur , ce qui est impossible");
+                            animalCailloux.showAndWait();
+                        } else {
+                            Button reference = null;
+                            for (Node node : gridPane.getChildren()) {
+                                if (GridPane.getColumnIndex(node) == laby.getLoup().getY() && GridPane.getRowIndex(node) == laby.getLoup().getX()) {
+                                    if (node instanceof Button) {
+                                        reference = (Button) node;
+                                        break;
+
+                                    }
+                                }
+                            }
+                            reference.setGraphic(null);
+                            laby.getLoup().setPosition(cellule);
+                            bouton.setGraphic(imageView1);
+                        }
+
+                    }
+                    System.out.println(laby.toString());
+
+
+                } else if (evenementsMenu.getAction().equals("PoserMur")) {
+                    if (bouton.getGraphic() == null) {
+                        bouton.setBackground(background2);
+
+                        Mur mur = new Mur();
+                        cellule.setÉlément(mur);
+                        laby.toString();
+                    } else {
+                        Alert MuronAnimal = new Alert(Alert.AlertType.INFORMATION);
+                        MuronAnimal.setTitle("Erreur");
+                        MuronAnimal.setHeaderText("Action impossible");
+                        MuronAnimal.setContentText("Vous essayez de placer un Mur sur un animal ce qui est impossible , déplacez l'animal ou placez un autre élément");
+                        MuronAnimal.showAndWait();
+                    }
+
+                } else {
+                    System.out.println("Action non reconnue");
+                }
+            } else {
+                Alert alertBordures = new Alert(Alert.AlertType.INFORMATION);
+                alertBordures.setTitle("Erreur");
+                alertBordures.setHeaderText("L'élément que vous essayez de placer est hors des limites autorisées");
+                alertBordures.setContentText("Essayez autre part");
+                alertBordures.showAndWait();
             }
+
+        }
         else {
             Alert Erreur = new Alert(Alert.AlertType.INFORMATION);
             Erreur.setTitle("Erreur");
             Erreur.setHeaderText("Erreur");
             Erreur.setContentText("l'action ne proviens pas d'un bouton");
         }
-        }
-
     }
 
+}
