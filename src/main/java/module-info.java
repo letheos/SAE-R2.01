@@ -4,7 +4,7 @@ module com.example.fx_sae {
     requires java.rmi;
     requires java.desktop;
     requires jdk.jfr;
-    requires javafx.media;
+    //requires javafx.media;
 
 
     opens com.example.fx_sae to javafx.fxml;

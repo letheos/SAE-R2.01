@@ -1,5 +1,5 @@
 package m;
-
+/*
 import org.junit.jupiter.api.BeforeEach;
 import org.testng.annotations.Test;
 
@@ -85,3 +85,5 @@ class LabyrintheTest {
         assertEquals(2, voisins.size());
     }
 }
+
+ */

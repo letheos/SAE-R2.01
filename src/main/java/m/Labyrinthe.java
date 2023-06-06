@@ -74,6 +74,7 @@ public class Labyrinthe implements Serializable {
         this.cellules = lab.GetCellules();
         this.mouton = lab.getMouton();
         this.loup = lab.getLoup();
+        this.sortie = lab.getSortie();
     }
 
     public String toString() {
