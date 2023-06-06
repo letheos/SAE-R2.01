@@ -5,10 +5,9 @@ import m.*;
 
 import java.awt.*;
 import java.io.*;
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 public class Labyrinthe implements Serializable {
     private int nx;
@@ -232,6 +231,23 @@ public class Labyrinthe implements Serializable {
         ArrayList<Cellule> voisins = new ArrayList<>();
         int x = cellule.getX();
         int y = cellule.getY();
+        if (cellule == this.getSortie()){
+            if (cellule.getX() == 0);
+            voisins.add(this.GetCellule(1,cellule.getY()));
+
+            if(cellule.getX() == this.nx){
+                voisins.add(this.GetCellule(cellule.getX()-1,cellule.getY()));
+            }
+            if (cellule.getY() == 0){
+                voisins.add(this.GetCellule(cellule.getX(),cellule.getY()+1));
+            }
+            if (cellule.getY() == this.ny){
+                voisins.add(this.GetCellule(cellule.getX(),cellule.getY()-1));
+            }
+        }
+        else{
+
+
         if (!(this.GetCellule(x - 1, y).getÉlément() instanceof Mur)) {
 
             voisins.add(this.GetCellule(x - 1, y));
@@ -248,7 +264,7 @@ public class Labyrinthe implements Serializable {
 
             voisins.add(this.GetCellule(x, y + 1));
 
-        }
+        }}
         return voisins;
 
 
@@ -691,7 +707,7 @@ public class Labyrinthe implements Serializable {
 
 
         }
-        lab.trouvelaSortie(deligne,lab);
+        //lab.trouvelaSortie(deligne,lab);
         System.out.println("dernier check ");
         System.out.println("mouton : "+lab.getMouton());
         System.out.println("Loup :"+lab.getLoup());
@@ -714,13 +730,13 @@ public class Labyrinthe implements Serializable {
                 laSortie.setÉlément(new Herbe());
 
 
-                System.out.println("bla la sortie couhou");
+
                 //this.setSortie(this.cellules.get(0).get(i));
-                System.out.println("bla la sortie douhou");
+
             }
             if (sortie.equals(Character.toString(lab[lab.length - 1].charAt(i)))) {
                 //si la sortie est sur la dernière ligne
-                System.out.println("bla la sortie douhou");
+
 
                 Cellule laSortie = nouv.GetCellule(lab.length - 1, i);
                 nouv.setSortie(laSortie);
@@ -733,7 +749,7 @@ public class Labyrinthe implements Serializable {
             //débute à 1 et finit à longueur -1 pour éviter d'avoir la sortie dans un coin
             if (sortie.equals(Character.toString(lab[y].charAt(0)))) {
                 //si la sortie est sur la colone de gauche
-                System.out.println("bla la sortie aouhou");
+
                 Cellule laSortie = nouv.GetCellule(y, 0);
                 nouv.setSortie(laSortie);
                 this.DéfinirSortie(y, 0);
@@ -741,7 +757,7 @@ public class Labyrinthe implements Serializable {
             }
             if (sortie.equals(Character.toString(lab[y].charAt(lab[0].length() - 1)))) {
                 //si la sortie est sur la colonne de droite
-                System.out.println("bla la sortie uouhou");
+
                 Cellule laSortie = nouv.GetCellule(y, lab[0].length() - 1);
                 nouv.setSortie(laSortie);
                 this.DéfinirSortie(y, lab[0].length() - 1);
@@ -749,8 +765,58 @@ public class Labyrinthe implements Serializable {
             }
 
         }
-        System.out.println("bla la sortie houhou");
-        System.out.println(nouv.toString());
+
+
+
+    }
+    public ArrayList<Cellule> ParcoursProfondeur(Cellule cellule,ArrayList<Cellule> cellulesVisitées){
+        ArrayList<Cellule> voisins = new ArrayList<Cellule>();
+
+
+        voisins = this.getVoisins(cellule);
+        cellulesVisitées.add(cellule);
+
+        for (Cellule voisin : voisins){
+            if (!cellulesVisitées.contains(voisin)){
+                ParcoursProfondeur(voisin,cellulesVisitées);
+            }
+        }
+        return cellulesVisitées;
+    }
+    public ArrayList<Cellule> dijkstra(Cellule source,int distance) {
+        System.out.println("je suis passé dans dijkstra");
+        ArrayList<Cellule> result = new ArrayList();
+
+        Queue<Cellule> queue = new LinkedList<>();
+        Set<Cellule> visités = new HashSet<>();
+        Map<Cellule, Integer> distances = new HashMap<>();
+        queue.add(source);
+        visités.add(source);
+        distances.put(source,0);
+
+        while(!queue.isEmpty()){
+            Cellule current = queue.poll();
+            int distanceActuelle= distances.get(current);
+
+            if (distanceActuelle == distance){
+                result.add(current);
+                continue;
+            }
+            else if (distanceActuelle > distance){
+                 break;
+            }
+            ArrayList<Cellule> voisins = this.getVoisins(current);
+
+            for (Cellule voisin : voisins){
+                if(!visités.contains(voisin)){
+                    queue.add(voisin);
+                    visités.add(voisin);
+                    distances.put(voisin,distanceActuelle+1);
+                }
+            }
+
+        }
+        return result;
 
     }
 

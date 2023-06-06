@@ -32,6 +32,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
+import javax.swing.*;
+
 public class Préparation extends Stage implements Serializable {
     private  int nx;
     private int ny;
@@ -289,9 +291,15 @@ for (int row = 0; row < this.récup.getNx(); row++) {
             Button Jouertour = new Button("Jouer Tour");
 
             Lancer.setOnMouseClicked(mouseEvent -> {
-    System.out.println("voici le labyrinthe que je prend en entrée");
+                System.out.println("vision du mouton"+récup.dijkstra(récup.getMouton().getPosition(),4));
+                System.out.println("vision du loup"+récup.dijkstra(récup.getLoup().getPosition(),4));
+                ArrayList parcours = (ArrayList) this.récup.ParcoursProfondeur(this.récup.getMouton().getPosition(),new ArrayList<Cellule>());
+                if (parcours.contains(this.récup.getLoup().getPosition())&& parcours.contains(this.récup.getSortie())){
+                    System.out.println("voici le labyrinthe que je prend en entrée");
     System.out.println("voici le mouton : " + this.récup.getMouton());
+    System.out.println("voici la position du mouton :"+this.récup.getMouton().getPosition());
     System.out.println("voici le Loup :" + this.récup.getLoup());
+    System.out.println("voici la position du loup : " +this.récup.getLoup().getPosition());
     System.out.println("voici la sortie : " + this.récup.getSortie());
     System.out.println(this.récup.toString());
     if (this.récup.getSortie() != null && this.récup.getMouton() != null && this.récup.getLoup() != null) {
@@ -319,6 +327,16 @@ for (int row = 0; row < this.récup.getNx(); row++) {
         alert.setContentText("Il est impossible de lancer le jeu si celui-ci ne possède pas au moins un \n -Une sortie \n -Un Loup \n -Un Mouton");
         alert.showAndWait();
     }
+
+                }
+                else {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Erreur");
+                    alert.setHeaderText("Action impossible");
+                    alert.setContentText("Le mouton n'a pas accès à la sortie et au loup");
+                    alert.showAndWait();
+                }
+
 });
 
             Button DéfinirSortie = new Button("Définir sortie");

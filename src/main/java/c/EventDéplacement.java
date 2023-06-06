@@ -211,7 +211,7 @@ public class EventDéplacement implements EventHandler {
 
         GridPane.setValignment(newOverlayPane, VPos.CENTER);
 */ System.out.println(récup.toString());
-        }//TODO optimiser le code , dans les faits il marche mais pas de manière optimale
+        }
 
 
 
@@ -314,6 +314,10 @@ public class EventDéplacement implements EventHandler {
 
             untour.addAll(deuxtours);deuxtours.clear();*/
             this.animal = false;
+            System.out.println("les cases a la portée du loup"+récup.dijkstra(récup.getLoup().getPosition(),4));
+            /*if(récup.getLoup().vision(récup) == true){
+                System.out.println("le loup voit le mouton");
+            }*/
 
 
         } else {
@@ -366,6 +370,10 @@ public class EventDéplacement implements EventHandler {
             this.untour.addAll(this.deuxtours);
             this.deuxtours.clear();
             this.animal = true;
+            System.out.println("les cases a la portée du Mouton"+récup.dijkstra(récup.getMouton().getPosition(),4));
+            /*if(récup.getMouton().vision(récup) == true){
+                System.out.println("le mouton voit le Loup");
+            }*/
 
 
         }

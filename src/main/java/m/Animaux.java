@@ -3,8 +3,8 @@ package m;
 import m.Labyrinthe;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Random;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class Animaux implements Serializable {
     private int portée;
@@ -54,4 +54,25 @@ public class Animaux implements Serializable {
         animal.setPosition(nouvCellule);
         //todo finir errer en choisissant aléatoirement la direction qui est récupérée et gérer ça dans le labyrinthe
     }
+    public Boolean vision(Labyrinthe laby) {
+        if (this instanceof Loup){
+            if (laby.dijkstra(this.getPosition(),4).contains(laby.getMouton())) {
+            return true;
+    }
+            else {
+                return false;
+            }
+        } else if (this instanceof Mouton) {
+            if (laby.dijkstra(this.getPosition(),4).contains(laby.getLoup())){
+                return true;
+            }
+            else{
+                return false;
+            }
+
+        }
+
+        return false;
+}
+
 }
