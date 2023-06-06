@@ -98,6 +98,8 @@ public class HelloApplication extends Application {
         //Préparation prep = new Préparation(10,8);
 
         //TODO finir de faire les evènement de la page d'accueil
+        //Labyrinthe laby = new Labyrinthe(10,10);
+        //System.out.println(laby.parcour)
         Accueil ij = new Accueil();
 
 
