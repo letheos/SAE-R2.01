@@ -67,7 +67,9 @@ if (button2 != null) {
     public int getDéplacement(){
         return this.déplacement;
     }
-
+    public void setFuite(boolean état){
+        this.fuite = état;
+    }
 
     }
 
