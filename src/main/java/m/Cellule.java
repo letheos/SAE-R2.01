@@ -8,6 +8,8 @@ public class Cellule implements Serializable {
     private int identifiant;
     private int x;
     private int y;
+    private int heuristique;
+    private int deplacement;
 
     private Element élément;
 
@@ -19,6 +21,7 @@ public class Cellule implements Serializable {
         this.y = y;
         this.identifiant = identifiant;
         this.élément = element;
+
     }
 
     public Element getÉlément() {
@@ -57,5 +60,24 @@ public class Cellule implements Serializable {
 
     public int getX() {
         return x;
+    }
+
+    public int getHeuristique() {
+        return heuristique;
+    }
+
+    public void setHeuristique(int heuristique) {
+        this.heuristique = heuristique;
+    }
+
+    public int getIdentifiant() {
+        return identifiant;
+    }
+
+    public void setIdentifiant(int identifiant) {
+        this.identifiant = identifiant;
+    }
+    public void ajoutDepla(){
+        this.deplacement = this.deplacement + 1;
     }
 }
