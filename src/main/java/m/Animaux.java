@@ -54,6 +54,7 @@ public class Animaux implements Serializable {
         animal.setPosition(nouvCellule);
         //todo finir errer en choisissant aléatoirement la direction qui est récupérée et gérer ça dans le labyrinthe
     }
+    /*
     public Boolean vision(Labyrinthe laby) {
         if (this instanceof Loup){
             if (laby.dijkstra(this.getPosition(),4).contains(laby.getMouton())) {
@@ -74,5 +75,8 @@ public class Animaux implements Serializable {
 
         return false;
 }
+
+     */
+
 
 }
