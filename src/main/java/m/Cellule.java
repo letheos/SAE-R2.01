@@ -58,4 +58,8 @@ public class Cellule implements Serializable {
     public int getX() {
         return x;
     }
+
+    public int manathan(Cellule destination){
+        return (int)Math.sqrt(Math.pow(destination.getX() - this.x, 2) + Math.pow(destination.getY() - this.y, 2));
+    }
 }

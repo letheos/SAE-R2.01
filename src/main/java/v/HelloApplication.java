@@ -6,13 +6,10 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.scene.layout.GridPane;
-import m.Labyrinthe;
-import m.Loup;
-import m.Mouton;
+import m.*;
 
 import java.io.IOException;
-
-import m.Animaux;
+import java.util.ArrayList;
 
 public class HelloApplication extends Application {
 
@@ -101,10 +98,57 @@ public class HelloApplication extends Application {
         //Labyrinthe laby = new Labyrinthe(10,10);
         //System.out.println(laby.parcour)
         Accueil ij = new Accueil();
+        Labyrinthe v = new Labyrinthe(10,10);
+
+        /*Integer[][]b =v.dijkstra(v.GetCellule(2,2),4);
+        System.out.println("\n");
+        System.out.println("\n");
+        System.out.println("\n");
+        System.out.println("\n");
+        System.out.println("\n");
+        System.out.println("\n");
+        System.out.println("\n");
+        System.out.println("\n");
+
+        System.out.println(v.printTab(b));*/
+        Mouton m = new Mouton(v.GetCellule(1,1));
+        Loup loup = new Loup(v.GetCellule(1,3));
+        v.PoserMur(1,2);
+        v.PoserMur(2,2);
+        v.PoserMur(3,2);
+        v.PoserMur(4,2);
+        v.PoserMur(5,2);
+
+        v.setLoup(loup);
+        v.setSortie(v.GetCellule(0,5));
+
+        v.setMouton(m);
+        System.out.println(v.toString());
 
 
+        System.out.println("voici les cellules dnas le périmètre de la cellule concernée"+v.dijkstra2(v.GetCellule(1,1)));
+        if (v.dijkstra2(v.GetCellule(1,1)).contains(v.getLoup().getPosition())){
+            System.out.println("le loup est dans le périmètre");
+        }
+        else{
+            System.out.println("le loup n'est pas dans la vision du mouton");
+        }
+        /*for (ArrayList<Cellule> liste : v.GetCellules()) {
+    for (Cellule cellule : liste) {
+        System.out.println("Cellule: " + cellule.getX() + ", " + cellule.getY());
 
+        ArrayList<Cellule> voisins = v.getVoisins(cellule);
+        System.out.println("Voisins:");
 
+        for (Cellule voisin : voisins) {
+            System.out.println("    Voisin: " + voisin.getX() + ", " + voisin.getY());
+        }
+
+        System.out.println("---------------------");
+    }
+
+}*/
+System.out.println(v.toString());
     }
 
 
