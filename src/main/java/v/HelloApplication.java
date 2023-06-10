@@ -126,8 +126,8 @@ public class HelloApplication extends Application {
         System.out.println(v.toString());
 
 
-        System.out.println("voici les cellules dnas le périmètre de la cellule concernée"+v.dijkstra2(v.GetCellule(1,1)));
-        if (v.dijkstra2(v.GetCellule(1,1)).contains(v.getLoup().getPosition())){
+        System.out.println("voici les cellules dnas le périmètre de la cellule concernée"+v.dijkstra2(v.GetCellule(1,1),5));
+        if (v.dijkstra2(v.GetCellule(1,1),5).contains(v.getLoup().getPosition())){
             System.out.println("le loup est dans le périmètre");
         }
         else{
