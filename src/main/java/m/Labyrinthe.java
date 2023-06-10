@@ -1,14 +1,8 @@
 package m;
 
-import javafx.scene.control.Cell;
-import m.*;
-
-import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 public class Labyrinthe implements Serializable {
     private int nx;
@@ -228,51 +222,44 @@ public class Labyrinthe implements Serializable {
     //x = droite
     //y = hauteur
     //liste de boolean en format [N,S,E,O] pour indiquer si l'animal peut se déplacer dans une direction ou non
-    public ArrayList<Cellule> getVoisins(Cellule cellule) {
-        ArrayList<Cellule> voisins = new ArrayList<>();
-        int x = cellule.getX();
-        int y = cellule.getY();
-        if (!(this.GetCellule(x - 1, y).getÉlément() instanceof Mur)) {
+    public ArrayList<Cellule> getVoisins(Cellule cellule){
+        ArrayList<Cellule> voisins = new ArrayList<Cellule>();
+        if (cellule.getX() < this.getNx()-1 && cellule.getX() > 0 && cellule.getY()>0 && cellule.getY()<this.getNy()-1){
+            if (!(this.GetCellule(cellule.getX()-1,cellule.getY()).getÉlément() instanceof Mur)){
+                voisins.add(this.GetCellule(cellule.getX()-1,cellule.getY()));
+            }
+            if (!(this.GetCellule(cellule.getX()+1,cellule.getY()).getÉlément() instanceof Mur)){
+                voisins.add(this.GetCellule(cellule.getX()+1,cellule.getY()));
+            }
+            if (!(this.GetCellule(cellule.getX(),cellule.getY()+1).getÉlément() instanceof Mur)){
+                voisins.add(this.GetCellule(cellule.getX(),cellule.getY()+1));
+            }
+            if (!(this.GetCellule(cellule.getX(),cellule.getY()-1).getÉlément() instanceof Mur)){
+                voisins.add(this.GetCellule(cellule.getX()-1,cellule.getY()-1));
+            }
 
-            voisins.add(this.GetCellule(x - 1, y));
         }
-        if (!(this.GetCellule(x + 1, y).getÉlément() instanceof Mur)) {
-
-            voisins.add(this.GetCellule(x + 1, y));
+        if (cellule.getX() == 0 ){
+            if (!(this.GetCellule(1,cellule.getY()).getÉlément() instanceof Mur)){
+                voisins.add(this.GetCellule(1,cellule.getY()));}
         }
-        if (!(this.GetCellule(x, y - 1).getÉlément() instanceof Mur)) {
-
-            voisins.add(this.GetCellule(x, y - 1));
+        if(cellule.getY() == 0 ){
+            if (!(this.GetCellule(cellule.getX(),1).getÉlément() instanceof Mur)){
+                voisins.add(this.GetCellule(cellule.getX(), 1));
+            }
         }
-        if (!(this.GetCellule(x, y + 1).getÉlément() instanceof Mur)) {
-
-            voisins.add(this.GetCellule(x, y + 1));
-
+        if(cellule.getX() == this.getNx()-1 ){
+            if (!(this.GetCellule(cellule.getX()-1,cellule.getY()).getÉlément() instanceof Mur)){
+                voisins.add(this.GetCellule(cellule.getX()-1,cellule.getY()));
+            }
+        }
+        if(cellule.getY() == this.getNy()-1){
+            if (!(this.GetCellule(cellule.getX(), cellule.getY()-1).getÉlément() instanceof Mur)){
+                voisins.add(this.GetCellule(cellule.getX(),cellule.getY()-1));
+            }
         }
         return voisins;
-
-
-
-
-        /*if (this.cellules.get(cellule.getX() - 1).get(cellule.getY()).getÉlément() instanceof Végétal || this.cellules.get(cellule.getX() - 1).get(cellule.getY()).getÉlément() == null) {
-            System.out.println("la cellule au dessus de "+cellule.getX()+","+cellule.getY()+"est  la cellule"+this.GetCellule(cellule.getX()-1, cellule.getY()).getX()+","+this.GetCellule(cellule.getX()-1, cellule.getY()).getY());
-            voisins.add(this.cellules.get(cellule.getX() - 1).get(cellule.getY()));
-        }
-        if (this.cellules.get(cellule.getX() + 1).get(cellule.getY()).getÉlément() instanceof Végétal || this.cellules.get(cellule.getX() + 1).get(cellule.getY()).getÉlément() == null) {
-            System.out.println("la cellule en dessous de "+cellule.getX()+","+cellule.getY()+"est  la cellule"+this.GetCellule(cellule.getX()+1, cellule.getY()).getX()+","+this.GetCellule(cellule.getX()+1, cellule.getY()).getY());
-            voisins.add(this.cellules.get(cellule.getX() + 1).get(cellule.getY()));
-        }
-        if (this.cellules.get(cellule.getX()).get(cellule.getY() + 1).getÉlément() instanceof Végétal || this.cellules.get(cellule.getX()).get(cellule.getY() + 1).getÉlément() == null) {
-            System.out.println("la cellule a droite de "+cellule.getX()+","+cellule.getY()+"est  la cellule"+this.GetCellule(cellule.getX(), cellule.getY()+1).getX()+","+this.GetCellule(cellule.getX(), cellule.getY()+1).getY());
-            voisins.add(this.cellules.get(cellule.getX() + 1).get(cellule.getY()+1));
-        }
-        if (this.cellules.get(cellule.getX()).get(cellule.getY() - 1).getÉlément() instanceof Végétal ||this.cellules.get(cellule.getX()).get(cellule.getY() - 1).getÉlément() == null ) {
-            System.out.println("la cellule a gauche de "+cellule.getX()+","+cellule.getY()+"est  la cellule"+this.GetCellule(cellule.getX(), cellule.getY()-1).getX()+","+this.GetCellule(cellule.getX(), cellule.getY()-1).getY());
-            voisins.add(this.cellules.get(cellule.getX()).get(cellule.getY() - 1));
-        }
-        return voisins;*/
     }
-
     public void setLoup(Loup loup) {
         this.loup = loup;
     }
@@ -754,6 +741,363 @@ public class Labyrinthe implements Serializable {
         System.out.println(nouv.toString());
 
     }
+
+    public void dijkstra2(Cellule depart) {
+        Queue<Cellule> file = new LinkedList<>();
+        HashMap<Cellule, Integer> distances = new HashMap<>();
+        HashMap<Cellule, Cellule> predecesseurs = new HashMap<>();
+
+        // Initialisation des distances
+        for (ArrayList<Cellule> liste : cellules) {
+            for (Cellule cellule : liste) {
+                //met toutes les cellules à une valeur infini
+                distances.put(cellule, Integer.MAX_VALUE);
+                predecesseurs.put(cellule, null);
+            }
+        }
+
+        // Départ
+        distances.put(depart, 0);
+        file.offer(depart);
+
+        while (!file.isEmpty()) {
+            Cellule actuelle = file.poll();
+
+            // Parcours des voisins
+            for (Cellule voisine : this.getVoisins(actuelle)) {
+                if (distances.get(voisine) == Integer.MAX_VALUE) {  // Cellule non visitée
+                    int nouvelleDistance = distances.get(actuelle) + 1;
+
+                    if (nouvelleDistance <= 4) {  // Périmètre de 4
+                        distances.put(voisine, nouvelleDistance);
+                        predecesseurs.put(voisine, actuelle);
+                        file.offer(voisine);
+                    }
+                }
+            }
+        }
+
+        // Affichage des résultats
+        for (ArrayList<Cellule> liste : cellules) {
+            for (Cellule cellule : liste) {
+                System.out.println("Cellule: " + cellule.getX() + cellule.getY() + ", Distance: " + distances.get(cellule));
+                LinkedList<Cellule> chemin = getChemin(predecesseurs, cellule);
+                System.out.println("Chemin: " + chemin);
+                System.out.println("---------------------");
+            }
+        }
+    }
+
+
+
+    private Cellule getCelluleMinDistance(Map<Cellule, Integer> distance, ArrayList<Cellule> cellulesNonExplorees) {
+        Cellule minCellule = null;
+        int minDistance = Integer.MAX_VALUE;
+
+        for (Cellule cellule : cellulesNonExplorees) {
+            int celluleDistance = distance.get(cellule);
+            if (celluleDistance < minDistance) {
+                minCellule = cellule;
+                minDistance = celluleDistance;
+            }
+        }
+
+        return minCellule;
+    }
+
+    private LinkedList<Cellule> getChemin(Map<Cellule, Cellule> previous, Cellule destination) {
+        LinkedList<Cellule> chemin = new LinkedList<>();
+        Cellule celluleCourante = destination;
+
+        while (celluleCourante != null) {
+            chemin.addFirst(celluleCourante);
+            celluleCourante = previous.get(celluleCourante);
+        }
+
+        return chemin;
+    }
+    private String getCheminAvecCoordonnees(Map<Cellule, Cellule> previous, Cellule destination) {
+        LinkedList<Cellule> chemin = new LinkedList<>();
+        Cellule celluleCourante = destination;
+
+        while (celluleCourante != null) {
+            chemin.addFirst(celluleCourante);
+            celluleCourante = previous.get(celluleCourante);
+        }
+
+        StringBuilder cheminString = new StringBuilder();
+        for (Cellule cellule : chemin) {
+            cheminString.append("(")
+                    .append(cellule.getX())
+                    .append(",")
+                    .append(cellule.getY())
+                    .append(") ");
+        }
+
+        return cheminString.toString();
+    }
+
+
+
+
+
+    //TODO faire un code ou on regarde tout les voisins et on les répertorie avec juste le prédécesseur jusqu'a tomber sur la bonne cellule et remonter la chaine
+
+
+    public ArrayList<Cellule> getVoisinsDistance4(Cellule cellule) {
+        ArrayList<Cellule> voisins = new ArrayList<>();
+        int x = cellule.getX();
+        int y = cellule.getY();
+
+        // Vérifier les voisins dans la plage de (x-4, y-4) à (x+4, y+4)
+        for (int i = x - 4; i <= x + 4; i++) {
+            for (int j = y - 4; j <= y + 4; j++) {
+                if (i >= 0 && i < this.getNx() && j >= 0 && j < this.getNy()) {
+                    Cellule voisin = this.GetCellule(i, j);
+                    if (voisin != null && !voisin.equals(cellule)) {
+                        voisins.add(voisin);
+                    }
+                }
+            }
+        }
+
+        return voisins;
+    }
+
+    public void trouverVoisinsDistance4DuMouton() {
+        Cellule moutonCellule = mouton.getPosition();
+        ArrayList<Cellule> voisinsDistance4 = getVoisinsDistance4(moutonCellule);
+        for (Cellule voisin : voisinsDistance4) {
+            // Faites quelque chose avec le voisin à distance 4 du mouton
+            // Par exemple, vérifier s'il s'agit du loup
+            if (voisin.equals(loup.getPosition())) {
+                System.out.println("Le loup est à distance 4 du mouton !");
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static int distanceManhattan(Cellule debut, Cellule fin) {
+        return Math.abs((debut.getX()) - fin.getX()) + Math.abs((debut.getY()) - fin.getY());
+    }
+
+    public ArrayList<Cellule> aStar(Cellule debut, Cellule fin, ArrayList<Cellule> pasDedans) {
+        int Manhattan = debut.manhattan(fin);
+        //System.out.println();
+
+        PriorityQueue<Cellule> tas = new PriorityQueue<>(new CellTri());
+        //open liste
+        PriorityQueue<Cellule> rebut = new PriorityQueue<>(new CellTri());
+        ArrayList<Cellule> chemin = new ArrayList<>();
+        //Cellule qui sont pas dans le chemin mais qui pourais être utilisé après
+        //close liste
+
+        //faire le while, mettre en pratique le set distance*
+        //ajout dans le tas de la 1ere cellule
+        tas.add(debut);
+        //chemin.add(debut);
+        //ajout de sa distance
+        debut.setHeuristique(Manhattan);
+        //ajout de déplacement
+        debut.setDeplacement(0);
+
+        while (!(tas.isEmpty())) {
+            Cellule current = tas.poll();
+            //prends la cellule de plus faible heuristique
+            if (current == fin){
+                System.out.println(current);
+                System.out.println(chemin);
+                chemin.add(current);
+                return chemin;
+                /*
+                return current;
+                si le noeud est le même que la fin return la cellule
+                 */
+            }
+            ArrayList<Cellule> vois = this.getVoisins(current);
+            System.out.println(vois);
+            System.out.println("vois");
+            //si certaines cellules voisines sont dans pasDedans, on les enlèves
+            vois.removeIf(pasDedans::contains);
+
+            for(Cellule cl:vois){
+
+
+                //mettre les voisins dans la openList
+                cl.setDeplacement(current.getDeplacement()+1);
+                cl.setHeuristique(cl.manhattan(fin)+cl.getDeplacement());
+
+                if(!tas.contains(cl) && !rebut.contains(cl)){
+                    //si la cellule n'est ni dans tas et ni dans rebut
+                    if(current.manhattan(fin)<cl.manhattan(fin)){
+
+                        //si la cellule a plus de cout que la cellule d'avant on la met dans rebut
+                        System.out.println(current.getHeuristique());
+                        System.out.println("current heuri");
+                        System.out.println(cl.getHeuristique());
+                        System.out.println("cl heuri");
+                        System.out.println("rebut");
+                        System.out.println("\n");
+                        rebut.add(cl);
+                    }else{
+                        //sinon on la met dans tas
+                        this.PoserMargueurite(cl.getX(),cl.getY());
+                        tas.add(cl);
+                        //current = cl;
+                        System.out.println(current.getHeuristique());
+                        System.out.println("tas");
+                        System.out.println(cl.getHeuristique());
+                        System.out.println(tas);
+                        System.out.println(this.toString());
+
+                    }
+                } else{
+                    if(cl.manhattan(fin)<current.manhattan(fin)){
+                        rebut.remove(cl);
+                        tas.add(cl);
+                        //rebut.add(current);
+                        //current = cl;
+                    }
+                }
+
+
+            }
+            tas.remove(current);
+            rebut.add(current);
+            if(!chemin.contains(current)){
+                chemin.add(current);
+            }
+            System.out.println(tas);
+            System.out.println("tas");
+            System.out.println(rebut);
+            System.out.println("rebut");
+
+
+
+            /*
+            Cellule plusFailbe = vois.get(0);
+
+            if(!vois.isEmpty()){
+                for (Cellule cl:vois) {
+                    if(cl.getHeuristique()< plusFailbe.getHeuristique()){
+                        plusFailbe = cl;
+                    }
+                }
+            }
+
+            //TODO peut avoir une bien meilleure complexité
+            tas.add(plusFailbe);
+            vois.remove(plusFailbe);
+            if(!vois.isEmpty()){
+                rebut.addAll(vois);
+            }
+            //permet d'ajouter la cellule de poid le plus faible
+            //si la liste n'est pas vide après met toutes les cellules dans rebut
+            //comprendre comment faire le chemin et donc prendre en compte si le chemin est blockée
+            //mettre a jour tas donc ajouter des trucs dedant
+            //utiliser .contains pour ne pas faire demis tour, mettre en place le système de dépilage
+
+            //open list = noeud pas encore visité mettre le curent dedans
+            //close list = noeud déjà visité
+            //si il est possible d'y y aller, il faut prendre la cellule qui a la valeur la plus faible
+
+             */
+        }
+        System.out.println(chemin);
+        for(Cellule cl:chemin){
+            System.out.println(cl.getX());
+            System.out.println(cl.getY());
+            System.out.println("\t");
+        }
+        System.out.println("chemin");
+        return chemin;
+    }
+
+
+    //TODO faire un code ou on regarde tout les voisins et on les répertorie avec juste le prédécesseur jusqu'a tomber sur la bonne cellule et remonter la chaine
+    //TODO prendre en compte la liste rebut
+
+/*
+    public static Cellule aStar(Cellule start, Cellule target){
+        PriorityQueue<Cellule> closedList = new PriorityQueue<>();
+        PriorityQueue<Cellule> openList = new PriorityQueue<>();
+
+        start.f = start.g + start.calculateHeuristic(target);
+        openList.add(start);
+
+        while(!openList.isEmpty()){
+            Cellule current = openList.peek();
+            if(current == target){
+                return current;
+            }
+
+            for(Cellule.Edge edge : current.neighbors){
+                Cellule m = edge.Cellule;
+                double totalWeight = current.g + edge.weight;
+
+                if(!openList.contains(m) && !closedList.contains(m)){
+                    m.parent = current;
+                    m.g = totalWeight;
+                    m.f = m.g + m.calculateHeuristic(target);
+                    openList.add(m);
+                } else {
+                    if(totalWeight < m.g){
+                        m.parent = n;
+                        m.g = totalWeight;
+                        m.f = m.g + m.calculateHeuristic(target);
+
+                        if(closedList.contains(m)){
+                            closedList.remove(m);
+                            openList.add(m);
+                        }
+                    }
+                }
+            }
+
+            openList.remove(n);
+            closedList.add(n);
+        }
+        return null;
+    }
+
+    public static void printPath(Node target){
+        Node n = target;
+
+        if(n==null)
+            return;
+
+        List<Integer> ids = new ArrayList<>();
+
+        while(n.parent != null){
+            ids.add(n.id);
+            n = n.parent;
+        }
+        ids.add(n.id);
+        Collections.reverse(ids);
+
+        for(int id : ids){
+            System.out.print(id + " ");
+        }
+        System.out.println("");
+    }
+
+
+ */
+
 
 }
 
