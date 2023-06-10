@@ -272,38 +272,46 @@ public class EventDéplacement implements EventHandler {
 
 
         if (animal == true) {
-            for (int x = 0; x < 3; x++) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+            if (récup.dijkstra2(récup.getLoup().getPosition(),5).contains(récup.getMouton().getPosition())){
+                        ArrayList<Cellule> chemin = récup.astar(récup.getLoup().getPosition(),récup.getMouton().getPosition());
+                        for (int i = 0;i< chemin.size();i++){
+                            Cellule cell = chemin.get(i);
+                            déplacement(this.récup,this.gridPane,cell.getX(),cell.getY(),imageView,imageView1,récup.getLoup());
+                            //TODO finir le déplacement en faisant juste la boucle for qui utilise déplacement avec les cellules de la liste dans une limite de 3
+                        }
+                    }
+            else {
+                for (int x = 0; x < 3; x++) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    ArrayList<Cellule> voisins = récup.getVoisins(récup.getLoup().getPosition());
+                    if (voisins.contains(this.récup.getSortie())) {
+                        voisins.remove(this.récup.getSortie());
+                    }
+                    if (voisins.size() == 0) {
+                        Alert impossible = new Alert(Alert.AlertType.INFORMATION);
+                        impossible.setTitle("Erreur");
+                        impossible.setHeaderText("Arret du jeu ");
+                        impossible.setContentText("le loup ne peux pas se déplacer par conséquent le jeu va se terminer sur une victoire du mouton");
+                        impossible.showAndWait();
+                        stage.close();
+                        Victoire v = new Victoire(récup.getMouton());
+                        break;
+                    } else {
+                        Random random = new Random();
+                        int oui = random.nextInt(voisins.size());
+
+                        Cellule choix = voisins.get(oui);
+                        int newX = choix.getX();
+                        int newY = choix.getY();
+                        déplacement(this.récup, this.gridPane, newX, newY, imageView, imageView1, récup.getLoup());
+
+
+                    }
                 }
-                ArrayList<Cellule> voisins = récup.getVoisins(récup.getLoup().getPosition());
-                if (voisins.contains(this.récup.getSortie())) {
-                    voisins.remove(this.récup.getSortie());
-                }
-                if (voisins.size() == 0) {
-                    Alert impossible = new Alert(Alert.AlertType.INFORMATION);
-                    impossible.setTitle("Erreur");
-                    impossible.setHeaderText("Arret du jeu ");
-                    impossible.setContentText("le loup ne peux pas se déplacer par conséquent le jeu va se terminer sur une victoire du mouton");
-                    impossible.showAndWait();
-                    stage.close();
-                    Victoire v = new Victoire(récup.getMouton());
-                    break;
-                } else {
-                    Random random = new Random();
-                    int oui = random.nextInt(voisins.size());
-
-                    Cellule choix = voisins.get(oui);
-                    int newX = choix.getX();
-                    int newY = choix.getY();
-                    déplacement(this.récup, this.gridPane, newX, newY, imageView, imageView1, récup.getLoup());
-
-
-
-                }
-            }
                 /*if (untour.size()> 0){
 
                 for (int y = 0;y<this.untour.size();y++){
@@ -313,19 +321,29 @@ public class EventDéplacement implements EventHandler {
                 }
 
             untour.addAll(deuxtours);deuxtours.clear();*/
-            this.animal = false;
-            System.out.println("les cases a la portée du loup"+récup.dijkstra(récup.getLoup().getPosition(),4));
+                this.animal = false;
+                System.out.println("les cases a la portée du loup" + récup.dijkstra2(récup.getLoup().getPosition(),5));
             /*if(récup.getLoup().vision(récup) == true){
                 System.out.println("le loup voit le mouton");
             }*/
 
-
+            }
         } else {
-            try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+
+
+
+            //Todo modifier pour adapter au mouton
+            if (récup.dijkstra2(récup.getLoup().getPosition(),5).contains(récup.getMouton().getPosition())){
+                        ArrayList<Cellule> interdits = récup.dijkstra2(récup.getLoup().getPosition(),2);
+                        ArrayList<Cellule> chemin = récup.astar(récup.getLoup().getPosition(),récup.getMouton().getPosition(),interdits);
+                        for (int i = 0;i< récup.getMouton().getDéplacement();i++){
+                            Cellule cell = chemin.get(i);
+                            déplacement(this.récup,this.gridPane,cell.getX(),cell.getY(),imageView,imageView1,récup.getMouton());
+                            //TODO finir le déplacement en faisant juste la boucle for qui utilise déplacement avec les cellules de la liste dans une limite de 3
+                        }
+                    }
+
+            else{
             for (int x = 0; x < this.récup.getMouton().getDéplacement(); x++) {
                 ArrayList<Cellule> voisins = récup.getVoisins(récup.getMouton().getPosition());
                 if (voisins.size() == 0) {
@@ -337,6 +355,7 @@ public class EventDéplacement implements EventHandler {
                     stage.close();
                     Défaite d = new Défaite(récup.getMouton());
                 } else {
+
                     Random random = new Random();
                     int oui = random.nextInt(voisins.size());
                     Cellule choix = voisins.get(oui);
@@ -353,7 +372,7 @@ public class EventDéplacement implements EventHandler {
             System.out.println(untour);
                     System.out.println(récup.toString());*/
                 }
-
+            }
             }
             if (récup.getMouton().getPosition().getÉlément() != null){
                 this.deuxtours.add(récup.getMouton().getPosition());
@@ -370,7 +389,7 @@ public class EventDéplacement implements EventHandler {
             this.untour.addAll(this.deuxtours);
             this.deuxtours.clear();
             this.animal = true;
-            System.out.println("les cases a la portée du Mouton"+récup.dijkstra(récup.getMouton().getPosition(),4));
+            System.out.println("les cases a la portée du Mouton"+récup.dijkstra2(récup.getMouton().getPosition(),5));
             /*if(récup.getMouton().vision(récup) == true){
                 System.out.println("le mouton voit le Loup");
             }*/

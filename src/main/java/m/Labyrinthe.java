@@ -814,57 +814,7 @@ public ArrayList<Cellule> getVoisins(Cellule cellule){
         }
         return cellulesVisitées;
     }
-    public Integer[][] dijkstra(Cellule source,int distance) {
-        System.out.println("je suis passé dans dijkstra");
-        ArrayList<Cellule> result = new ArrayList();
-        Integer[][] tab = new Integer[this.nx][this.ny];
-        tab[source.getX()][source.getY()] = 0;
-        ArrayList<Cellule> voisins = this.getVoisins(source);
-        Queue<Cellule> queue = new LinkedList<>();
-        Set<Cellule> visités = new HashSet<>();
-        Cellule current = source;
-        queue.add(current);
-        //rajoute dans la file les voisins, si la valeur est supérieur a distance pas ça dégage de la file, du coup elle va se vider
-        /*
-        Map<Cellule, Integer> distances = new HashMap<>();
-        queue.add(source);
-        visités.add(source);
-        distances.put(source,0);
-        */
-        while(!queue.isEmpty() ){
-            System.out.println("while");
-            ArrayList<Cellule> voisin = this.getVoisins(current);
-            if(tab[current.getX()][current.getY()] == distance){
-                break;
-            }
 
-            //(!queue.isEmpty() || queue.poo()..getÉlément() instanceof Loup/Mouton
-            //Cellule current = queue.poll();
-            for(Cellule cl:voisin){
-                if(tab[cl.getX()][cl.getY()] != null){
-                    break;
-                }
-                if(voisin.contains(loup.getPosition())){
-                 //mettre en fuite le mouton
-                 this.mouton.setFuite(true);
-                }
-                else{
-                    ArrayList<Cellule> voisinCl = this.getVoisins(cl);
-                    for(Cellule c : voisinCl){
-                        if(!(queue.contains(c))){
-                            queue.add(c);
-                        }
-                    }
-                    //faire une condition pour pas dépasser la valeur de vision
-                    queue.add(cl);
-                    tab[cl.getX()][cl.getY()] = tab[current.getX()][current.getY()] + 1;
-                }
-            }
-            current = queue.poll();
-        }
-        return tab;
-
-    }
 
     public String printTab(Integer[][] tab){
         StringBuilder sb = new StringBuilder();
@@ -882,12 +832,11 @@ public ArrayList<Cellule> getVoisins(Cellule cellule){
 
     }
 
-   public ArrayList<Cellule> dijkstra2(Cellule depart) {
+   public ArrayList<Cellule> dijkstra2(Cellule depart,int vision) {
     Queue<Cellule> file = new LinkedList<>();
     HashMap<Cellule, Integer> distances = new HashMap<>();
     HashMap<Cellule, Cellule> predecesseurs = new HashMap<>();
 
-    // Initialisation des distances
     for (ArrayList<Cellule> liste : cellules) {
         for (Cellule cellule : liste) {
             //met toutes les cellules à une valeur infini
@@ -896,19 +845,16 @@ public ArrayList<Cellule> getVoisins(Cellule cellule){
         }
     }
 
-    // Départ
     distances.put(depart, 0);
     file.offer(depart);
 
     while (!file.isEmpty()) {
         Cellule actuelle = file.poll();
-
         // Parcours des voisins
         for (Cellule voisine : this.getVoisins(actuelle)) {
             if (distances.get(voisine) == Integer.MAX_VALUE) {  // Cellule non visitée
                 int nouvelleDistance = distances.get(actuelle) + 1;
-
-                if (nouvelleDistance <= 4) {  // Périmètre de 4
+                if (nouvelleDistance <= vision) {  // Périmètre de 4
                     distances.put(voisine, nouvelleDistance);
                     predecesseurs.put(voisine, actuelle);
                     file.offer(voisine);
@@ -933,7 +879,7 @@ public ArrayList<Cellule> getVoisins(Cellule cellule){
     Cellule cellule = entry.getKey();
     int distance = entry.getValue();
 
-    if (distance <= 4) {
+    if (distance <= vision) {
         babouin_périmètre.add(cellule);
     }
 
@@ -943,7 +889,7 @@ public ArrayList<Cellule> getVoisins(Cellule cellule){
 
 
 
-    private Cellule getCelluleMinDistance(Map<Cellule, Integer> distance, ArrayList<Cellule> cellulesNonExplorees) {
+    /*private Cellule getCelluleMinDistance(Map<Cellule, Integer> distance, ArrayList<Cellule> cellulesNonExplorees) {
         Cellule minCellule = null;
         int minDistance = Integer.MAX_VALUE;
 
@@ -968,40 +914,9 @@ public ArrayList<Cellule> getVoisins(Cellule cellule){
         }
 
         return chemin;
-    }
-private String getCheminAvecCoordonnees(Map<Cellule, Cellule> previous, Cellule destination) {
-    LinkedList<Cellule> chemin = new LinkedList<>();
-    Cellule celluleCourante = destination;
-
-    while (celluleCourante != null) {
-        chemin.addFirst(celluleCourante);
-        celluleCourante = previous.get(celluleCourante);
-    }
-
-    StringBuilder cheminString = new StringBuilder();
-    for (Cellule cellule : chemin) {
-        cheminString.append("(")
-                    .append(cellule.getX())
-                    .append(",")
-                    .append(cellule.getY())
-                    .append(") ");
-    }
-
-    return cheminString.toString();
-}
-
-
-
-
+    }*/
 
                 //TODO faire un code ou on regarde tout les voisins et on les répertorie avec juste le prédécesseur jusqu'a tomber sur la bonne cellule et remonter la chaine
-
-
-
-
-
-
-
 }
 
 
