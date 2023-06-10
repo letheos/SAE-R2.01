@@ -999,7 +999,8 @@ public class Labyrinthe implements Serializable {
                 }
             }
 
-            //TODO peut avoir une bien meilleure complexité
+            //TODO éviter d'avoir 2 fois les voisins qui ont le même heuristique
+            //TODO le faire fonctionner en marche arrière
             tas.add(plusFailbe);
             vois.remove(plusFailbe);
             if(!vois.isEmpty()){
