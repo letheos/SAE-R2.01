@@ -98,7 +98,7 @@ public class HelloApplication extends Application {
         //Labyrinthe laby = new Labyrinthe(10,10);
         //System.out.println(laby.parcour)
         Accueil ij = new Accueil();
-        Labyrinthe v = new Labyrinthe(10,10);
+        Labyrinthe v = new Labyrinthe(20,20);
 
         /*Integer[][]b =v.dijkstra(v.GetCellule(2,2),4);
         System.out.println("\n");
@@ -115,39 +115,21 @@ public class HelloApplication extends Application {
         Loup loup = new Loup(v.GetCellule(1,3));
         v.PoserMur(1,2);
         v.PoserMur(2,2);
-        v.PoserMur(3,2);
+        //v.PoserMur(3,2);
+        v.PoserMur(4,3);
+        v.PoserMur(4,4);
         v.PoserMur(4,2);
+        v.PoserMur(4,1);
         v.PoserMur(5,2);
-
+        ArrayList<Cellule> vo;
+        vo = v.aStar(v.GetCellule(1,1),v.GetCellule(10,14),new ArrayList<>());
+        System.out.println(vo);
         v.setLoup(loup);
         v.setSortie(v.GetCellule(0,5));
 
         v.setMouton(m);
         System.out.println(v.toString());
 
-
-        System.out.println("voici les cellules dnas le périmètre de la cellule concernée"+v.dijkstra2(v.GetCellule(1,1),5));
-        if (v.dijkstra2(v.GetCellule(1,1),5).contains(v.getLoup().getPosition())){
-            System.out.println("le loup est dans le périmètre");
-        }
-        else{
-            System.out.println("le loup n'est pas dans la vision du mouton");
-        }
-        /*for (ArrayList<Cellule> liste : v.GetCellules()) {
-    for (Cellule cellule : liste) {
-        System.out.println("Cellule: " + cellule.getX() + ", " + cellule.getY());
-
-        ArrayList<Cellule> voisins = v.getVoisins(cellule);
-        System.out.println("Voisins:");
-
-        for (Cellule voisin : voisins) {
-            System.out.println("    Voisin: " + voisin.getX() + ", " + voisin.getY());
-        }
-
-        System.out.println("---------------------");
-    }
-
-}*/
 System.out.println(v.toString());
     }
 

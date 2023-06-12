@@ -1,5 +1,5 @@
 package v;
-
+/*
 //importation de fonction utile pour notre programe
 import c.EventController;
 import javafx.application.Application;
@@ -165,3 +165,6 @@ public class Paramètres extends Stage {
         stage.show();
     }
 }
+
+
+ */

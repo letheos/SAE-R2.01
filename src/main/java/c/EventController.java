@@ -10,15 +10,14 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+
 import javafx.scene.paint.Color;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
 import java.io.File;
 import java.net.MalformedURLException;
-
+/*
 public class EventController implements EventHandler<MouseEvent> {
     //importation des variable pour modifier la fenêtre
     private Text text;
@@ -106,3 +105,6 @@ public class EventController implements EventHandler<MouseEvent> {
         });
     }
 }
+
+
+ */

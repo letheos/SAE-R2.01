@@ -99,12 +99,10 @@ public class Cellule implements Serializable {
             this.setHeuristique(manathan);
         }
     }
-    public int getHeuriDep(){
-        return this.getHeuristique() + this.getDeplacement();
+    public int getHeuriDep(Cellule fin){
+        return this.distanceManhattan(fin) + this.getDeplacement();
     }
-    public int manhattan(Cellule destination){
-        return (int)Math.sqrt(Math.pow(destination.getX() - this.x, 2) + Math.pow(destination.getY() - this.y, 2));
-    }
+
     public int distanceManhattan(Cellule destination) {
         return Math.abs(this.getX() - destination.getX()) + Math.abs(this.getY() - destination.getY());
     }

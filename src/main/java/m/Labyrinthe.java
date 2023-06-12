@@ -114,6 +114,36 @@ public class Labyrinthe implements Serializable {
 
         return sb.toString();
     }
+    public String toString2() {
+        StringBuilder sb = new StringBuilder();
+
+        // Dessiner la première ligne avec des barres horizontales en haut
+        sb.append("+");
+        for (int i = 0; i < ny; i++) {
+            sb.append("---+");
+        }
+        sb.append("\n");
+
+        // Dessiner les lignes du milieu
+        for (int x = 0; x < nx; x++) {
+            sb.append("|");
+            for (int y = 0; y < ny; y++) {
+                Cellule cell = cellules.get(x).get(y);
+                int truc = cell.getHeuristique()+cell.getDeplacement();
+                sb.append("/"+truc+" /");
+            }
+            sb.append("\n");
+
+            // Dessiner une ligne avec des barres horizontales entre chaque cellule
+            sb.append("+");
+            for (int i = 0; i < ny; i++) {
+                sb.append("---+");
+            }
+            sb.append("\n");
+        }
+
+        return sb.toString();
+    }
 
 
     public ArrayList<ArrayList<Cellule>> GetCellules() {
@@ -896,13 +926,14 @@ public class Labyrinthe implements Serializable {
     }
 
     public ArrayList<Cellule> aStar(Cellule debut, Cellule fin, ArrayList<Cellule> pasDedans) {
-        int Manhattan = debut.manhattan(fin);
+        int Manhattan = debut.distanceManhattan(fin);
         //System.out.println();
 
-        PriorityQueue<Cellule> tas = new PriorityQueue<>(new CellTri());
+        PriorityQueue<Cellule> tas = new PriorityQueue<>(new CompareCell(fin));
         //open liste
-        PriorityQueue<Cellule> rebut = new PriorityQueue<>(new CellTri());
+        PriorityQueue<Cellule> rebut = new PriorityQueue<>(new CompareCell(fin));
         ArrayList<Cellule> chemin = new ArrayList<>();
+        ArrayList<Cellule> voisin = new ArrayList<>();
         //Cellule qui sont pas dans le chemin mais qui pourais être utilisé après
         //close liste
 
@@ -916,17 +947,19 @@ public class Labyrinthe implements Serializable {
         debut.setDeplacement(0);
 
         while (!(tas.isEmpty())) {
+
+        ;
             Cellule current = tas.poll();
             //prends la cellule de plus faible heuristique
-            if (current == fin){
+            if (current == fin || tas.contains(fin) || voisin.contains(fin)) {
                 System.out.println(current);
                 System.out.println(chemin);
+                System.out.println(toString2());
                 chemin.add(current);
-                return chemin;
-                /*
-                return current;
-                si le noeud est le même que la fin return la cellule
-                 */
+                return voisin;
+
+
+
             }
             ArrayList<Cellule> vois = this.getVoisins(current);
             System.out.println(vois);
@@ -934,78 +967,36 @@ public class Labyrinthe implements Serializable {
             //si certaines cellules voisines sont dans pasDedans, on les enlèves
             vois.removeIf(pasDedans::contains);
 
-            for(Cellule cl:vois){
+            for (Cellule cl : vois) {
+                if(cl == fin){
+                    return voisin;
 
+                }
 
-                //mettre les voisins dans la openList
-                cl.setDeplacement(current.getDeplacement()+1);
-                cl.setHeuristique(cl.manhattan(fin)+cl.getDeplacement());
-
-                if(!tas.contains(cl) && !rebut.contains(cl)){
-                    //si la cellule n'est ni dans tas et ni dans rebut
-                    if(current.manhattan(fin)<cl.manhattan(fin)){
-
-                        //si la cellule a plus de cout que la cellule d'avant on la met dans rebut
-                        System.out.println(current.getHeuristique());
-                        System.out.println("current heuri");
-                        System.out.println(cl.getHeuristique());
-                        System.out.println("cl heuri");
-                        System.out.println("rebut");
-                        System.out.println("\n");
-                        rebut.add(cl);
-                    }else{
-                        //sinon on la met dans tas
-                        this.PoserMargueurite(cl.getX(),cl.getY());
-                        tas.add(cl);
-                        //current = cl;
-                        System.out.println(current.getHeuristique());
-                        System.out.println("tas");
-                        System.out.println(cl.getHeuristique());
-                        System.out.println(tas);
-                        System.out.println(this.toString());
-
-                    }
-                } else{
-                    if(cl.manhattan(fin)<current.manhattan(fin)){
-                        rebut.remove(cl);
-                        tas.add(cl);
-                        //rebut.add(current);
-                        //current = cl;
-                    }
+                if (!voisin.contains(cl) && !tas.contains(cl)) {
+                    //mettre les voisins dans la openList
+                    cl.setDeplacement(current.getDeplacement() + 1);
+                    System.out.println(cl.getDeplacement()+"dep");
+                    System.out.println(cl.distanceManhattan(fin)+"man");
+                    System.out.println("\n");
+                    //ajout sur la cellule d'un cout en déplacement de 1 de plus que celle d'avant
+                    int disMan = cl.distanceManhattan(fin);
+                    int dep = cl.getDeplacement() + 1;
+                    cl.setHeuristique(disMan);
+                    //ajout a la cellule de son heuristique
+                    this.GetCellule(cl.getX(),cl.getY()).setÉlément(new marguerite());
+                    System.out.println(this.toString2());
+                    tas.add(cl);
+                    voisin.add(cl);
                 }
 
 
             }
-            tas.remove(current);
-            rebut.add(current);
-            if(!chemin.contains(current)){
-                chemin.add(current);
-            }
-            System.out.println(tas);
-            System.out.println("tas");
-            System.out.println(rebut);
-            System.out.println("rebut");
-
 
 
             /*
-            Cellule plusFailbe = vois.get(0);
-
-            if(!vois.isEmpty()){
-                for (Cellule cl:vois) {
-                    if(cl.getHeuristique()< plusFailbe.getHeuristique()){
-                        plusFailbe = cl;
-                    }
-                }
-            }
-
             //TODO éviter d'avoir 2 fois les voisins qui ont le même heuristique
             //TODO le faire fonctionner en marche arrière
-            tas.add(plusFailbe);
-            vois.remove(plusFailbe);
-            if(!vois.isEmpty()){
-                rebut.addAll(vois);
-            }
             //permet d'ajouter la cellule de poid le plus faible
             //si la liste n'est pas vide après met toutes les cellules dans rebut
             //comprendre comment faire le chemin et donc prendre en compte si le chemin est blockée
@@ -1017,87 +1008,21 @@ public class Labyrinthe implements Serializable {
             //si il est possible d'y y aller, il faut prendre la cellule qui a la valeur la plus faible
 
              */
+            tas.comparator();
+
         }
-        System.out.println(chemin);
-        for(Cellule cl:chemin){
-            System.out.println(cl.getX());
-            System.out.println(cl.getY());
-            System.out.println("\t");
-        }
-        System.out.println("chemin");
-        return chemin;
+        return voisin;
     }
+    public HashMap<Cellule,Cellule> cheminAstar(ArrayList<Cellule> voisin){
+        var chemin = new HashMap<Cellule,Cellule>();
+
+    }
+    //faire une fonction recursive qui remonte la liste de voisin
+    //faire une methode qui initialise le hashmap avec la sortie
 
 
     //TODO faire un code ou on regarde tout les voisins et on les répertorie avec juste le prédécesseur jusqu'a tomber sur la bonne cellule et remonter la chaine
     //TODO prendre en compte la liste rebut
-
-/*
-    public static Cellule aStar(Cellule start, Cellule target){
-        PriorityQueue<Cellule> closedList = new PriorityQueue<>();
-        PriorityQueue<Cellule> openList = new PriorityQueue<>();
-
-        start.f = start.g + start.calculateHeuristic(target);
-        openList.add(start);
-
-        while(!openList.isEmpty()){
-            Cellule current = openList.peek();
-            if(current == target){
-                return current;
-            }
-
-            for(Cellule.Edge edge : current.neighbors){
-                Cellule m = edge.Cellule;
-                double totalWeight = current.g + edge.weight;
-
-                if(!openList.contains(m) && !closedList.contains(m)){
-                    m.parent = current;
-                    m.g = totalWeight;
-                    m.f = m.g + m.calculateHeuristic(target);
-                    openList.add(m);
-                } else {
-                    if(totalWeight < m.g){
-                        m.parent = n;
-                        m.g = totalWeight;
-                        m.f = m.g + m.calculateHeuristic(target);
-
-                        if(closedList.contains(m)){
-                            closedList.remove(m);
-                            openList.add(m);
-                        }
-                    }
-                }
-            }
-
-            openList.remove(n);
-            closedList.add(n);
-        }
-        return null;
-    }
-
-    public static void printPath(Node target){
-        Node n = target;
-
-        if(n==null)
-            return;
-
-        List<Integer> ids = new ArrayList<>();
-
-        while(n.parent != null){
-            ids.add(n.id);
-            n = n.parent;
-        }
-        ids.add(n.id);
-        Collections.reverse(ids);
-
-        for(int id : ids){
-            System.out.print(id + " ");
-        }
-        System.out.println("");
-    }
-
-
- */
 
 
 }

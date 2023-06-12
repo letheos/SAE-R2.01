@@ -5,17 +5,15 @@ import java.util.Comparator;
 public class CompareCell implements Comparator<Cellule> {
     //compare l'heuristique
     //comment foutre l'heuristique avec les cellules
+    private Cellule fin;
     @Override
     public int compare(Cellule o1, Cellule o2) {
-        if(o1.getHeuristique() < o2.getHeuristique()){
-            return 1;
-        }else {
-            return -1;
-        }
-
+        //return o1.getHeuriDep(fin) - o2.getHeuriDep(fin);
+        return o1.getHeuristique() - o2.getHeuristique();
     }
 
-    public CompareCell() {
+    public CompareCell(Cellule f) {
         super();
+        this.fin = f;
     }
 }
