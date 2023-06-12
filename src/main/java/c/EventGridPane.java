@@ -107,6 +107,7 @@ public class EventGridPane implements EventHandler<Event> {
                         bouton.setBackground(background);
                         cellule.setÉlément(new Herbe());
                         laby.setSortie(cellule);
+
                     }
                     System.out.println(laby.toString());
                 } else {

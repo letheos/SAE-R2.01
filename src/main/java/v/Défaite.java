@@ -4,6 +4,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -32,6 +33,9 @@ public class Défaite extends Stage {
         vbox.setAlignment(Pos.TOP_CENTER);
         Scene scene = new Scene(vbox,350,200);
         stage.setScene(scene);
+        String racineProjet = System.getProperty("user.dir");
+        javafx.scene.image.Image logo = new Image(racineProjet + "\\src\\images\\logo.png");
+            stage.getIcons().add(logo);
         stage.show();
     }
 }

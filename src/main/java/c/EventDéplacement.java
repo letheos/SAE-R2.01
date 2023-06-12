@@ -34,7 +34,8 @@ public class EventDéplacement implements EventHandler {
     private ArrayList <Cellule> deuxtours;
     private ArrayList <Cellule> untour;
 
-
+    private ArrayList<Cellule> positionsMouton;
+    private ArrayList<Cellule> positionsLoup;
 
     public EventDéplacement(Labyrinthe labyrinthe, GridPane gridPane, Stage stage) {
         this.récup = labyrinthe;
@@ -43,7 +44,8 @@ public class EventDéplacement implements EventHandler {
         this.stage = stage;
         this.deuxtours = new ArrayList<>();
         this.untour = new ArrayList<>();
-
+        this.positionsMouton = new ArrayList<>();
+        this.positionsLoup = new ArrayList<>();
     }
 
     private void repousse(Cellule cell){
@@ -272,9 +274,20 @@ public class EventDéplacement implements EventHandler {
 
 
         if (animal == true) {
-            if (récup.dijkstra2(récup.getLoup().getPosition(),5).contains(récup.getMouton().getPosition())){
-                        ArrayList<Cellule> chemin = récup.astar(récup.getLoup().getPosition(),récup.getMouton().getPosition());
-                        for (int i = 0;i< chemin.size();i++){
+            positionsLoup = new ArrayList<>();
+            if ((récup.dijkstra2(récup.getLoup().getPosition(),5)).contains(récup.getMouton().getPosition())){
+
+                        ArrayList<Cellule> chemin = récup.chemindijkstra(récup.getLoup().getPosition(),récup.getMouton().getPosition(),new ArrayList<Cellule>());
+
+
+                        if (chemin.size() > 1){
+                            chemin.remove(0);
+                        }
+
+
+
+
+                        for (int i = 0;i< 3;i++){
                             Cellule cell = chemin.get(i);
                             déplacement(this.récup,this.gridPane,cell.getX(),cell.getY(),imageView,imageView1,récup.getLoup());
                             //TODO finir le déplacement en faisant juste la boucle for qui utilise déplacement avec les cellules de la liste dans une limite de 3
@@ -282,11 +295,7 @@ public class EventDéplacement implements EventHandler {
                     }
             else {
                 for (int x = 0; x < 3; x++) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+
                     ArrayList<Cellule> voisins = récup.getVoisins(récup.getLoup().getPosition());
                     if (voisins.contains(this.récup.getSortie())) {
                         voisins.remove(this.récup.getSortie());
@@ -301,6 +310,11 @@ public class EventDéplacement implements EventHandler {
                         Victoire v = new Victoire(récup.getMouton());
                         break;
                     } else {
+                        for (Cellule cell:positionsLoup){
+                        if(voisins.contains(cell)){
+                            voisins.remove(cell);
+                        }
+                    }
                         Random random = new Random();
                         int oui = random.nextInt(voisins.size());
 
@@ -321,25 +335,42 @@ public class EventDéplacement implements EventHandler {
                 }
 
             untour.addAll(deuxtours);deuxtours.clear();*/
-                this.animal = false;
-                System.out.println("les cases a la portée du loup" + récup.dijkstra2(récup.getLoup().getPosition(),5));
+
             /*if(récup.getLoup().vision(récup) == true){
                 System.out.println("le loup voit le mouton");
             }*/
 
             }
+            this.animal = false;
+                positionsMouton = new ArrayList<>();
         } else {
 
 
 
             //Todo modifier pour adapter au mouton
-            if (récup.dijkstra2(récup.getLoup().getPosition(),5).contains(récup.getMouton().getPosition())){
-                        ArrayList<Cellule> interdits = récup.dijkstra2(récup.getLoup().getPosition(),2);
-                        ArrayList<Cellule> chemin = récup.astar(récup.getLoup().getPosition(),récup.getMouton().getPosition(),interdits);
-                        for (int i = 0;i< récup.getMouton().getDéplacement();i++){
-                            Cellule cell = chemin.get(i);
-                            déplacement(this.récup,this.gridPane,cell.getX(),cell.getY(),imageView,imageView1,récup.getMouton());
-                            //TODO finir le déplacement en faisant juste la boucle for qui utilise déplacement avec les cellules de la liste dans une limite de 3
+            if ((récup.dijkstra2(récup.getMouton().getPosition(),5)).contains(récup.getLoup().getPosition())){
+                        ArrayList<Cellule> interdits = récup.dijkstra2(récup.getLoup().getPosition(),1);
+                        if (interdits.contains(récup.getMouton().getPosition())){
+                            interdits.remove(récup.getMouton().getPosition());
+                }
+
+                        ArrayList<Cellule> chemin = récup.chemindijkstra(récup.getMouton().getPosition(),récup.getSortie(),interdits);
+                       if (chemin.size() > 1){
+                            chemin.remove(0);
+                        }
+
+                        //TOdo finir de corriger le déplacement du loup pour qu'il attrape le mouton
+                        if (récup.dijkstra2(récup.getLoup().getPosition(),2).contains(récup.getSortie())){
+                                this.stage.close();
+                                Défaite defaite = new Défaite(récup.getMouton());
+                        }
+                        else {
+                            for (int i = 0; i < récup.getMouton().getDéplacement(); i++) {
+                                Cellule cell = chemin.get(i);
+
+                                déplacement(this.récup, this.gridPane, cell.getX(), cell.getY(), imageView, imageView1, récup.getMouton());
+
+                            }
                         }
                     }
 
@@ -354,8 +385,13 @@ public class EventDéplacement implements EventHandler {
                     impossible.showAndWait();
                     stage.close();
                     Défaite d = new Défaite(récup.getMouton());
-                } else {
-
+                }
+                else {
+                    for (Cellule cell:positionsMouton){
+                        if(voisins.contains(cell)){
+                            voisins.remove(cell);
+                        }
+                    }
                     Random random = new Random();
                     int oui = random.nextInt(voisins.size());
                     Cellule choix = voisins.get(oui);
@@ -363,14 +399,9 @@ public class EventDéplacement implements EventHandler {
                     int newY = choix.getY();
                     déplacement(this.récup, this.gridPane, newX, newY, imageView, imageView1, récup.getMouton());
                     if (stage.isShowing() == false) {
-                        System.out.println("arret urgence");
                         break;
                     }
-                    /*System.out.println(Bdeuxtours);
-            System.out.println(deuxtours);
-            System.out.println(BunTour);
-            System.out.println(untour);
-                    System.out.println(récup.toString());*/
+
                 }
             }
             }
@@ -389,7 +420,6 @@ public class EventDéplacement implements EventHandler {
             this.untour.addAll(this.deuxtours);
             this.deuxtours.clear();
             this.animal = true;
-            System.out.println("les cases a la portée du Mouton"+récup.dijkstra2(récup.getMouton().getPosition(),5));
             /*if(récup.getMouton().vision(récup) == true){
                 System.out.println("le mouton voit le Loup");
             }*/

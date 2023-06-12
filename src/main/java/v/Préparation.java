@@ -237,10 +237,8 @@ for (int row = 0; row < this.récup.getNx(); row++) {
             générerLabyrinthe.setOnMouseClicked(mouseEvent -> {
                 if(hauteur.getValue() != null && largeur.getValue() != null){
                 this.récup = new Labyrinthe(hauteur.getValue(),largeur.getValue());
-                System.out.println("le labyrinthe a bien été changé en x:"+this.récup.getNx()+"y:"+this.récup.getNy());
                 this.récup.toString();
-                System.out.println(this.récup.getNx());
-                System.out.println(this.récup.getNy());
+
                 EventGénération eventGénération = new EventGénération(hauteur.getValue(),largeur.getValue(),this.récup,eventmenu);
                 scrollPane.setContent(eventGénération.getGridPane());
                 this.gridPane = eventGénération.getGridPane();
@@ -291,17 +289,20 @@ for (int row = 0; row < this.récup.getNx(); row++) {
             Button Jouertour = new Button("Jouer Tour");
 
             Lancer.setOnMouseClicked(mouseEvent -> {
-                System.out.println("vision du mouton"+récup.dijkstra(récup.getMouton().getPosition(),4));
-                System.out.println("vision du loup"+récup.dijkstra(récup.getLoup().getPosition(),4));
+
                 ArrayList parcours = (ArrayList) this.récup.ParcoursProfondeur(this.récup.getMouton().getPosition(),new ArrayList<Cellule>());
+
                 if (parcours.contains(this.récup.getLoup().getPosition())&& parcours.contains(this.récup.getSortie())){
-                    System.out.println("voici le labyrinthe que je prend en entrée");
-    System.out.println("voici le mouton : " + this.récup.getMouton());
+
+
+
+    /*System.out.println("voici le mouton : " + this.récup.getMouton());
     System.out.println("voici la position du mouton :"+this.récup.getMouton().getPosition());
     System.out.println("voici le Loup :" + this.récup.getLoup());
     System.out.println("voici la position du loup : " +this.récup.getLoup().getPosition());
     System.out.println("voici la sortie : " + this.récup.getSortie());
-    System.out.println(this.récup.toString());
+    System.out.println(this.récup.toString());*/
+
     if (this.récup.getSortie() != null && this.récup.getMouton() != null && this.récup.getLoup() != null) {
         for (Node node : gauche.getChildren()) {
             if (node != boutonaccueil) { // Exclure le bouton "Accueil"

@@ -260,10 +260,14 @@ public class Labyrinthe implements Serializable {
             }
         }
     }
+
+
+
     return voisins;
 }*/
 
-public ArrayList<Cellule> getVoisins(Cellule cellule){
+    //Todo dernière version de getvoisins en date non fonctionnelle car pas le voisin a gauche
+/*public ArrayList<Cellule> getVoisins(Cellule cellule){
         ArrayList<Cellule> voisins = new ArrayList<Cellule>();
         if (cellule.getX() < this.getNx()-1 && cellule.getX() > 0 && cellule.getY()>0 && cellule.getY()<this.getNy()-1){
             if (!(this.GetCellule(cellule.getX()-1,cellule.getY()).getÉlément() instanceof Mur)){
@@ -300,7 +304,27 @@ public ArrayList<Cellule> getVoisins(Cellule cellule){
             }
         }
         return voisins;
+}*/
+    public ArrayList<Cellule> getVoisins(Cellule cellule) {
+    ArrayList<Cellule> voisins = new ArrayList<Cellule>();
+    int x = cellule.getX();
+    int y = cellule.getY();
+
+    if (x > 0 && !(this.GetCellule(x-1, y).getÉlément() instanceof Mur)) {
+        voisins.add(this.GetCellule(x-1, y));
+    }
+    if (x < this.getNx()-1 && !(this.GetCellule(x+1, y).getÉlément() instanceof Mur)) {
+        voisins.add(this.GetCellule(x+1, y));
+    }
+    if (y > 0 && !(this.GetCellule(x, y-1).getÉlément() instanceof Mur)) {
+        voisins.add(this.GetCellule(x, y-1));
+    }
+    if (y < this.getNy()-1 && !(this.GetCellule(x, y+1).getÉlément() instanceof Mur)) {
+        voisins.add(this.GetCellule(x, y+1));
+    }
+    return voisins;
 }
+
 
     /*public ArrayList<Cellule> getVoisins(Cellule cellule) {
     ArrayList<Cellule> voisins = new ArrayList<>();
@@ -370,7 +394,6 @@ public ArrayList<Cellule> getVoisins(Cellule cellule){
         //ArrayList<Object> sauv = new ArrayList<>();
         for (int i = 0; i < cellules.size(); i++) {
             //ArrayList<String> ligne = new ArrayList<>();
-
             for (int k = 0; k < cellules.get(i).size(); k++) {
                 if (mouton != null && cellules.get(i).get(k).getX() == mouton.getX() && cellules.get(i).get(k).getY() == mouton.getY()) {
                     //si les coordonnnées du mouton sont les mêmes que celles de cettes cellules, on le met dans la liste
@@ -506,7 +529,6 @@ public ArrayList<Cellule> getVoisins(Cellule cellule){
             this.PoserMur(0, y);
             this.PoserMur(this.getNx() - 1, y);
         }
-        System.out.println(this.toString());
     }
 
 
@@ -575,9 +597,7 @@ public ArrayList<Cellule> getVoisins(Cellule cellule){
             Random randomX = new Random();
             Random random1 = new Random();
             int coX = randomX.nextInt(this.getNx());
-            System.out.println(coX);
             if (coX == 0 || coX == this.getNx() - 1) {
-                System.out.println(coX);
 
                 //nombre maximum que le random peut sortir ici this.getNy
                 int max = this.getNy() - 1;
@@ -601,12 +621,10 @@ public ArrayList<Cellule> getVoisins(Cellule cellule){
                 this.GetCellule(coX, coY).setÉlément(new Herbe());
                 this.DéfinirSortie(coX, coY);
             } else {
-                System.out.println("marche Po");
             }
 
 
         }
-        System.out.println(this.toString());
 
     }
 
@@ -754,7 +772,6 @@ public ArrayList<Cellule> getVoisins(Cellule cellule){
             //débute à 1 et finit à longueur -1 pour éviter d'avoir la sortie dans un coin
             if (sortie.equals(Character.toString(lab[0].charAt(i)))) {
                 //si sortie en haut
-                System.out.println("bla la sortie bouhou");
                 Cellule laSortie = nouv.GetCellule(0, i);
                 nouv.setSortie(laSortie);
                 nouv.DéfinirSortie(0, i);
@@ -802,11 +819,8 @@ public ArrayList<Cellule> getVoisins(Cellule cellule){
     }
     public ArrayList<Cellule> ParcoursProfondeur(Cellule cellule,ArrayList<Cellule> cellulesVisitées){
         ArrayList<Cellule> voisins = new ArrayList<Cellule>();
-
-
         voisins = this.getVoisins(cellule);
         cellulesVisitées.add(cellule);
-
         for (Cellule voisin : voisins){
             if (!cellulesVisitées.contains(voisin)){
                 ParcoursProfondeur(voisin,cellulesVisitées);
@@ -814,8 +828,6 @@ public ArrayList<Cellule> getVoisins(Cellule cellule){
         }
         return cellulesVisitées;
     }
-
-
     public String printTab(Integer[][] tab){
         StringBuilder sb = new StringBuilder();
         for(int i = 0;i<tab.length;i++){
@@ -888,6 +900,46 @@ public ArrayList<Cellule> getVoisins(Cellule cellule){
 }
 
 
+public ArrayList<Cellule> chemindijkstra(Cellule depart, Cellule arrivée, ArrayList<Cellule> cellulesInterdites) {
+    Queue<Cellule> file = new LinkedList<>();
+    HashMap<Cellule, Integer> distances = new HashMap<>();
+    HashMap<Cellule, Cellule> predecesseurs = new HashMap<>();
+    for (ArrayList<Cellule> liste : cellules) {
+        for (Cellule cellule : liste) {
+            distances.put(cellule, Integer.MAX_VALUE);
+            predecesseurs.put(cellule, null);
+        }
+    }
+    distances.put(depart, 0);
+    file.offer(depart);
+    while (!file.isEmpty()) {
+        Cellule actuelle = file.poll();
+        if (actuelle == (arrivée)) {
+            break;
+        }
+        for (Cellule voisine : this.getVoisins(actuelle)) {
+            if (distances.get(voisine) == Integer.MAX_VALUE) {
+                int nouvelleDistance = distances.get(actuelle) + 1;
+                if (!cellulesInterdites.contains(voisine)) {
+                    distances.put(voisine, nouvelleDistance);
+                    predecesseurs.put(voisine, actuelle);
+                    file.offer(voisine);
+                }
+            }
+        }
+    }
+    ArrayList<Cellule> chemin = new ArrayList<>();
+    Cellule celluleActuelle = arrivée;
+    while (celluleActuelle != null) {
+        chemin.add(0, celluleActuelle);
+        celluleActuelle = predecesseurs.get(celluleActuelle);
+    }
+
+    return chemin;
+}
+
+
+
 
     /*private Cellule getCelluleMinDistance(Map<Cellule, Integer> distance, ArrayList<Cellule> cellulesNonExplorees) {
         Cellule minCellule = null;
@@ -906,11 +958,11 @@ public ArrayList<Cellule> getVoisins(Cellule cellule){
 
     private LinkedList<Cellule> getChemin(Map<Cellule, Cellule> previous, Cellule destination) {
         LinkedList<Cellule> chemin = new LinkedList<>();
-        Cellule celluleCourante = destination;
+        Cellule celluleActuelle = destination;
 
-        while (celluleCourante != null) {
-            chemin.addFirst(celluleCourante);
-            celluleCourante = previous.get(celluleCourante);
+        while (celluleActuelle != null) {
+            chemin.addFirst(celluleActuelle);
+            celluleActuelle = previous.get(celluleActuelle);
         }
 
         return chemin;
